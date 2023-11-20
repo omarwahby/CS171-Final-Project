@@ -60,7 +60,10 @@ function createVis(data) {
     // *** TO-DO ***
 
     // (4) Create visualization instances
-    let countVis = new CountVis("countvis", allData);
+    let countVis = new CountVis("scatterplotvis", allData);
+    let countVis1 = new CountVis("piechartvis", allData);
+    let countVis2 = new CountVis("mapvis", allData);
+    let countVis3 = new CountVis("debtvis", allData);
 
     // *** TO-DO ***
     //  pass event handler to CountVis, at constructor of CountVis above
