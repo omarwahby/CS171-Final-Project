@@ -26,6 +26,10 @@ h2 {
 	pointer-events: none;
 }*/
 
+.narration {
+	color: red;
+}
+
 .axis line,
 .axis path {
 	fill: none;
