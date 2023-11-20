@@ -1,109 +1,146 @@
-// define margins
-// wanted the area chart to be a bit bigger than the bar chart area, so two widths and heights were defined
-let margin = {
-        top: 10,
-        right: 35,
-        bottom: 200,
-        left: 100},
-    width = 850 - margin.left - margin.right,
-    height = 650 - margin.top - margin.bottom;
 
-// journey to the promise land
-d3.csv("data/BarChartData.csv", d => {
+/*
+ * BarChartVis - Object constructor function
+ * @param _parentElement 	-- the HTML element in which to draw the visualization
+ * @param _data						-- the actual data: perDayData
+ */
 
-    return d;
+class BarChartVis {
 
-}).then(function(data){
-    // draw bar chart
-    drawBarChart(data);
-});
+	constructor(_parentElement, _data, _eventHandler) {
+		this.parentElement = _parentElement;
+		this.data = _data;
+		//this.eventHandler =
 
-function drawBarChart(data){
-
-    // define shelter data
-    const degreeDate = [
-        { type: "Business, Management, Marketing", percentage: 9.289 },
-        { type: "Liberal Arts And Sciences, General Studies And Humanities", percentage: 5.619 },
-        { type: "Visual And Performing Arts", percentage: 3.370 },
-        { type: "Computer And Information Sciences", percentage: 2.972 },
-        { type: "Mechanic And Repair Technologies/Technicians", percentage: 2.785 },
-        { type: "Theology And Religious Vocations", percentage: 2.564 },
-        { type: "Homeland Security, Law Enforcement, Firefighting", percentage: 2.430 },
-        { type: "Engineering Technologies", percentage: 2.159 },
-        { type: "Education", percentage: 2.080 },
-        { type: "Communication, Journalism", percentage: 1.247 },
-    ];
-
-    let padding = 30;
-
-    // define svg area of BAR CHART using said margins
-    let barChartSvg = d3.select("#bar-chart")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + (margin.left) + "," + margin.top+ ")");
-
-    // Create an ordinal scale for the x-axis
-    const xBarScale = d3.scaleBand()
-        .domain(degreeDate.map(d => d.type))
-        .range([padding, width - padding])
-        .padding(0.2);
-
-    // Add x-axis
-    const xAxis = barChartSvg.append("g")
-        .attr("class", "x-axis")
-        .attr("transform", `translate(0, ${height - 2 * padding})`)
-        .call(d3.axisBottom().scale(xBarScale))
-        .selectAll("text")
-        .attr("transform", "translate(-10,0) rotate(-45)") // Rotate and adjust position
-        .style("text-anchor", "end")
-        .style("font-size", "12px");
-
-    // Create y-scale for the bar chart
-    const yBarScale = d3.scaleLinear()
-        .domain([0, 100])
-        .range([height - 2*padding, 2*padding]);
-
-    // Add y-axis
-    barChartSvg.append("g")
-        .attr("class", "y-axis")
-        .attr("transform", "translate(" + padding + ",0)")
-        .call(d3.axisLeft().scale(yBarScale))
-        .style("font-size", "12px");
-
-    // Draw bars
-    barChartSvg.selectAll(".bar")
-        .data(degreeDate)
-        .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", d => xBarScale(d.type))
-        .attr("y", d => yBarScale(d.percentage))
-        .attr("width", xBarScale.bandwidth())
-        .attr("height", d => height - yBarScale(d.percentage) -60)
-        .style("font-size", "12px");
+		this.initVis();
+	}
 
 
-    // Add labels above each bar
-    barChartSvg.selectAll(".bar-label")
-        .data(degreeDate)
-        .enter().append("text")
-        .attr("class", "bar-label")
-        .attr("x", d => xBarScale(d.type) + xBarScale.bandwidth() / 2)
-        .attr("y", d => yBarScale(d.percentage) - 5)
-        .attr("text-anchor", "middle")
-        .text(d => `${d.percentage.toFixed(2)}%`)
-        .style("font-size", "12px");
+	/*
+	 * Initialize visualization (static content, e.g. SVG area or axes)
+	 */
 
-    // Add chart title
-    barChartSvg.append("text")
-        .attr("class", "chart-title")
-        .attr("x", width / 2)
-        .attr("y", 30)
-        .style("text-anchor", "middle")
-        .style("text-decoration", "underline")
-        .text("Top 10 Colleges by Highest Percentage of Graduates in Specific Degree Types")
-        .style("font-size", "20px");
+	initVis() {
+		let vis = this;
+
+		// Initialize the svg essentials
+		vis.margin = { top: 50, right: 20, bottom: 170, left: 100, xAxisPadding: -8, yAxisPadding: 10 };
+
+		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right,
+			vis.height = 500 - vis.margin.top - vis.margin.bottom;
+
+		vis.padding = 30
+
+		//Clean the data before we use it
+		vis.data = vis.data.filter(function (schoolObject) {
+			// Check if any attribute is null or NaN
+			return (
+				Object.values(schoolObject.degPercents).every(value => value !== null && !isNaN(value))
+			);
+		});
+
+		// Aggregate the data so we can represent it by degree category instead of by school
+		vis.degreeData = {}
+
+		Object.keys(vis.data[0].degPercents).forEach(category => {
+			let categoryAveragePercentage = d3.mean(vis.data, d => d.degPercents[category]);
+			vis.degreeData[category] = categoryAveragePercentage
+		});
+		// console.log(vis.degreeData)
+
+		vis.degreeLabelMapping = {
+			"bizdegpercent": "Business, Management, Marketing",
+			"libartsdegpercent": "Liberal Arts And Sciences,Humanities",
+			"vizartsdegpercent": "Visual And Performing Arts",
+			"csdegpercent": "Computer And Information Sciences",
+			"mechdegpercent": "Mechanic And Repair Technicians",
+			"phildegpercent": "Theology And Religious Vocations",
+			"lawenfdegpercent": "Law Enforcement, Firefighting",
+			"engdegpercent": "Engineering",
+			"edudegpercent": "Education",
+			"commdegpercent": "Communication, Journalism",
+			"healthdegpercent": "Health Professions",
+			"fooddegpercent": "Culinary Services"
+		}
+
+		// SVG drawing area
+		vis.barChartSvg = d3.select("#" + vis.parentElement).append("svg")
+			.attr("width", vis.width + vis.margin.left + vis.margin.right)
+			.attr("height", vis.height + vis.margin.top + vis.margin.bottom)
+			.append("g")
+			.attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
+
+		vis.xScale = d3.scaleBand()
+			.domain(Object.keys(vis.degreeData))
+			.range([0, vis.width])
+			.padding(0.1);
+
+		vis.yScale = d3.scaleLinear()
+			.domain([0, d3.max(Object.values(vis.degreeData))])
+			.range([vis.height, 0]);
+
+		// Create bars
+		vis.barChartSvg.selectAll(".bar")
+			.data(Object.entries(vis.degreeData))
+			.enter().append("rect")
+			.attr("class", "bar")
+			.attr("x", d => vis.xScale(d[0]))
+			.attr("width", vis.xScale.bandwidth())
+			.attr("y", d => vis.yScale(d[1]))
+			.attr("height", d => vis.height - vis.yScale(d[1]));
+
+		// Add x-axis
+		vis.barChartSvg.append("g")
+			.attr("class", "x-axis")
+			.attr("transform", "translate(0," + vis.height + ")")
+			.call(d3.axisBottom(vis.xScale))
+			.selectAll("text")
+			.attr("transform", "rotate(-45)")
+			.style("text-anchor", "end");
+
+		// Update the x-axis tick labels
+		vis.barChartSvg.selectAll(".x-axis text")
+			.text((d, i) => vis.degreeLabelMapping[d]);
+		// Add y-axis
+		vis.barChartSvg.append("g")
+			.attr("class", "y-axis")
+			.call(d3.axisLeft(vis.yScale).tickFormat(d3.format(".0%")));
+
+		// Add plot title
+		vis.barChartSvg.append("text")
+			.attr("x", (vis.width / 2))
+			.attr("y", 0 - (vis.margin.top / 2))
+			.attr("text-anchor", "middle")
+			.style("font-size", "24px")
+			.text("Average percentage of degrees awarded by degree category");
+
+		// Add labels
+		vis.barChartSvg.append("text")
+			.attr("transform", "rotate(-90)")
+			.attr("y", 0 - vis.margin.left)
+			.attr("x", 0 - (vis.height / 2))
+			.attr("dy", "1em")
+			.style("text-anchor", "middle")
+			.text("Average percentage of degrees awarded");
+
+		vis.barChartSvg.append("text")
+			.attr("transform", "translate(" + (vis.width / 2) + " ," + (vis.height + vis.margin.top + 80) + ")")
+			.style("text-anchor", "middle")
+			.text("Degree Category");
+
+		vis.wrangleData();
+	}
+
+
+	wrangleData() {
+		let vis = this;
+
+		vis.displayData = vis.data;
+
+		vis.updateVis();
+	}
+
+	updateVis() {
+		let vis = this;
+	}
 }
-svg.append('g').attr('transform', `translate(0,${height})`).call(xAxis);
-svg.append('g').call(yAxis);

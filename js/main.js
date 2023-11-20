@@ -6,7 +6,7 @@ let dateParser = d3.timeParse("%Y-%m-%d");
 // (1) Load data with promises
 
 let promises = [
-    d3.csv("data/satvscomprate.csv")
+    d3.csv("data/collegeData.csv")
 ];
 
 Promise.all(promises)
@@ -26,7 +26,21 @@ function createVis(data) {
         let schoolObject = {
             schoolID: +d.UNITID,
             avg_sat: +d.SAT_AVG,
-            comp_rate: +d.C100_4
+            comp_rate: +d.C100_4,
+            degPercents: {
+                "bizdegpercent": +d.PCIP52,
+                "libartsdegpercent": +d.PCIP24,
+                "vizartsdegpercent": +d.PCIP50,
+                "csdegpercent": +d.PCIP11,
+                "mechdegpercent": +d.PCIP47,
+                "phildegpercent": +d.PCIP39,
+                "lawenfdegpercent": +d.PCIP43,
+                "engdegpercent": +d.PCIP15,
+                "edudegpercent": +d.PCIP13,
+                "commdegpercent": +d.PCIP09,
+                "healthdegpercent": +d.PCIP51,
+                "fooddegpercent": +d.PCIP12
+            }
         };
         return schoolObject;
     });
@@ -38,6 +52,7 @@ function createVis(data) {
 
     // (4) Create visualization instances
     let scatterplotVis = new ScatterPlotVis("scatterplotvis", allData);
+    let barchartVis = new BarChartVis("barchartvis", allData);
     let pictogramVis = new PictoGramVis("pictogramvis", allData);
 
     // *** TO-DO ***

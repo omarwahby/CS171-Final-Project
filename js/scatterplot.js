@@ -27,7 +27,7 @@ class ScatterPlotVis {
 		vis.margin = { top: 40, right: 20, bottom: 60, left: 60, xAxisPadding: -8, yAxisPadding: 10 };
 
 		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right,
-			vis.height = 300 - vis.margin.top - vis.margin.bottom;
+			vis.height = 500 - vis.margin.top - vis.margin.bottom;
 
 		// SVG drawing area
 		vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -39,7 +39,12 @@ class ScatterPlotVis {
 		// Clean the data before we initialize the vis
 		vis.data = vis.data.filter(function (schoolObject) {
 			// Check if any attribute is null or NaN
-			return Object.values(schoolObject).every(attribute => attribute !== null && !isNaN(attribute));
+			return (
+				schoolObject.avg_sat !== null &&
+				!isNaN(schoolObject.avg_sat) &&
+				schoolObject.comp_rate !== null &&
+				!isNaN(schoolObject.comp_rate)
+			);
 		});
 		console.log(vis.data)
 
