@@ -46,7 +46,7 @@ class ScatterPlotVis {
 				!isNaN(schoolObject.comp_rate)
 			);
 		});
-		console.log(vis.data)
+		// console.log(vis.data)
 
 		let lowestSatDataPoint = allData.reduce((min, current) => {
 			return current.avg_sat < min.avg_sat ? current : min;

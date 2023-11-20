@@ -25,9 +25,23 @@ h2 {
 	fill-opacity: .5;
 	pointer-events: none;
 }*/
+.placeholder-pic {
+	align-items: center;
+}
+
+.placeholder-title {
+	text-align: center;
+}
 
 .narration {
 	color: red;
+	font-weight: bold;
+	text-align: center;
+}
+
+#title,
+#subtitle {
+	text-align: center;
 }
 
 .axis line,

@@ -40,11 +40,14 @@ function createVis(data) {
                 "commdegpercent": +d.PCIP09,
                 "healthdegpercent": +d.PCIP51,
                 "fooddegpercent": +d.PCIP12
-            }
+            },
+            avg_fam_inc: +d.FAMINC,
+            withdraw_rate: +d.WDRAW_ORIG_YR4_RT
+
         };
         return schoolObject;
     });
-    // console.log(allData)
+    console.log(allData)
 
 
     // (3) Create event handler
@@ -53,7 +56,7 @@ function createVis(data) {
     // (4) Create visualization instances
     let scatterplotVis = new ScatterPlotVis("scatterplotvis", allData);
     let barchartVis = new BarChartVis("barchartvis", allData);
-    let pictogramVis = new PictoGramVis("pictogramvis", allData);
+    let sankeyVis = new SankeyVis("sankeyvis", allData);
 
     // *** TO-DO ***
     //  pass event handler to CountVis, at constructor of CountVis above
