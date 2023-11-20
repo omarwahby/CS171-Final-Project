@@ -1,4 +1,6 @@
-
+:root {
+	--main-color: #16537b;
+}
 
 body {
 	font-family: 'Neuton', serif;
@@ -6,7 +8,7 @@ body {
 
 h1 {
 	font-size: 36px;
-	color: #825a5a;
+	color: var(--main-color);
 	margin-top: 40px;
 }
 
@@ -26,9 +28,9 @@ h2 {
 
 .axis line,
 .axis path {
-  fill: none;
-  stroke: #555;
-  shape-rendering: crispEdges;
+	fill: none;
+	stroke: #555;
+	shape-rendering: crispEdges;
 }
 
 .tick text {
@@ -42,7 +44,7 @@ h2 {
 }
 
 .area {
-	fill: #825a5a;
+	fill: var(--main-color);
 }
 
 .area.area-age {
