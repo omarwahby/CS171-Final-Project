@@ -3,24 +3,17 @@
 let margin = {
         top: 10,
         right: 35,
-        bottom: 50,
+        bottom: 200,
         left: 100},
     width = 850 - margin.left - margin.right,
     height = 650 - margin.top - margin.bottom;
 
-// define time parser
-let parseTime= d3.timeParse("%Y-%m-%d");
-
 // journey to the promise land
-d3.csv("data/zaatari-refugee-camp-population.csv", d => {
-    // parse data properly
-    d.population = +d.population;
-    d.date = parseTime(d.date);
+d3.csv("data/BarChartData.csv", d => {
+
     return d;
 
 }).then(function(data){
-    // draw area chart
-    drawAreaChart(data);
     // draw bar chart
     drawBarChart(data);
 });
@@ -28,10 +21,17 @@ d3.csv("data/zaatari-refugee-camp-population.csv", d => {
 function drawBarChart(data){
 
     // define shelter data
-    const shelterData = [
-        { type: "Caravans", percentage: 79.68 },
-        { type: "Combination*", percentage: 10.81 },
-        { type: "Tents", percentage: 9.51 }
+    const degreeDate = [
+        { type: "Business, Management, Marketing", percentage: 9.289 },
+        { type: "Liberal Arts And Sciences, General Studies And Humanities", percentage: 5.619 },
+        { type: "Visual And Performing Arts", percentage: 3.370 },
+        { type: "Computer And Information Sciences", percentage: 2.972 },
+        { type: "Mechanic And Repair Technologies/Technicians", percentage: 2.785 },
+        { type: "Theology And Religious Vocations", percentage: 2.564 },
+        { type: "Homeland Security, Law Enforcement, Firefighting", percentage: 2.430 },
+        { type: "Engineering Technologies", percentage: 2.159 },
+        { type: "Education", percentage: 2.080 },
+        { type: "Communication, Journalism", percentage: 1.247 },
     ];
 
     let padding = 30;
@@ -46,20 +46,25 @@ function drawBarChart(data){
 
     // Create an ordinal scale for the x-axis
     const xBarScale = d3.scaleBand()
-        .domain(shelterData.map(d => d.type))
+        .domain(degreeDate.map(d => d.type))
         .range([padding, width - padding])
         .padding(0.2);
+
     // Add x-axis
-    barChartSvg.append("g")
+    const xAxis = barChartSvg.append("g")
         .attr("class", "x-axis")
-        .attr("transform", "translate(0," + (height-2*padding) + ")")
+        .attr("transform", `translate(0, ${height - 2 * padding})`)
         .call(d3.axisBottom().scale(xBarScale))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0) rotate(-45)") // Rotate and adjust position
+        .style("text-anchor", "end")
         .style("font-size", "12px");
 
     // Create y-scale for the bar chart
     const yBarScale = d3.scaleLinear()
         .domain([0, 100])
         .range([height - 2*padding, 2*padding]);
+
     // Add y-axis
     barChartSvg.append("g")
         .attr("class", "y-axis")
@@ -69,7 +74,7 @@ function drawBarChart(data){
 
     // Draw bars
     barChartSvg.selectAll(".bar")
-        .data(shelterData)
+        .data(degreeDate)
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", d => xBarScale(d.type))
@@ -78,9 +83,10 @@ function drawBarChart(data){
         .attr("height", d => height - yBarScale(d.percentage) -60)
         .style("font-size", "12px");
 
+
     // Add labels above each bar
     barChartSvg.selectAll(".bar-label")
-        .data(shelterData)
+        .data(degreeDate)
         .enter().append("text")
         .attr("class", "bar-label")
         .attr("x", d => xBarScale(d.type) + xBarScale.bandwidth() / 2)
@@ -96,6 +102,8 @@ function drawBarChart(data){
         .attr("y", 30)
         .style("text-anchor", "middle")
         .style("text-decoration", "underline")
-        .text("Type of Shelter")
+        .text("Top 10 Colleges by Highest Percentage of Graduates in Specific Degree Types")
         .style("font-size", "20px");
 }
+svg.append('g').attr('transform', `translate(0,${height})`).call(xAxis);
+svg.append('g').call(yAxis);
