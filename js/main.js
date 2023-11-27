@@ -6,7 +6,10 @@ let dateParser = d3.timeParse("%Y-%m-%d");
 // (1) Load data with promises
 
 let promises = [
-    d3.csv("data/collegeData.csv")
+    
+    d3.csv("data/collegeData.csv"),
+    d3.csv("data.csv")
+    
 ];
 
 Promise.all(promises)
