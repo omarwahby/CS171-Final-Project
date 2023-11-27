@@ -1,146 +1,135 @@
 
-/*
- * BarChartVis - Object constructor function
- * @param _parentElement 	-- the HTML element in which to draw the visualization
- * @param _data						-- the actual data: perDayData
- */
+/*****************************************/
+/*   DRAW BAR CHART - ALREADY COMPLETE   */
+/*****************************************/
 
-class BarChartVis {
+// CHART AREA
 
-	constructor(_parentElement, _data, _eventHandler) {
-		this.parentElement = _parentElement;
-		this.data = _data;
-		//this.eventHandler =
+let margin = {top: 40, right: 20, bottom: 300, left: 90},
+    width = $('#chart-area').width() - margin.left - margin.right,
+    height = 800 - margin.top - margin.bottom;
 
-		this.initVis();
+
+let svg = d3.select("#chart-area").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+// AXIS 
+
+let x = d3.scaleBand()
+	.range([0, width])
+	.paddingInner(0.1);
+
+let y = d3.scaleLinear()
+    .range([height, 0]);
+
+let xAxis = d3.axisBottom()
+    .scale(x);
+    
+let yAxis = d3.axisLeft()
+    .scale(y);
+
+let xAxisGroup = svg.append("g")
+    .attr("class", "x-axis axis");
+
+let yAxisGroup = svg.append("g")
+  .attr("class", "y-axis axis");
+
+
+
+function renderBarChart(data) {
+
+	// Check array length (top 5 attractions)
+	if(data.length > 15) {
+		errorMessage("Max 5 rows");
+		return;
 	}
 
+	// Check object properties
+	if(!data[0].hasOwnProperty("Visitors") || !data[0].hasOwnProperty("Location") || !data[0].hasOwnProperty("Category")) {
+		errorMessage("The Object properties are not correct! An attraction should include at least: 'Visitors', 'Location', 'Category'");
+		return;
+	}
 
-	/*
-	 * Initialize visualization (static content, e.g. SVG area or axes)
-	 */
+	x.domain(data.map( d => d.Location));
+    y.domain([0, d3.max(data, d => d.Visitors)]);
 
-	initVis() {
-		let vis = this;
+  // ---- DRAW BARS ----
+    let bars = svg.selectAll(".bar")
+        .remove()
+        .exit()
+        .data(data)
 
-		// Initialize the svg essentials
-		vis.margin = { top: 50, right: 20, bottom: 170, left: 100, xAxisPadding: -8, yAxisPadding: 10 };
+    bars.enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", d => x(d.Location))
+        .attr("y", d => y(d.Visitors))
+        .attr("height", d => (height - y(d.Visitors)))
+        .attr("width", x.bandwidth())
+		.on("mouseover", function(event, d) {
 
-		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right,
-			vis.height = 500 - vis.margin.top - vis.margin.bottom;
+            //Get this bar's x/y values, then augment for the tooltip
+            let xPosition = margin.left + parseFloat(d3.select(this).attr("x")) ;
+            let yPosition = margin.top +  y(d.Visitors/2);
 
-		vis.padding = 30
+            //Update the tooltip position and value
+            d3.select("#tooltip")
+                .style("left", xPosition + "px")
+                .style("top", yPosition + "px")
+                .select("#value")
+                .text(d.Visitors);
 
-		//Clean the data before we use it
-		vis.data = vis.data.filter(function (schoolObject) {
-			// Check if any attribute is null or NaN
-			return (
-				Object.values(schoolObject.degPercents).every(value => value !== null && !isNaN(value))
-			);
+
+            //Show the tooltip
+            d3.select("#tooltip").classed("hidden", false);
+		})
+		.on("mouseout", function(d) {
+
+            //Hide the tooltip
+            d3.select("#tooltip").classed("hidden", true);
 		});
 
-		// Aggregate the data so we can represent it by degree category instead of by school
-		vis.degreeData = {}
 
-		Object.keys(vis.data[0].degPercents).forEach(category => {
-			let categoryAveragePercentage = d3.mean(vis.data, d => d.degPercents[category]);
-			vis.degreeData[category] = categoryAveragePercentage
-		});
-		// console.log(vis.degreeData)
-
-		vis.degreeLabelMapping = {
-			"bizdegpercent": "Business, Management, Marketing",
-			"libartsdegpercent": "Liberal Arts And Sciences,Humanities",
-			"vizartsdegpercent": "Visual And Performing Arts",
-			"csdegpercent": "Computer And Information Sciences",
-			"mechdegpercent": "Mechanic And Repair Technicians",
-			"phildegpercent": "Theology And Religious Vocations",
-			"lawenfdegpercent": "Law Enforcement, Firefighting",
-			"engdegpercent": "Engineering",
-			"edudegpercent": "Education",
-			"commdegpercent": "Communication, Journalism",
-			"healthdegpercent": "Health Professions",
-			"fooddegpercent": "Culinary Services"
-		}
-
-		// SVG drawing area
-		vis.barChartSvg = d3.select("#" + vis.parentElement).append("svg")
-			.attr("width", vis.width + vis.margin.left + vis.margin.right)
-			.attr("height", vis.height + vis.margin.top + vis.margin.bottom)
-			.append("g")
-			.attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
-
-		vis.xScale = d3.scaleBand()
-			.domain(Object.keys(vis.degreeData))
-			.range([0, vis.width])
-			.padding(0.1);
-
-		vis.yScale = d3.scaleLinear()
-			.domain([0, d3.max(Object.values(vis.degreeData))])
-			.range([vis.height, 0]);
-
-		// Create bars
-		vis.barChartSvg.selectAll(".bar")
-			.data(Object.entries(vis.degreeData))
-			.enter().append("rect")
-			.attr("class", "bar")
-			.attr("x", d => vis.xScale(d[0]))
-			.attr("width", vis.xScale.bandwidth())
-			.attr("y", d => vis.yScale(d[1]))
-			.attr("height", d => vis.height - vis.yScale(d[1]));
-
-		// Add x-axis
-		vis.barChartSvg.append("g")
-			.attr("class", "x-axis")
-			.attr("transform", "translate(0," + vis.height + ")")
-			.call(d3.axisBottom(vis.xScale))
-			.selectAll("text")
-			.attr("transform", "rotate(-45)")
-			.style("text-anchor", "end");
-
-		// Update the x-axis tick labels
-		vis.barChartSvg.selectAll(".x-axis text")
-			.text((d, i) => vis.degreeLabelMapping[d]);
-		// Add y-axis
-		vis.barChartSvg.append("g")
-			.attr("class", "y-axis")
-			.call(d3.axisLeft(vis.yScale).tickFormat(d3.format(".0%")));
-
-		// Add plot title
-		vis.barChartSvg.append("text")
-			.attr("x", (vis.width / 2))
-			.attr("y", 0 - (vis.margin.top / 2))
-			.attr("text-anchor", "middle")
-			.style("font-size", "24px")
-			.text("Average percentage of degrees awarded by degree category");
-
-		// Add labels
-		vis.barChartSvg.append("text")
-			.attr("transform", "rotate(-90)")
-			.attr("y", 0 - vis.margin.left)
-			.attr("x", 0 - (vis.height / 2))
-			.attr("dy", "1em")
-			.style("text-anchor", "middle")
-			.text("Average percentage of degrees awarded");
-
-		vis.barChartSvg.append("text")
-			.attr("transform", "translate(" + (vis.width / 2) + " ," + (vis.height + vis.margin.top + 80) + ")")
-			.style("text-anchor", "middle")
-			.text("Degree Category");
-
-		vis.wrangleData();
-	}
+	// ---- DRAW AXIS	----
+    xAxisGroup = svg.select(".x-axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+    .selectAll("text") // Select all the text elements for the x-axis ticks
+    .style("text-anchor", "end") // Set the text anchor to end
+    .attr("dx", "-.8em") // Adjust the x position
+    .attr("dy", ".15em") // Adjust the y position
+    .attr("transform", "rotate(-45)"); // Rotate the labels by -45 degrees
 
 
-	wrangleData() {
-		let vis = this;
+  yAxisGroup = svg.select(".y-axis")
+      .call(yAxis);
 
-		vis.displayData = vis.data;
-
-		vis.updateVis();
-	}
-
-	updateVis() {
-		let vis = this;
-	}
+  svg.select("text.axis-title").remove();
+  svg.append("text")
+  	.attr("class", "axis-title")
+		.attr("x", -5)
+		.attr("y", -15)
+		.attr("dy", ".1em")
+		.style("text-anchor", "end")
+		.text("Annual Visitors");
 }
+
+
+function errorMessage(message) {
+	console.log(message);
+}
+
+function shortenString(content, maxLength){
+	// Trim the string to the maximum length
+	let trimmedString = content.substr(0, maxLength);
+
+	// Re-trim if we are in the middle of a word
+	trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
+
+	return trimmedString;
+}
+
