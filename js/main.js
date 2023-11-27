@@ -20,6 +20,16 @@ Promise.all(promises)
         console.log(err)
     });
 
+function initMainPage(dataArray) {
+
+    // log data
+    console.log('check out the data', dataArray);
+
+    const map =  new MapVisualization('#mapContainer', dataArray[1]);
+    MapVisualization.initVis();
+
+}
+
 function createVis(data) {
     let perSchoolData = data[0]
 
