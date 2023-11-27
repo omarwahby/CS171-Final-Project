@@ -8,7 +8,7 @@ let dateParser = d3.timeParse("%Y-%m-%d");
 let promises = [
     
     d3.csv("data/collegeData.csv"),
-    d3.csv("data.csv")
+    d3.csv("data/data.csv")
     
 ];
 
