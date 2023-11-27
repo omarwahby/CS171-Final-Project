@@ -15,6 +15,7 @@ let promises = [
 Promise.all(promises)
     .then(function (data) {
         createVis(data)
+        initMainPage((data))
     })
     .catch(function (err) {
         console.log(err)
