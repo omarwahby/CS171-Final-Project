@@ -47,7 +47,7 @@ function createVis(data) {
         };
         return schoolObject;
     });
-    console.log(allData)
+    // console.log("All schools", allData)
 
 
     // (3) Create event handler
@@ -55,8 +55,8 @@ function createVis(data) {
 
     // (4) Create visualization instances
     let scatterplotVis = new ScatterPlotVis("scatterplotvis", allData);
-    let barchartVis = new BarChartVis("barchartvis", allData);
-    let sankeyVis = new SankeyVis("sankeyvis", allData);
+    // let barchartVis = new BarChartVis("barchartvis", allData);
+    let parallelCoordinatesVis = new ParallelCoordinatesVis("parallelcoordinatesvis", allData);
 
     // *** TO-DO ***
     //  pass event handler to CountVis, at constructor of CountVis above
