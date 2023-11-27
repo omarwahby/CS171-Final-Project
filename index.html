@@ -51,16 +51,15 @@
         </div>
 
         <div class="row">
-            <div class="col-md-12">
-                <h3 class="placeholder-title">Average family income per state</h3>
-                <h4 class="placeholder-title">The image below is just a placeholder since we have not yet implemented
-                    our designed our cloropleth. presents a comprehensive overview of economic disparities across the
-                    nation.
-                    Employing a color scale, the map captures the variances in average income levels,
-                    utilizing shades of red to denote lower incomes and progressively deepening into greens and darker
-                    blues for higher income brackets.</h4>
-                <img src="chloropleth-sketch.png" class="placeholder-pic" alt="Description of the image">
-            </div>
+
+            <div id="mapContainer"></div>
+
+            <select id="variableDropdown">
+                <option value="TUITIONFEE_IN">Average Tuition</option>
+                <option value="COMP_ORIG_YR2_RT">Average Completion Rate</option>
+                <option value="WDRAW_ORIG_YR4_RT">Average Withdrawal Rate</option>
+            </select>
+           <h4 class="placeholder-title">This is a map that has a tooltip to show tuition rates, withdrawal and completion rates by state.</h4>
         </div>
 
         <!-- header -->
