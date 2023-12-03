@@ -115,7 +115,7 @@ function renderBarChart(data) {
 		.attr("y", -15)
 		.attr("dy", ".1em")
 		.style("text-anchor", "end")
-		.text("Annual Visitors");
+		.text("percentage");
 }
 
 
