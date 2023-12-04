@@ -24,10 +24,10 @@ class ScatterPlotVis {
 		let vis = this;
 
 		// Initialize the svg essentials
-		vis.margin = { top: 40, right: 20, bottom: 60, left: 60, xAxisPadding: -8, yAxisPadding: 10 };
+		vis.margin = { top: 50, right: 80, bottom: 80, left: 100, xAxisPadding: -8, yAxisPadding: 10 };
 
 		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right,
-			vis.height = 500 - vis.margin.top - vis.margin.bottom;
+			vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
 
 		// SVG drawing area
 		vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -65,55 +65,6 @@ class ScatterPlotVis {
 			.domain([0, d3.max(vis.data, d => d.comp_rate)])
 			.range([vis.height, 0]);
 
-		// Draw circles for each data point
-		vis.svg.selectAll(".dot")
-			.data(vis.data)
-			.enter()
-			.append("circle")
-			.attr("class", "dot")
-			.attr("fill", "green")
-			.attr("stroke", "yellow")
-			.attr("cx", d => vis.xScale(d.avg_sat))
-			.attr("cy", d => vis.yScale(d.comp_rate))
-			.attr("r", 5);  // Radius of the circles
-
-		// Add axes
-		vis.xAxis = d3.axisBottom(vis.xScale);
-		vis.yAxis = d3.axisLeft(vis.yScale).tickFormat(d3.format(".0%")); // Format ticks as percentages
-
-		vis.svg.append("g")
-			.attr("transform", "translate(0," + (vis.height + vis.margin.yAxisPadding) + ")")
-			.call(vis.xAxis);
-
-		vis.svg.append("g")
-			// .attr("transform", "translate(0," + (0 - vis.margin.xAxisPadding) + ")")
-			.attr("transform", "translate(" + (vis.margin.xAxisPadding) + ", 0)")
-			.call(vis.yAxis);
-
-		// Add x-axis label
-		vis.svg.append("text")
-			.attr("transform", "translate(" + (vis.width / 2) + " ," + (vis.height + vis.margin.top + 10) + ")")
-			.style("text-anchor", "middle")
-			.text("Average SAT Score");
-
-		// Add y-axis label
-		vis.svg.append("text")
-			.attr("transform", "rotate(-90)")
-			.attr("y", 0 - vis.margin.left - 5)
-			.attr("x", 0 - (vis.height / 2))
-			.attr("dy", "1em")
-			.style("text-anchor", "middle")
-			.text("Completion Rate (%)");
-
-		// Add plot title
-		vis.svg.append("text")
-			.attr("x", (vis.width / 2))
-			.attr("y", 0 - (vis.margin.top / 2))
-			.attr("text-anchor", "middle")
-			.style("font-size", "24px")
-			.text("SAT Scores vs. 4-Year Bachelor's Degree Completion Rates");
-
-
 		// Calculate the least squares regression line
 		const regressionLine = d3.line()
 			.x(d => vis.xScale(d.avg_sat))
@@ -142,7 +93,106 @@ class ScatterPlotVis {
 			.attr("class", "line")
 			.attr("d", regressionLine)
 			.style("stroke-width", 5)
-			.style("stroke", "red");
+			.style("stroke", "red")
+			.style("opacity", ".7");
+
+		vis.tooltip = vis.svg.append("foreignObject")
+			.attr("width", 200)
+			.attr("height", 300)
+			.attr("x", 10)
+			.attr("y", 20)
+			.append("xhtml:div")
+			.style("opacity", 0)
+			.style("user-select", "none")
+			.style("position", "absolute")
+			.style("background-color", "green")
+			.style("padding", "10px")
+			.style("border", "1px solid #ccc")
+			.style("border-radius", "5px")
+			.style("pointer-events", "none");
+
+		// Draw circles for each data point
+		vis.svg.selectAll(".dot")
+			.data(vis.data)
+			.enter()
+			.append("circle")
+			.attr("class", "dot")
+			.attr("fill", "green")
+			.attr("stroke", "yellow")
+			.attr("cx", d => vis.xScale(d.avg_sat))
+			.attr("cy", d => vis.yScale(d.comp_rate))
+			.attr("r", 5)
+			.on("mouseover", function (event, d) {
+				d3.select(this)
+					.attr("fill", "red")
+					.attr("opacity", .6)
+					.attr("r", 10);
+				vis.tooltip.transition()
+					.duration(200)
+					.style("opacity", 1);
+				vis.tooltip.html(`<strong>${d.school_name}</strong><br>Average SAT Score: ${d.avg_sat}<br> Completion Rate: ${(d.comp_rate * 100).toFixed(2)}%`)
+					.style("font-family", "Arial, sans-serif")
+					.style("font-size", "14px")
+					.style("color", "yellow");
+			})
+			.on("mouseout", function (d) {
+				d3.select(this)
+					.attr("fill", "green")
+					.attr("opacity", 1)
+					.attr("r", 5);
+				vis.tooltip.transition()
+					.duration(500)
+					.style("opacity", 0);
+			});
+
+
+		// Add axes
+		vis.xAxis = d3.axisBottom(vis.xScale);
+		vis.yAxis = d3.axisLeft(vis.yScale).tickFormat(d3.format(".0%")); // Format ticks as percentages
+
+		vis.svg.append("g")
+			.attr("transform", "translate(0," + (vis.height + vis.margin.yAxisPadding) + ")")
+			.call(vis.xAxis);
+
+		vis.svg.append("g")
+			// .attr("transform", "translate(0," + (0 - vis.margin.xAxisPadding) + ")")
+			.attr("transform", "translate(" + (vis.margin.xAxisPadding) + ", 0)")
+			.call(vis.yAxis);
+
+		// Add x-axis label
+		vis.svg.append("text")
+			.attr("transform", "translate(" + (vis.width / 2) + " ," + (vis.height + vis.margin.top + 8) + ")")
+			.style("text-anchor", "middle")
+			.style("font-size", "24px")
+			.text("Average SAT Score");
+
+		// Add y-axis label
+		vis.svg.append("text")
+			.attr("transform", "rotate(-90)")
+			.attr("y", 0 - vis.margin.left + 10)
+			.attr("x", 0 - (vis.height / 2))
+			.attr("dy", "1em")
+			.style("text-anchor", "middle")
+			.style("font-size", "24px")
+			.text("Completion Rate (%)");
+
+		// Add plot title
+		vis.svg.append("text")
+			.attr("x", (vis.width / 2))
+			.attr("y", 0 - (vis.margin.top / 2))
+			.attr("text-anchor", "middle")
+			.style("font-size", "24px")
+			.text("SAT Scores vs. 4-Year Bachelor's Degree Completion Rates");
+
+		// Add instructions label
+		vis.svg.append("text")
+			.attr("x", vis.margin.left + 130)
+			.attr("y", vis.margin.top - 40)
+			.attr("text-anchor", "middle")
+			.style("font-size", "20px")
+			.style("fill", "red")
+			.style("font-weight", "bold")
+			.text("Hover over a point to view info about a specific school");
 
 		vis.wrangleData();
 	}
