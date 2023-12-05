@@ -7,15 +7,15 @@ dataFiltering();
 function dataFiltering() {
 	let attractions = attractionData;
 
-	console.log('hello from your js file. Good luck with the lab!')
+	// console.log('hello from your js file. Good luck with the lab!')
 
-	
+
 	// Sorting code fixed (needed to change from 'visitors' to 'Visitors')
 	attractions.sort(function (a, b) {
 		return b.Visitors - a.Visitors;
 	})
 
-	console.log('Sorted Array', attractions);
+	// console.log('Sorted Array', attractions);
 
 	/* **************************************************
 	 *
@@ -35,7 +35,7 @@ function dataFiltering() {
 	if (selectedValue !== "Default") {
 		attractions = attractions.filter(item => item.Category === selectedValue);
 	}
-	console.log('Sorted Array filtered by the \'' + selectedValue + '\' category', attractions);
+	// console.log('Sorted Array filtered by the \'' + selectedValue + '\' category', attractions);
 	// Use the filter() method to get the first five rows
 	const firstFiveRows = attractions.filter((item, index) => index < 15);
 	renderBarChart(firstFiveRows);
@@ -46,7 +46,7 @@ function dataManipulation() {
 	let selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
 	// You can now use the selectedValue variable for further manipulation
-	console.log("Selected Value:", selectedValue);
+	// console.log("Selected Value:", selectedValue);
 
 	dataFiltering();
 }
