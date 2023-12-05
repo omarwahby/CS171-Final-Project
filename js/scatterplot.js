@@ -48,7 +48,7 @@ class ScatterPlotVis {
 		});
 
 		vis.displayData = vis.data
-		console.log(vis.displayData)
+		// console.log(vis.displayData)
 
 		// Scatterplot Scales
 		vis.xScale = d3.scaleLinear()
@@ -143,85 +143,6 @@ class ScatterPlotVis {
 			vis.updateVis();
 		});
 
-		// // Add range sliders for min and max values
-		// vis.minSlider = vis.svg
-		// 	.append("foreignObject")
-		// 	.attr("width", 350)
-		// 	.attr("height", 50)
-		// 	.attr("y", vis.margin.top - 60)
-		// 	.attr("x", vis.margin.left - 25)
-		// 	.append("xhtml:input")
-		// 	.attr("type", "range")
-		// 	.attr("min", d3.min(vis.displayData, (d) => d.avg_sat))
-		// 	.attr("max", d3.max(vis.displayData, (d) => d.avg_sat))
-		// 	.attr("value", d3.min(vis.displayData, (d) => d.avg_sat))
-		// 	.attr("step", 1)
-		// 	.style("width", "100%")
-		// 	.style("height", "100%");
-
-		// vis.maxSlider = vis.svg
-		// 	.append("foreignObject")
-		// 	.attr("width", 350)
-		// 	.attr("height", 50)
-		// 	.attr("y", vis.margin.top - 60)
-		// 	.attr("x", vis.margin.left - 25)
-		// 	.append("xhtml:input")
-		// 	.attr("type", "range")
-		// 	.attr("min", d3.min(vis.displayData, (d) => d.avg_sat))
-		// 	.attr("max", d3.max(vis.displayData, (d) => d.avg_sat))
-		// 	.attr("value", d3.max(vis.displayData, (d) => d.avg_sat))
-		// 	.attr("step", 1)
-		// 	.style("width", "100%")
-		// 	.style("height", "100%");
-
-		// // SAT Score Label
-		// vis.scoreLabel = vis.svg
-		// 	.append("text")
-		// 	.attr("x", vis.margin.left + 150)
-		// 	.attr("y", vis.margin.top - 5)
-		// 	.attr("text-anchor", "middle")
-		// 	.style("font-size", "20px")
-		// 	.style("fill", "black")
-		// 	.style("font-weight", "regular")
-		// 	.text(
-		// 		"Selected SAT Score Range: " +
-		// 		vis.minSlider.property("value") +
-		// 		" - " +
-		// 		vis.maxSlider.property("value")
-		// 	);
-
-		// // Add event listeners to both sliders
-		// vis.minSlider.on("input", updateSliderValues);
-		// vis.maxSlider.on("input", updateSliderValues);
-
-		// function updateSliderValues() {
-		// 	// Update the displayed value
-		// 	vis.scoreLabel.text(
-		// 		"Selected SAT Score Range: " +
-		// 		vis.minSlider.property("value") +
-		// 		" - " +
-		// 		vis.maxSlider.property("value")
-		// 	);
-
-		// 	// Filter data based on the selected range
-		// 	vis.displayData = vis.data.filter(
-		// 		(d) =>
-		// 			d.avg_sat >= vis.minSlider.property("value") &&
-		// 			d.avg_sat <= vis.maxSlider.property("value")
-		// 	);
-
-		// 	vis.svg
-		// 		.selectAll(".dot")
-		// 		.data(vis.displayData, (d) => d.school_id)
-		// 		.selectAll("circle")
-		// 		.transition()
-		// 		.attr("cx", (d) => vis.xScale(d.avg_sat))
-		// 		.attr("cy", (d) => vis.yScale(d.comp_rate));
-
-		// 	// Update the visualization
-		// 	vis.updateVis();
-		// }
-
 		// Hover instructions label
 		vis.svg.append("text")
 			.attr("x", vis.width / 2)
@@ -258,15 +179,11 @@ class ScatterPlotVis {
 			.text("SAT Scores vs. 4-Year Bachelor's Degree Completion Rates");
 
 
-		vis.tooltip = vis.svg.append("foreignObject")
+		vis.tooltip = d3.select("body").append("foreignObject")
 			.attr("width", 200)
 			.attr("height", 300)
-			// .attr("x", 10)
-			// .attr("y", 90)
-			.attr("x", 100)
-			.attr("y", -115)
 			.append("xhtml:div")
-			.style("opacity", 0)
+			.style("opacity", .5)
 			.style("user-select", "none")
 			.style("position", "absolute")
 			.style("background-color", "green")
@@ -342,36 +259,69 @@ class ScatterPlotVis {
 		// 	.style("opacity", ".7");
 
 		// Update circles based on the new scales
-		let circles = vis.svg.selectAll(".dot")
+		// let circles = vis.svg.selectAll(".dot")
+		// 	.data(vis.displayData, d => d.school_id);
+
+		// circles.enter()
+		// 	.append("circle")
+		// 	.attr("class", "dot")
+		// 	.attr("fill", "green")
+		// 	.attr("stroke", "yellow")
+		// 	.attr("r", 5)
+		// 	.merge(circles)  // Merge enter and update selections
+		// 	.transition()
+		// 	.attr("cx", d => vis.xScale(d.avg_sat))
+		// 	.attr("cy", d => vis.yScale(d.comp_rate));
+
+		// circles.exit().remove();  // Remove unused circles
+
+
+
+		let old_circles = vis.svg.selectAll(".dot")
 			.data(vis.displayData, d => d.school_id);
 
-		circles.enter()
+		old_circles // Add new circles for data points that enter the range
+			.attr("class", "dot")
+			.merge(old_circles) // Merge with existing circles
+			.transition()
+			.duration(200)
+			.attr("cx", d => vis.xScale(d.avg_sat))
+			.attr("cy", d => vis.yScale(d.comp_rate))
+			.attr("r", 5)
+			.attr("stroke", "yellow")
+			.style("fill", "green");
+
+		old_circles.exit().remove();
+
+		// Add new circles for data points that enter the range
+		let new_circles = old_circles.enter()
 			.append("circle")
 			.attr("class", "dot")
-			.attr("fill", "green")
-			.attr("stroke", "yellow")
 			.attr("r", 5)
-			.merge(circles)  // Merge enter and update selections
-			.transition()
+			.attr("stroke", "yellow")
+			.style("fill", "green");
+
+		new_circles
 			.attr("cx", d => vis.xScale(d.avg_sat))
 			.attr("cy", d => vis.yScale(d.comp_rate));
 
-		circles.exit().remove();  // Remove unused circles
-
-		// Tooltip interactions
-		circles.on("mouseover", function (event, d) {
-			d3.select(this)
-				.attr("fill", "red")
-				.attr("opacity", .6)
-				.attr("r", 10);
-			vis.tooltip.transition()
-				.duration(200)
-				.style("opacity", 1);
-			vis.tooltip.html(`<strong>${d.school_name}</strong><br>Average SAT Score: ${d.avg_sat}<br> Completion Rate: ${(d.comp_rate * 100).toFixed(2)}%`)
-				.style("font-family", "Arial, sans-serif")
-				.style("font-size", "14px")
-				.style("color", "yellow");
-		})
+		// // Tooltip interactions
+		new_circles
+			.on("mouseover", function (event, d) {
+				d3.select(this)
+					.attr("fill", "red")
+					.attr("opacity", .6)
+					.attr("r", 10);
+				vis.tooltip.transition()
+					.duration(200)
+					.style("opacity", 1);
+				vis.tooltip.html(`<strong>${d.school_name}</strong><br>Average SAT Score: ${d.avg_sat}<br> Completion Rate: ${(d.comp_rate * 100).toFixed(2)}%`)
+					.style("left", (event.pageX) + "px")
+					.style("top", (event.pageY) + "px")
+					.style("font-family", "Arial, sans-serif")
+					.style("font-size", "14px")
+					.style("color", "yellow");
+			})
 			.on("mouseout", function (d) {
 				d3.select(this)
 					.attr("fill", "green")
@@ -381,5 +331,7 @@ class ScatterPlotVis {
 					.duration(500)
 					.style("opacity", 0);
 			});
+
+		new_circles.merge(old_circles);
 	}
 }
