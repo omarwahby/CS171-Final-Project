@@ -227,53 +227,35 @@ class ScatterPlotVis {
 			.transition()
 			.call(vis.yAxis);
 
-		// // Calculate the least squares regression line
-		// const regressionLine = d3.line()
-		// 	.x(d => vis.xScale(d.avg_sat))
-		// 	.y(d => vis.yScale(regressionEquation(d.avg_sat)))
-		// 	.curve(d3.curveLinear);
+		// Calculate the least squares regression line
+		const regressionLine = d3.line()
+			.x(d => vis.xScale(d.avg_sat))
+			.y(d => vis.yScale(regressionEquation(d.avg_sat)))
+			.curve(d3.curveLinear);
 
-		// function regressionEquation(x) {
-		// 	// Implement your regression equation here
-		// 	// This is a simple linear regression for demonstration purposes
-		// 	// You may want to use a library like 'regression-js' for more complex regressions
-		// 	// For a simple linear regression: y = mx + b
-		// 	const n = vis.displayData.length;
-		// 	const sumX = vis.displayData.reduce((acc, d) => acc + d.avg_sat, 0);
-		// 	const sumY = vis.displayData.reduce((acc, d) => acc + d.comp_rate, 0);
-		// 	const sumXY = vis.displayData.reduce((acc, d) => acc + d.avg_sat * d.comp_rate, 0);
-		// 	const sumXSquare = vis.displayData.reduce((acc, d) => acc + d.avg_sat ** 2, 0);
+		function regressionEquation(x) {
+			// simple linear regression: y = mx + b
+			const n = vis.displayData.length;
+			const sumX = vis.displayData.reduce((acc, d) => acc + d.avg_sat, 0);
+			const sumY = vis.displayData.reduce((acc, d) => acc + d.comp_rate, 0);
+			const sumXY = vis.displayData.reduce((acc, d) => acc + d.avg_sat * d.comp_rate, 0);
+			const sumXSquare = vis.displayData.reduce((acc, d) => acc + d.avg_sat ** 2, 0);
 
-		// 	const m = (n * sumXY - sumX * sumY) / (n * sumXSquare - sumX ** 2);
-		// 	const b = (sumY - m * sumX) / n;
-		// 	return m * x + b;
-		// }
+			const m = (n * sumXY - sumX * sumY) / (n * sumXSquare - sumX ** 2);
+			const b = (sumY - m * sumX) / n;
+			return m * x + b;
+		}
 
-		// // Draw the line of best fit
-		// vis.svg.append("path")
-		// 	.datum(vis.displayData)
-		// 	.attr("class", "line")
-		// 	.attr("d", regressionLine)
-		// 	.style("stroke-width", 5)
-		// 	.style("stroke", "red")
-		// 	.style("opacity", ".7");
-
-		// Update circles based on the new scales
-		// let circles = vis.svg.selectAll(".dot")
-		// 	.data(vis.displayData, d => d.school_id);
-
-		// circles.enter()
-		// 	.append("circle")
-		// 	.attr("class", "dot")
-		// 	.attr("fill", "green")
-		// 	.attr("stroke", "yellow")
-		// 	.attr("r", 5)
-		// 	.merge(circles)  // Merge enter and update selections
-		// 	.transition()
-		// 	.attr("cx", d => vis.xScale(d.avg_sat))
-		// 	.attr("cy", d => vis.yScale(d.comp_rate));
-
-		// circles.exit().remove();  // Remove unused circles
+		// Remove previous regression line before drawing new one
+		vis.svg.selectAll(".reg-line").remove();
+		// Draw the line of best fit
+		vis.svg.append("path")
+			.datum(vis.displayData)
+			.attr("class", "reg-line")
+			.attr("d", regressionLine)
+			.style("stroke-width", 5)
+			.style("stroke", "red")
+			.style("opacity", ".7");
 
 
 
