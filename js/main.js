@@ -6,10 +6,10 @@ let dateParser = d3.timeParse("%Y-%m-%d");
 // (1) Load data with promises
 
 let promises = [
-    
+
     d3.csv("data/collegeData.csv"),
     d3.csv("data/data.csv")
-    
+
 ];
 
 Promise.all(promises)
@@ -26,7 +26,7 @@ function initMainPage(dataArray) {
     // log data
     console.log('check out the data', dataArray);
 
-    const map =  new MapVisualization('#mapContainer', dataArray[1]);
+    const map = new MapVisualization('#mapContainer', dataArray[1]);
     MapVisualization.initVis();
 
 }
@@ -38,7 +38,8 @@ function createVis(data) {
     allData = perSchoolData.map(function (d) {
 
         let schoolObject = {
-            schoolID: +d.UNITID,
+            school_id: +d.UNITID,
+            school_name: d.INSTNM,
             avg_sat: +d.SAT_AVG,
             comp_rate: +d.C100_4,
             degPercents: {

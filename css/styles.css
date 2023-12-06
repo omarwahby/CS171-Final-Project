@@ -1,24 +1,24 @@
 .section {
-    text-align: center;
-    font-size: 3em;
+	text-align: center;
+	font-size: 3em;
 }
 
 .fp-watermark {
-    display: none;
+	display: none;
 }
 
 #section3 {
-    background-image: url('https://raw.githubusercontent.com/alvarotrigo/fullPage.js/master/examples/imgs/bg3.jpg');
+	background-image: url('https://raw.githubusercontent.com/alvarotrigo/fullPage.js/master/examples/imgs/bg3.jpg');
 }
 
 #section4 {
-    background-image: url("https://raw.githubusercontent.com/alvarotrigo/fullPage.js/master/examples/imgs/bg1.jpg");
+	background-image: url("https://raw.githubusercontent.com/alvarotrigo/fullPage.js/master/examples/imgs/bg1.jpg");
 }
 
 .section {
-    background-position: center center;
-    background-repeat: none;
-    background-size: cover;
+	background-position: center center;
+	background-repeat: none;
+	background-size: cover;
 }
 
 :root {
@@ -90,22 +90,39 @@ h2 {
 .bar {
 	fill: #93bebf;
 }
+
 .tooltip {
-    position: absolute;
-    text-align: center;
-    font: 12px sans-serif;
+	position: absolute;
+	text-align: center;
+	font: 12px sans-serif;
 }
-.tooltip h3,h4 {
-    text-align: left;
+
+.tooltip h3,
+h4 {
+	text-align: left;
 }
+
 .tooltip h4 {
-    font: 14px sans-serif;
+	font: 14px sans-serif;
 }
 
 .table {
-    font-size: 0.7em;
+	font-size: 0.7em;
 }
 
-.x-axis, .y-axis {
-    font-size: .5em;
+.x-axis,
+.y-axis {
+	font-size: .5em;
+}
+
+.noUi-connect {
+	background: green;
+}
+
+.noUi-connects {
+	background: rgb(112, 115, 112);
+}
+
+.noUi-touch-area {
+	background: rgb(79, 11, 11);
 }
