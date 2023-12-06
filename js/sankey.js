@@ -85,9 +85,9 @@ class SankeyVis {
 		}
 
 		const income_mapping = {
-			0: `Lower Third (<=$${Math.round(bottom_third_threshold)})`,
-			1: `Middle Third ($${Math.round(bottom_third_threshold)}-$${Math.round(middle_third_threshold)})`,
-			2: `Upper Third ($${Math.round(middle_third_threshold)}-$${Math.round(upper_third_threshold)})`
+			0: `Lower Third (<=$${Math.round(bottom_third_threshold)}/yr)`,
+			1: `Middle Third ($${Math.round(bottom_third_threshold)}/yr-$${Math.round(middle_third_threshold)}/yr)`,
+			2: `Upper Third ($${Math.round(middle_third_threshold)}/yr-$${Math.round(upper_third_threshold)}/yr)`
 		};
 		const withdrawal_mapping = {
 			3: "0-10%",
@@ -149,7 +149,7 @@ class SankeyVis {
 			.attr("y", 0 - (vis.margin.top / 2))
 			.attr("text-anchor", "middle")
 			.style("font-size", "24px")
-			.text("Flow of Average student income to withdrawal rate");
+			.text("Connection between average student income per year to withdrawal rate");
 
 		// format variables
 		var formatNumber = d3.format(",.0f"), // zero decimal places
@@ -159,7 +159,7 @@ class SankeyVis {
 		// Set the sankey diagram properties
 		var sankey = d3.sankey()
 			.nodeWidth(36)
-			.nodePadding(50)
+			.nodePadding(70)
 			.size([vis.width, vis.height]);
 
 		var path = sankey.links();

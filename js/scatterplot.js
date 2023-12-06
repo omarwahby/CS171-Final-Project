@@ -81,7 +81,7 @@ class ScatterPlotVis {
 			.style("font-size", "20px")
 			.style("fill", "red")
 			.style("font-weight", "bold")
-			.text("Filter data by averge SAT score range");
+			.text("Filter data by average SAT score range");
 
 		// Add SAT range score labels
 		vis.startScore = vis.svg.append("text")
