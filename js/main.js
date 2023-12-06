@@ -6,16 +6,30 @@ let dateParser = d3.timeParse("%Y-%m-%d");
 // (1) Load data with promises
 
 let promises = [
-    d3.csv("data/collegeData.csv")
+
+    d3.csv("data/collegeData.csv"),
+    d3.csv("data/data.csv")
+
 ];
 
 Promise.all(promises)
     .then(function (data) {
         createVis(data)
+        initMainPage((data))
     })
     .catch(function (err) {
         console.log(err)
     });
+
+function initMainPage(dataArray) {
+
+    // log data
+    console.log('check out the data', dataArray);
+
+    const map = new MapVisualization('#mapContainer', dataArray[1]);
+    MapVisualization.initVis();
+
+}
 
 function createVis(data) {
     let perSchoolData = data[0]
@@ -24,7 +38,8 @@ function createVis(data) {
     allData = perSchoolData.map(function (d) {
 
         let schoolObject = {
-            schoolID: +d.UNITID,
+            school_id: +d.UNITID,
+            school_name: d.INSTNM,
             avg_sat: +d.SAT_AVG,
             comp_rate: +d.C100_4,
             degPercents: {
@@ -47,7 +62,6 @@ function createVis(data) {
         };
         return schoolObject;
     });
-    // console.log(allData)
 
 
     // (3) Create event handler
@@ -57,6 +71,7 @@ function createVis(data) {
     let scatterplotVis = new ScatterPlotVis("scatterplotvis", allData);
     // let barchartVis = new BarChartVis("barchartvis", allData);
     let sankeyVis = new SankeyVis("sankeyvis", allData);
+    // let barchartVis = new BarChartVis("barchartvis", allData);
 
     // *** TO-DO ***
     //  pass event handler to CountVis, at constructor of CountVis above
