@@ -1,6 +1,6 @@
 .section {
 	text-align: center;
-	font-size: 3em;
+	/* font-size: 3em; */
 }
 
 .fp-watermark {
@@ -40,15 +40,6 @@ h2 {
 	font-size: 24px;
 	margin-top: 10px;
 	margin-bottom: 30px;
-}
-
-
-.placeholder-pic {
-	align-items: center;
-}
-
-.placeholder-title {
-	text-align: center;
 }
 
 .narration {
@@ -125,4 +116,26 @@ h4 {
 
 .noUi-touch-area {
 	background: rgb(79, 11, 11);
+}
+
+/* Sankey Styles */
+
+.node rect {
+	fill-opacity: .9;
+	shape-rendering: crispEdges;
+}
+
+.node text {
+	pointer-events: none;
+	text-shadow: 0 1px 0 #fff;
+}
+
+.link {
+	fill: none;
+	stroke: #000;
+	stroke-opacity: .2;
+}
+
+.link:hover {
+	stroke-opacity: .5;
 }

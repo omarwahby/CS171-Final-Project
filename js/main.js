@@ -24,7 +24,7 @@ Promise.all(promises)
 function initMainPage(dataArray) {
 
     // log data
-    console.log('check out the data', dataArray);
+    // console.log('check out the data', dataArray);
 
     const map = new MapVisualization('#mapContainer', dataArray[1]);
     MapVisualization.initVis();
@@ -62,7 +62,6 @@ function createVis(data) {
         };
         return schoolObject;
     });
-    // console.log("All schools", allData)
 
 
     // (3) Create event handler
@@ -71,7 +70,8 @@ function createVis(data) {
     // (4) Create visualization instances
     let scatterplotVis = new ScatterPlotVis("scatterplotvis", allData);
     // let barchartVis = new BarChartVis("barchartvis", allData);
-    let parallelCoordinatesVis = new ParallelCoordinatesVis("parallelcoordinatesvis", allData);
+    let sankeyVis = new SankeyVis("sankeyvis", allData);
+    // let barchartVis = new BarChartVis("barchartvis", allData);
 
     // *** TO-DO ***
     //  pass event handler to CountVis, at constructor of CountVis above
