@@ -1,10 +1,24 @@
 new fullpage('#fullpage', {
   //options here
-  autoScrolling:true,
+  autoScrolling: true,
   scrollHorizontally: true,
-  sectionsColor : ['#ffffff', '#ffffff', '#ffffff', '#ffffff'],
+  sectionsColor: [
+    '#ffffff',
+    '#ffffff',
+    '#ffffff',
+    '#ffffff',
+    '#ffffff',
+    '#ffffff',
+    '#ffffff'],
   navigation: true,
   slidesNavigation: true,
-  anchors:['firstPage', 'secondPage', 'thirdPage', 'finalPage'],
+  anchors: ['title',
+    'merit',
+    'sat',
+    'socioeconomic',
+    'sankey',
+    'map',
+    'barchart',
+  ],
   navigationTooltips: ['first', 'second']
 });
