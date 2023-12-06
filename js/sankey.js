@@ -24,10 +24,10 @@ class SankeyVis {
 		let vis = this;
 
 		// Initialize the svg essentials
-		vis.margin = { top: 40, right: 20, bottom: 60, left: 60, xAxisPadding: -8, yAxisPadding: 10 };
+		vis.margin = { top: 80, right: 50, bottom: 20, left: 10, xAxisPadding: -8, yAxisPadding: 10 };
 
-		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right,
-			vis.height = 800 - vis.margin.top - vis.margin.bottom;
+		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right - 50,
+			vis.height = 700 - vis.margin.top - vis.margin.bottom;
 
 
 		// Clean the data before we initialize the vis
@@ -159,7 +159,7 @@ class SankeyVis {
 		// Set the sankey diagram properties
 		var sankey = d3.sankey()
 			.nodeWidth(36)
-			.nodePadding(40)
+			.nodePadding(50)
 			.size([vis.width, vis.height]);
 
 		var path = sankey.links();
