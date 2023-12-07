@@ -1,52 +1,47 @@
 var attractionData = [
     {
         "Location": "Communication, Journalism",
-        "Category": "Default",
+        "Category": "10",
         "Visitors": 0.01247
     },
     {
-        "Location": "Computer And Information Sciences",
-        "Category": "Default",
-        "Visitors": 0.02972
-    },
-    {
         "Location": "Education",
-        "Category": "Default",
+        "Category": "10",
         "Visitors": 0.02080
     },
     {
         "Location": "Engineering Technologies",
-        "Category": "Default",
+        "Category": "10",
         "Visitors": 0.02159
     },
     {
         "Location": "Liberal Arts And Sciences, General Studies And Humanities",
-        "Category": "Default",
+        "Category": "10",
         "Visitors": 0.05619
     },
     {
         "Location": "Theology And Religious Vocations",
-        "Category": "Default",
+        "Category": "10",
         "Visitors": 0.02564
     },
     {
         "Location": "Homeland Security, Law Enforcement, Firefighting",
-        "Category": "Default",
+        "Category": "10",
         "Visitors": 0.02430
     },    
     {
         "Location": "Mechanic And Repair Technologies/Technicians",
-        "Category": "Default",
+        "Category": "10",
         "Visitors":  0.02785
     },
     {
         "Location": "Visual And Performing Arts",
-        "Category": "Default",
+        "Category": "10",
         "Visitors": 0.03370
     },
     {
         "Location": "Business, Management, Marketing",
-        "Category": "Default",
+        "Category": "10",
         "Visitors": 0.09289
     },
     {
@@ -377,11 +372,6 @@ var attractionData = [
         "Location": "Mechanic And Repair Technologies/Technicians",
         "Category": "5",
         "Visitors": 0.0314613
-    },
-    {
-        "Location": "Mechanic And Repair Technologies/Technicians",
-        "Category": "6",
-        "Visitors": 0.0324455
     },
     {
         "Location": "Mechanic And Repair Technologies/Technicians",
