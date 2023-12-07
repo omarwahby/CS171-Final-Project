@@ -27,7 +27,7 @@ class ScatterPlotVis {
 		vis.margin = { top: 120, right: 220, bottom: 80, left: 100, xAxisPadding: -8, yAxisPadding: 10 };
 
 		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right,
-			vis.height = vis.width * 0.6 - vis.margin.top - vis.margin.bottom;
+			vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
 
 		// SVG drawing area
 		vis.svg = d3.select("#" + vis.parentElement).append("svg")

@@ -15,7 +15,6 @@ class SankeyVis {
 		this.initVis();
 	}
 
-
 	/*
 	 * Initialize visualization (static content, e.g. SVG area or axes)
 	 */
@@ -27,7 +26,7 @@ class SankeyVis {
 		vis.margin = { top: 80, right: 50, bottom: 20, left: 10, xAxisPadding: -8, yAxisPadding: 10 };
 
 		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right - 50,
-			vis.height = vis.width * 0.5 - vis.margin.top - vis.margin.bottom;
+			vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
 
 
 		// Clean the data before we initialize the vis
@@ -70,17 +69,8 @@ class SankeyVis {
 
 		let jsonGraph = {
 			"nodes": [
-				// {
-				// 	"node": 0,
-				// 	"name": "node0"
-				// }
 			],
 			"links": [
-				// {
-				// 	"source": 0,
-				// 	"target": 2,
-				// 	"value": 2
-				// }
 			]
 		}
 
@@ -130,7 +120,6 @@ class SankeyVis {
 		// Create links between income brackets and withdrawal rates
 		Object.values(groupedData).forEach((income_bracket, income_node_index) => {
 			Object.values(withdrawal_mapping).forEach((withdrawal_label, withdrawal_index) => {
-				// console.log(((withdrawal_index + 1) * 10))
 				let linkObject = {
 					source: income_node_index,
 					target: withdrawal_index + node_offset,
