@@ -3,7 +3,7 @@ new fullpage('#fullpage', {
   autoScrolling: true,
   scrollHorizontally: true,
   sectionsColor: [
-    '#ffffff',
+    '#26272f',
     '#ffffff',
     '#ffffff',
     '#ffffff',
