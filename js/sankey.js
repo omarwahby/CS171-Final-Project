@@ -27,7 +27,7 @@ class SankeyVis {
 		vis.margin = { top: 80, right: 50, bottom: 20, left: 10, xAxisPadding: -8, yAxisPadding: 10 };
 
 		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right - 50,
-			vis.height = 700 - vis.margin.top - vis.margin.bottom;
+			vis.height = vis.width * 0.5 - vis.margin.top - vis.margin.bottom;
 
 
 		// Clean the data before we initialize the vis
