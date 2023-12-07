@@ -23,8 +23,15 @@
 
 :root {
 	--main-color: #16537b;
-	--primary-color: #f54000;
+	--primary-color: #ff6127;
 	--primary-font-family: 'Roboto', sans-serif;
+}
+
+.particle-overlay {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 body {
@@ -74,26 +81,20 @@ h2 {
 
 #title {
 	color: white;
-	font-weight: 200;
+	font-weight: 100;
 	margin: 20px 70px;
-}
-
-#subtitle {
-	color: var(--primary-color);
-	font-weight: 400;
 }
 
 #title,
 #subtitle {
 	text-align: center;
-	font-family: var(--primary-font-family);
 }
 
 .scroll-prompt {
 	color: var(--primary-color);
 	margin: 0;
 	font-size: 20px;
-	font-weight: 300;
+	font-weight: 400;
 	font-family: var(--primary-font-family);
 }
 
