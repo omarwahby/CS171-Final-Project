@@ -107,7 +107,7 @@ class MapVisualization {
         const variableDropdown = document.getElementById('variableDropdown');
 
 
-        console.log(variableDropdown)
+        // console.log(variableDropdown)
 
 
 
@@ -125,7 +125,7 @@ class MapVisualization {
             //  console.log("features:", states.features);
 
             // Draw the state boundaries initially
-            console.log("US", us)
+            // console.log("US", us)
             // vis.svg.selectAll("path")
             //     .data(us.features)
             //     .enter().append("path")
@@ -201,9 +201,9 @@ class MapVisualization {
         const averageWithdrawalRates = vis.calculateAverageRates(vis.displayData, 'WDRAW_ORIG_YR4_RT');
 
 
-        console.log(averageTuitionRates);
-        console.log(averageCompletionRates);
-        console.log(averageWithdrawalRates);
+        // console.log(averageTuitionRates);
+        // console.log(averageCompletionRates);
+        // console.log(averageWithdrawalRates);
     }
 
 
