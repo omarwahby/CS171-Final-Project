@@ -162,8 +162,8 @@ class SankeyVis {
 
 		// Add income node titles
 		vis.svg.append("text")
-			.attr("x", 60)
-			.attr("y", -20)
+			.attr("x", 50)
+			.attr("y", (vis.height / 8) - 80)
 			.attr("text-anchor", "middle")
 			.style("font-size", "18px")
 			.style("font-weight", "bold")
@@ -171,8 +171,8 @@ class SankeyVis {
 
 		// Add withdrawal rate node titles
 		vis.svg.append("text")
-			.attr("x", 1360)
-			.attr("y", -20)
+			.attr("x", vis.width - 50)
+			.attr("y", (vis.height / 8) - 80)
 			.attr("text-anchor", "middle")
 			.style("font-size", "18px")
 			.style("font-weight", "bold")
