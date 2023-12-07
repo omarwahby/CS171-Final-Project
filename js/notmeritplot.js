@@ -243,6 +243,23 @@ class NotMeritPlotVis {
 			.tickFormat(d3.format("$,")); // Format ticks as dollars
 		vis.yAxis = d3.axisLeft(vis.yScale);
 
+		vis.yAxisGroup.selectAll("path")
+			.attr("fill", "none")
+			.attr("stroke", "white");
+		vis.yAxisGroup.selectAll("line")
+			.attr("fill", "white")
+			.attr("stroke", "white");
+		vis.yAxisGroup.selectAll("text")
+			.attr("fill", "white");
+		vis.xAxisGroup.selectAll("path")
+			.attr("fill", "none")
+			.attr("stroke", "white");
+		vis.xAxisGroup.selectAll("line")
+			.attr("fill", "white")
+			.attr("stroke", "white");
+		vis.xAxisGroup.selectAll("text")
+			.attr("fill", "white");
+
 		// Update x-axis and y-axis based on the new scales
 		vis.svg.select(".x-axis")
 			.transition()  // You can add transitions for a smooth update

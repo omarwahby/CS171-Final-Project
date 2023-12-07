@@ -242,6 +242,23 @@ class MeritPlotVis {
 		vis.xAxis = d3.axisBottom(vis.xScale);
 		vis.yAxis = d3.axisLeft(vis.yScale).tickFormat(d3.format(".0%")); // Format ticks as percentages
 
+		vis.yAxisGroup.selectAll("path")
+		.attr("fill", "none")
+		.attr("stroke", "white");
+		vis.yAxisGroup.selectAll("line")
+			.attr("fill", "white")
+			.attr("stroke", "white");
+		vis.yAxisGroup.selectAll("text")
+			.attr("fill", "white");
+		vis.xAxisGroup.selectAll("path")
+			.attr("fill", "none")
+			.attr("stroke", "white");
+		vis.xAxisGroup.selectAll("line")
+			.attr("fill", "white")
+			.attr("stroke", "white");
+		vis.xAxisGroup.selectAll("text")
+			.attr("fill", "white");
+
 		// Update x-axis and y-axis based on the new scales
 		vis.svg.select(".x-axis")
 			.transition()  // You can add transitions for a smooth update
