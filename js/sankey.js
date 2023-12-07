@@ -89,6 +89,13 @@ class SankeyVis {
 			1: `Middle Third ($${Math.round(bottom_third_threshold)}/yr-$${Math.round(middle_third_threshold)}/yr)`,
 			2: `Upper Third ($${Math.round(middle_third_threshold)}/yr-$${Math.round(upper_third_threshold)}/yr)`
 		};
+
+		const income_colors = {
+			0: "red",
+			1: "green",
+			2: "blue"
+		};
+
 		const withdrawal_mapping = {
 			3: "0-10%",
 			4: "10%-20%",
@@ -104,7 +111,8 @@ class SankeyVis {
 		Object.keys(groupedData).forEach((value, index) => {
 			let nodeObject = {
 				node: index,
-				name: income_mapping[index]
+				name: income_mapping[index],
+				color: income_colors[index]
 			}
 			jsonGraph["nodes"].push(nodeObject)
 		});
@@ -113,7 +121,8 @@ class SankeyVis {
 		Object.keys(withdrawal_mapping).forEach((value, index) => {
 			let nodeObject = {
 				node: index + node_offset,
-				name: withdrawal_mapping[index + node_offset]
+				name: withdrawal_mapping[index + node_offset],
+				color: "#36454F"
 			}
 			jsonGraph["nodes"].push(nodeObject)
 		});
@@ -151,6 +160,24 @@ class SankeyVis {
 			.style("font-size", "24px")
 			.text("Connection between average student income per year to withdrawal rate");
 
+		// Add income node titles
+		vis.svg.append("text")
+			.attr("x", 60)
+			.attr("y", -20)
+			.attr("text-anchor", "middle")
+			.style("font-size", "18px")
+			.style("font-weight", "bold")
+			.text("Income Bracket");
+
+		// Add withdrawal rate node titles
+		vis.svg.append("text")
+			.attr("x", 1360)
+			.attr("y", -20)
+			.attr("text-anchor", "middle")
+			.style("font-size", "18px")
+			.style("font-weight", "bold")
+			.text("Withdrawal Rate");
+
 		// format variables
 		var formatNumber = d3.format(",.0f"), // zero decimal places
 			format = function (d) { return formatNumber(d); },
@@ -159,7 +186,7 @@ class SankeyVis {
 		// Set the sankey diagram properties
 		var sankey = d3.sankey()
 			.nodeWidth(36)
-			.nodePadding(70)
+			.nodePadding(30)
 			.size([vis.width, vis.height]);
 
 		var path = sankey.links();
@@ -172,6 +199,9 @@ class SankeyVis {
 			.enter().append("path")
 			.attr("class", "link")
 			.attr("d", d3.sankeyLinkHorizontal())
+			.style("stroke", (d, i) => {
+				return d.source.color
+			})
 			.attr("stroke-width", function (d) { return d.width; });
 
 		// add the link titles
@@ -193,8 +223,8 @@ class SankeyVis {
 			.attr("y", function (d) { return d.y0; })
 			.attr("height", function (d) { return d.y1 - d.y0; })
 			.attr("width", sankey.nodeWidth())
-			.style("fill", function (d) {
-				return d.color = color(d.name.replace(/ .*/, ""));
+			.style("fill", function (d, i) {
+				return d.color;
 			})
 			.style("stroke", function (d) {
 				return d3.rgb(d.color).darker(2);
