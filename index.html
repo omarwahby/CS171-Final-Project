@@ -43,154 +43,173 @@
                     the United
                     States</h1>
                 <p class="scroll-prompt primary-foreground">Scroll to start exploring!</p> <br>
-                <a href="#merit" type="button" class="btn btn-primary scroll-btn primary-background">
+                <a href="#merit_anchor" type="button" class="btn btn-primary scroll-btn primary-background">
                     <i class="bi bi-chevron-down" "></i>
                 </a>
             </div>
         </div>
         <div class=" section">
-                        <div class="narration-section secondary-background ">
-                            <h2 class="narration primary-foreground">Is merit the main determiner of academic success
-                                and subsequent career
-                                outcomes? At
-                                first glance,
-                                the data may seems to support this idea.</h2>
-                            <span class="scroll-prompt tertiary-foreground">Let's see what the data says</span>
-                            <br>
-                            <a a href="#sat" type="button" class="btn btn-primary scroll-btn primary-background">
-                                <i class="bi bi-chevron-down" "></i>
-                            </a>
-                        </div>
+            <div class="narration-section secondary-background ">
+                <h2 class="narration primary-foreground">Is merit the main determiner of academic success
+                    and subsequent career
+                    outcomes? At
+                    first glance,
+                    the data may seems to support this idea.</h2>
+                <span class="scroll-prompt tertiary-foreground">Let's see what the data says</span>
+                <br>
+                <a a href="#sat_anchor" type="button" class="btn btn-primary scroll-btn primary-background">
+                    <i class="bi bi-chevron-down" "></i>
+                </a>
+            </div>
         </div>
-            <div class=" section">
-                                    <div class="col-md-12">
-                                        <div id="meritplotvis" style="height:100vh;width:100%;"></div>
-                                    </div>
-                        </div>
-                        <div class=" section">
-                            <div class="narration-section primary-background">
-                                <h2 class="narration secondary-foreground">but is that really the whole story?</h2>
-                                <h2 class="narration secondary-foreground">The data also suggests that academic outcomes
-                                    are linked to a
-                                    student's
-                                    socioeconomic background before entering college.</h2>
-                                <span class="scroll-prompt secondary-foreground">Let's see what the data says</span>
-                                <br>
-                                <a a href="#sankey" type="button"
-                                    class="btn btn-primary scroll-btn secondary-background">
-                                    <i class="bi bi-chevron-down" "></i>
-                    </a>
+        <div class=" section">
+            <div class="col-md-12">
+                <div id="meritplotvis" style="height:100vh;width:100%;"></div>
+            </div>
+        </div>
+        <div class=" section">
+            <div class="narration-section primary-background">
+                <h2 class="narration secondary-foreground">but is that really the whole story?</h2>
+                <h2 class="narration secondary-foreground">The data also suggests that academic outcomes
+                    are linked to a
+                    student's
+                    socioeconomic background before entering college.</h2>
+                <span class="scroll-prompt secondary-foreground">Let's see what the data says</span>
+                <br>
+                <a a href="#notmerit_anchor" type="button"
+                    class="btn btn-primary scroll-btn secondary-background">
+                    <i class="bi bi-chevron-down" "></i>
+                </a>
+            </div>
+        </div>
+        <div class=" section">
+            <div class="col-md-12">
+                <div id="notmeritplotvis" style="height:100vh;width:100%;"></div>
+            </div>
+        </div>
+        <div class=" section">
+            <div class="col-md-12">
+                <div id="sankeyvis" style="height:100vh;"></div>
+            </div>
+        </div>
+        <div class="section">
+
+            <select id="variableDropdown">
+                <option value="TUITIONFEE_IN">Average Tuition</option>
+                <option value="COMP_ORIG_YR2_RT">Average Completion Rate</option>
+                <option value="WDRAW_ORIG_YR4_RT">Average Withdrawal Rate</option>
+            </select>
+            <h4 class="narration primary-foreground">This is a map that has a
+                tooltip to
+                show tuition rates,
+                withdrawal and
+                completion rates by state.
+                To initialize the map, change the dropdown box to a selection of your choice</h4>
+            <div id="mapContainer"></div>
+        </div>
+        <div class="section">
+            <div class="col-md-12">
+                <div class="align-self-center">
+                    <h1 style="color:white;">Average Percentage of Degrees Awarded by Top 10 Most
+                        Common Degree
+                        Categories</h1>
                 </div>
-                </div>
-                <div class=" section">
-                                        <div class="col-md-12">
-                                            <div id="notmeritplotvis" style="height:100vh;width:100%;"></div>
-                                        </div>
-                            </div>
-                            <div class=" section">
-                                <div class="col-md-12">
-                                    <div id="sankeyvis" style="height:100vh;"></div>
-                                </div>
-                            </div>
-                            <div class="section">
+                <div class="align-self-center">
+                    <div class="user-control">
+                        <div class="form-group">
+                            <select id="attraction-category" class="form-control"
+                                onchange="dataManipulation()">
+                                <option value="Default">Default</option>
+                                <option value="0">U.S. Service Academies</option>
+                                <option value="1">New England</option>
+                                <option value="2">Mid East</option>
+                                <option value="3">Great Lakes</option>
+                                <option value="4">Plains</option>
+                                <option value="5">Southeast</option>
+                                <option value="6">Southwest</option>
+                                <option value="7">Rocky Mountains</option>
+                                <option value="8">Far West</option>
+                                <option value="9">Other U.S. Jurisdictions</option>
 
-                                <select id="variableDropdown">
-                                    <option value="TUITIONFEE_IN">Average Tuition</option>
-                                    <option value="COMP_ORIG_YR2_RT">Average Completion Rate</option>
-                                    <option value="WDRAW_ORIG_YR4_RT">Average Withdrawal Rate</option>
-                                </select>
-                                <h4 class="narration primary-foreground">This is a map that has a
-                                    tooltip to
-                                    show tuition rates,
-                                    withdrawal and
-                                    completion rates by state.
-                                    To initialize the map, change the dropdown box to a selection of your choice</h4>
-                                <div id="mapContainer"></div>
-                            </div>
-                            <div class="section">
-                                <div class="col-md-12">
-                                    <div class="align-self-center">
-                                        <h1 style="color:white;">Average Percentage of Degrees Awarded by Top 10 Most
-                                            Common Degree
-                                            Categories</h1>
-                                    </div>
-                                    <div class="align-self-center">
-                                        <div class="user-control">
-                                            <div class="form-group">
-                                                <select id="attraction-category" class="form-control"
-                                                    onchange="dataManipulation()">
-                                                    <option value="Default">Default</option>
-                                                    <option value="0">U.S. Service Academies</option>
-                                                    <option value="1">New England</option>
-                                                    <option value="2">Mid East</option>
-                                                    <option value="3">Great Lakes</option>
-                                                    <option value="4">Plains</option>
-                                                    <option value="5">Southeast</option>
-                                                    <option value="6">Southwest</option>
-                                                    <option value="7">Rocky Mountains</option>
-                                                    <option value="8">Far West</option>
-                                                    <option value="9">Other U.S. Jurisdictions</option>
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="chart-area"></div>
-                                </div>
-                            </div>
-
+                            </select>
                         </div>
+                    </div>
+                </div>
+                <div id="chart-area"></div>
+            </div>
+        </div>
+        <div class=" section">
+            <h1 class="primary-foreground">Meet Our Team</h1>
+            <div>Insert team info here</div>
+            <span class="scroll-prompt tertiary-foreground">How did we make this?</span>
+            <br>
+            <a a href="#references_anchor" type="button" class="btn btn-primary scroll-btn primary-background">
+                <i class="bi bi-chevron-down" "></i>
+                </a>
+        </div>
+        <div class=" section">
+            <h1 class="primary-foreground">References</h1>
+            <div>Insert references here</div>
+            <span class="scroll-prompt tertiary-foreground">Scroll back to the beginning.</span>
+            <br>
+            <a a href="#title_anchor" type="button" class="btn btn-primary scroll-btn primary-background">
+                <i class="bi bi-chevron-up" "></i>
+                </a>
+        </div>
+    </div>
 
 
 
                         <!-- Bootstrap -->
-                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-                            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-                            crossorigin="anonymous"></script>
-                        <!-- d3 -->
-                        <script src="https://d3js.org/d3.v7.min.js"></script>
-                        <!-- Load the sankey.js function for d3 v7 -->
-                        <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js">
-                        </script>
+                        <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                                        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                                        crossorigin="anonymous"></script>
+                                        <!-- d3 -->
+                                        <script src="https://d3js.org/d3.v7.min.js"></script>
+                                        <!-- Load the sankey.js function for d3 v7 -->
+                                        <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js">
+                                        </script>
 
-                        <!-- Jquery -->
-                        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-                            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-                            crossorigin="anonymous"></script>
-
-
-                        <!-- d3 -->
-                        <script src="https://d3js.org/d3.v7.min.js"></script>
-                        <script src="https://d3js.org/d3-array.v2.min.js"></script>
-                        <script src="https://d3js.org/d3-geo.v2.min.js"></script>
-
-                        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-                        <script src="https://d3js.org/topojson.v2.min.js"></script>
-                        <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+                                        <!-- Jquery -->
+                                        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+                                            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+                                            crossorigin="anonymous"></script>
 
 
-                        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.17/fullpage.min.js"
-                            integrity="sha512-zAHJKGyoPf2Y20Wi4uo32sa/vSvwKfY4tYUt6gJfmkA79X0wt5ZfaxL5GqJ5cMnmvGslWi5PKTo51rHRZqYbJg=="
-                            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                        <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.4.0/nouislider.min.js"
-                            integrity="sha512-mZXUH8DAODwCHioWP3gltQwa953LbABMlzTYwYkKqv8eNxOk37B1HgNNuCMfFxgrpW5C34WJbxPDcM58+s1dJA=="
-                            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                        <!-- JS Libraries -->
-                        <script src="js/scrolling.js"></script>
-                        <script src="js/particles.js"></script>
-                        <script src="js/particleLauncher.js"></script>
-                        <!-- Visualizations -->
-                        <script src="js/meritplot.js"></script>
-                        <script src="js/notmeritplot.js"></script>
-                        <script src="js/sankey.js"></script>
-                        <script src="js/map.js"></script>
-                        <script src="js/global-attractions.js"></script>
-                        <script src="js/barchart.js"></script>
+                                        <!-- d3 -->
+                                        <script src="https://d3js.org/d3.v7.min.js"></script>
+                                        <script src="https://d3js.org/d3-array.v2.min.js"></script>
+                                        <script src="https://d3js.org/d3-geo.v2.min.js"></script>
 
-                        <!-- *** ADD JS CODE TO THE FOLLOWING FILE: *** -->
-                        <script src="js/week_03_lab.js"></script>
+                                        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+                                        <script src="https://d3js.org/topojson.v2.min.js"></script>
+                                        <script src="https://d3js.org/d3-geo.v1.min.js"></script>
 
-                        <script src="js/main.js"></script>
+
+                                        <script
+                                            src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.17/fullpage.min.js"
+                                            integrity="sha512-zAHJKGyoPf2Y20Wi4uo32sa/vSvwKfY4tYUt6gJfmkA79X0wt5ZfaxL5GqJ5cMnmvGslWi5PKTo51rHRZqYbJg=="
+                                            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                                        <script
+                                            src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.4.0/nouislider.min.js"
+                                            integrity="sha512-mZXUH8DAODwCHioWP3gltQwa953LbABMlzTYwYkKqv8eNxOk37B1HgNNuCMfFxgrpW5C34WJbxPDcM58+s1dJA=="
+                                            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                                        <!-- JS Libraries -->
+                                        <script src="js/scrolling.js"></script>
+                                        <script src="js/particles.js"></script>
+                                        <script src="js/particleLauncher.js"></script>
+                                        <!-- Visualizations -->
+                                        <script src="js/meritplot.js"></script>
+                                        <script src="js/notmeritplot.js"></script>
+                                        <script src="js/sankey.js"></script>
+                                        <script src="js/map.js"></script>
+                                        <script src="js/global-attractions.js"></script>
+                                        <script src="js/barchart.js"></script>
+
+                                        <!-- *** ADD JS CODE TO THE FOLLOWING FILE: *** -->
+                                        <script src="js/week_03_lab.js"></script>
+
+                                        <script src="js/main.js"></script>
 
 </body>
 

@@ -2,9 +2,13 @@ var primary_bg_color = "#26272f"
 var secondary_bg_color = "#ff6127"
 new fullpage('#fullpage', {
   //options here
+  licenseKey: "gplv3-license",
   autoScrolling: true,
   scrollHorizontally: true,
+  loopBottom:true,
   sectionsColor: [
+    primary_bg_color,
+    primary_bg_color,
     primary_bg_color,
     primary_bg_color,
     primary_bg_color,
@@ -15,14 +19,29 @@ new fullpage('#fullpage', {
     primary_bg_color],
   navigation: true,
   slidesNavigation: true,
-  anchors: ['title',
-    'merit',
-    'sat',
-    'socioeconomic',
-    'notmerit',
-    'sankey',
-    'map',
-    'barchart',
+  anchors: [
+    'title_anchor',
+    'merit_anchor',
+    'sat_anchor',
+    'socioeconomic_anchor',
+    'notmerit_anchor',
+    'sankey_anchor',
+    'map_anchor',
+    'barchart_anchor',
+    'team_anchor',
+    'references_anchor',
   ],
-  navigationTooltips: ['first', 'second']
+  navigationTooltips: [
+    'Title',
+   'Is it all merit?',
+   'SAT vs Completion',
+   'Socioeconomic Factors',
+   'Income vs SAT',
+   'Income to withdrawal',
+   'Regional stats',
+   'Major breakdown',
+   'Our Team',
+   'References'
+  ]
+  
 });
