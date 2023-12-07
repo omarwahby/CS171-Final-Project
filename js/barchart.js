@@ -5,7 +5,7 @@
 
 // CHART AREA
 
-let margin = {top: 40, right: 20, bottom: 300, left: 90},
+let margin = { top: 40, right: 20, bottom: 300, left: 90 },
     width = $('#chart-area').width() - margin.left - margin.right,
     height = 800 - margin.top - margin.bottom;
 
@@ -20,44 +20,45 @@ let svg = d3.select("#chart-area").append("svg")
 // AXIS 
 
 let x = d3.scaleBand()
-	.range([0, width])
-	.paddingInner(0.1);
+    .range([0, width])
+    .paddingInner(0.1);
 
 let y = d3.scaleLinear()
     .range([height, 0]);
 
 let xAxis = d3.axisBottom()
     .scale(x);
-    
+
 let yAxis = d3.axisLeft()
-    .scale(y);
+    .scale(y).tickFormat(d3.format(".0%"));
+
 
 let xAxisGroup = svg.append("g")
     .attr("class", "x-axis axis");
 
 let yAxisGroup = svg.append("g")
-  .attr("class", "y-axis axis");
+    .attr("class", "y-axis axis");
 
 
 
 function renderBarChart(data) {
 
-	// Check array length (top 5 attractions)
-	if(data.length > 15) {
-		errorMessage("Max 5 rows");
-		return;
-	}
+    // Check array length (top 5 attractions)
+    if (data.length > 15) {
+        errorMessage("Max 5 rows");
+        return;
+    }
 
-	// Check object properties
-	if(!data[0].hasOwnProperty("Visitors") || !data[0].hasOwnProperty("Location") || !data[0].hasOwnProperty("Category")) {
-		errorMessage("The Object properties are not correct! An attraction should include at least: 'Visitors', 'Location', 'Category'");
-		return;
-	}
+    // Check object properties
+    if (!data[0].hasOwnProperty("Visitors") || !data[0].hasOwnProperty("Location") || !data[0].hasOwnProperty("Category")) {
+        errorMessage("The Object properties are not correct! An attraction should include at least: 'Visitors', 'Location', 'Category'");
+        return;
+    }
 
-	x.domain(data.map( d => d.Location));
+    x.domain(data.map(d => d.Location));
     y.domain([0, d3.max(data, d => d.Visitors)]);
 
-  // ---- DRAW BARS ----
+    // ---- DRAW BARS ----
     let bars = svg.selectAll(".bar")
         .remove()
         .exit()
@@ -70,11 +71,11 @@ function renderBarChart(data) {
         .attr("y", d => y(d.Visitors))
         .attr("height", d => (height - y(d.Visitors)))
         .attr("width", x.bandwidth())
-		.on("mouseover", function(event, d) {
+        .on("mouseover", function (event, d) {
 
             //Get this bar's x/y values, then augment for the tooltip
-            let xPosition = margin.left + parseFloat(d3.select(this).attr("x")) ;
-            let yPosition = margin.top +  y(d.Visitors/2);
+            let xPosition = margin.left + parseFloat(d3.select(this).attr("x"));
+            let yPosition = margin.top + y(d.Visitors / 2);
 
             //Update the tooltip position and value
             d3.select("#tooltip")
@@ -86,50 +87,68 @@ function renderBarChart(data) {
 
             //Show the tooltip
             d3.select("#tooltip").classed("hidden", false);
-		})
-		.on("mouseout", function(d) {
+        })
+        .on("mouseout", function (d) {
 
             //Hide the tooltip
             d3.select("#tooltip").classed("hidden", true);
-		});
+        });
 
-
-	// ---- DRAW AXIS	----
+    // ---- DRAW AXIS	----
     xAxisGroup = svg.select(".x-axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis)
-    .selectAll("text") // Select all the text elements for the x-axis ticks
-    .style("text-anchor", "end") // Set the text anchor to end
-    .attr("dx", "-.8em") // Adjust the x position
-    .attr("dy", ".15em") // Adjust the y position
-    .attr("transform", "rotate(-45)"); // Rotate the labels by -45 degrees
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    xAxisGroup.selectAll("path")
+        .attr("fill", "none")
+        .attr("stroke", "white");
+    xAxisGroup.selectAll("line")
+        .attr("fill", "white")
+        .attr("stroke", "white");
+    xAxisGroup.selectAll("text")
+        .attr("fill", "white")
+        .style("text-anchor", "end") // Set the text anchor to end
+        .attr("dx", "-.8em") // Adjust the x position
+        .attr("dy", ".15em") // Adjust the y position
+        .attr("transform", "rotate(-45)") // Rotate the labels by -45 degrees
+        .attr("fill", "white");
 
 
-  yAxisGroup = svg.select(".y-axis")
-      .call(yAxis);
+    yAxisGroup = svg.select(".y-axis")
+        .call(yAxis)
 
-  svg.select("text.axis-title").remove();
-  svg.append("text")
-  	.attr("class", "axis-title")
-		.attr("x", -5)
-		.attr("y", -15)
-		.attr("dy", ".1em")
-		.style("text-anchor", "end")
-		.text("percentage");
+    yAxisGroup.selectAll("path")
+        .attr("fill", "none")
+        .attr("stroke", "white");
+    yAxisGroup.selectAll("line")
+        .attr("fill", "white")
+        .attr("stroke", "white");
+    yAxisGroup.selectAll("text")
+        .attr("fill", "white");
+
+    svg.select("text.axis-title").remove();
+    svg.append("text")
+        .attr("class", "axis-title")
+        .attr("x", -5)
+        .attr("y", -15)
+        .attr("dy", ".1em")
+        .attr("fill", "white")
+        .style("text-anchor", "end")
+        .text("Percentage");
 }
 
 
-function errorMessage(message) {
-	console.log(message);
+function errorMessage(message) {
+    console.log(message);
 }
 
-function shortenString(content, maxLength){
-	// Trim the string to the maximum length
-	let trimmedString = content.substr(0, maxLength);
+function shortenString(content, maxLength) {
+    // Trim the string to the maximum length
+    let trimmedString = content.substr(0, maxLength);
 
-	// Re-trim if we are in the middle of a word
-	trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
+    // Re-trim if we are in the middle of a word
+    trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
 
-	return trimmedString;
+    return trimmedString;
 }
 

@@ -23,8 +23,11 @@ class ScatterPlotVis {
 	initVis() {
 		let vis = this;
 
+		vis.primary_color = "#ff6127"
+		vis.secondary_color = "26272f"
+
 		// Initialize the svg essentials
-		vis.margin = { top: 120, right: 220, bottom: 80, left: 100, xAxisPadding: -8, yAxisPadding: 10 };
+		vis.margin = { top: 120, right: 180, bottom: 80, left: 100, xAxisPadding: -8, yAxisPadding: 10 };
 
 		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right,
 			vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
@@ -62,16 +65,34 @@ class ScatterPlotVis {
 		// Add axes
 		vis.xAxis = d3.axisBottom(vis.xScale);
 		vis.yAxis = d3.axisLeft(vis.yScale).tickFormat(d3.format(".0%")); // Format ticks as percentages
+
 		// Add axes groups
-		vis.svg.append("g")
+		vis.xAxisGroup = vis.svg.append("g")
 			.attr("class", "x-axis")
 			.attr("transform", "translate(0," + (vis.height + vis.margin.yAxisPadding) + ")")
 			.call(vis.xAxis);
-		vis.svg.append("g")
+		vis.yAxisGroup = vis.svg.append("g")
 			.attr("class", "y-axis")
 			// .attr("transform", "translate(0," + (0 - vis.margin.xAxisPadding) + ")")
 			.attr("transform", "translate(" + (vis.margin.xAxisPadding) + ", 0)")
 			.call(vis.yAxis);
+
+		vis.yAxisGroup.selectAll("path")
+			.attr("fill", "none")
+			.attr("stroke", "white");
+		vis.yAxisGroup.selectAll("line")
+			.attr("fill", "white")
+			.attr("stroke", "white");
+		vis.yAxisGroup.selectAll("text")
+			.attr("fill", "white");
+		vis.xAxisGroup.selectAll("path")
+			.attr("fill", "none")
+			.attr("stroke", "white");
+		vis.xAxisGroup.selectAll("line")
+			.attr("fill", "white")
+			.attr("stroke", "white");
+		vis.xAxisGroup.selectAll("text")
+			.attr("fill", "white");
 
 		// Add SAT range instructions label
 		vis.svg.append("text")
@@ -79,7 +100,7 @@ class ScatterPlotVis {
 			.attr("y", -70)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
-			.style("fill", "red")
+			.style("fill", "white")
 			.style("font-weight", "bold")
 			.text("Filter data by average SAT score range");
 
@@ -89,7 +110,7 @@ class ScatterPlotVis {
 			.attr("y", -45)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
-			.style("fill", "black")
+			.style("fill", "white")
 			.style("font-weight", "regular")
 			.text(d3.format(".0f")(d3.min(vis.displayData, (d) => d.avg_sat)));
 		vis.endScore = vis.svg.append("text")
@@ -97,7 +118,7 @@ class ScatterPlotVis {
 			.attr("y", -45)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
-			.style("fill", "black")
+			.style("fill", "white")
 			.style("font-weight", "regular")
 			.text(d3.format(".0f")(d3.max(vis.displayData, (d) => d.avg_sat)));
 
@@ -149,7 +170,7 @@ class ScatterPlotVis {
 			.attr("y", -15)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
-			.style("fill", "red")
+			.style("fill", "white")
 			.style("font-weight", "bold")
 			.text("Hover over a point to view info about a specific school");
 
@@ -158,6 +179,7 @@ class ScatterPlotVis {
 			.attr("transform", "translate(" + (vis.width / 2) + " ," + (vis.height + 50) + ")")
 			.style("text-anchor", "middle")
 			.style("font-size", "24px")
+			.attr("fill", "white")
 			.text("Average SAT Score");
 
 		// Add y-axis label
@@ -168,6 +190,7 @@ class ScatterPlotVis {
 			.attr("dy", "1em")
 			.style("text-anchor", "middle")
 			.style("font-size", "24px")
+			.attr("fill", "white")
 			.text("Completion Rate (%)");
 
 		// Add plot title
@@ -176,6 +199,7 @@ class ScatterPlotVis {
 			.attr("y", 0 - (vis.margin.top / 2) - 35)
 			.attr("text-anchor", "middle")
 			.style("font-size", "24px")
+			.attr("fill", vis.primary_color)
 			.text("SAT Scores vs. 4-Year Bachelor's Degree Completion Rates");
 
 
@@ -186,9 +210,10 @@ class ScatterPlotVis {
 			.style("opacity", .5)
 			.style("user-select", "none")
 			.style("position", "absolute")
-			.style("background-color", "green")
+			.style("background-color", "white")
 			.style("padding", "10px")
-			.style("border", "1px solid #ccc")
+			.style("border", "1px solid")
+			.style("border-color", vis.primary_color)
 			.style("border-radius", "5px")
 			.style("pointer-events", "none");
 
@@ -216,7 +241,6 @@ class ScatterPlotVis {
 		// Add axes
 		vis.xAxis = d3.axisBottom(vis.xScale);
 		vis.yAxis = d3.axisLeft(vis.yScale).tickFormat(d3.format(".0%")); // Format ticks as percentages
-		// Add axes groups
 
 		// Update x-axis and y-axis based on the new scales
 		vis.svg.select(".x-axis")
@@ -254,7 +278,7 @@ class ScatterPlotVis {
 			.attr("class", "reg-line")
 			.attr("d", regressionLine)
 			.style("stroke-width", 5)
-			.style("stroke", "red")
+			.style("stroke", "white")
 			.style("opacity", ".7");
 
 
@@ -270,8 +294,8 @@ class ScatterPlotVis {
 			.attr("cx", d => vis.xScale(d.avg_sat))
 			.attr("cy", d => vis.yScale(d.comp_rate))
 			.attr("r", 5)
-			.attr("stroke", "yellow")
-			.style("fill", "green");
+			.attr("stroke", "black")
+			.style("fill", vis.primary_color);
 
 		old_circles.exit().remove();
 
@@ -280,8 +304,8 @@ class ScatterPlotVis {
 			.append("circle")
 			.attr("class", "dot")
 			.attr("r", 5)
-			.attr("stroke", "yellow")
-			.style("fill", "green");
+			.attr("stroke", "black")
+			.style("fill", vis.primary_color);
 
 		new_circles
 			.attr("cx", d => vis.xScale(d.avg_sat))
@@ -291,7 +315,6 @@ class ScatterPlotVis {
 		new_circles
 			.on("mouseover", function (event, d) {
 				d3.select(this)
-					.attr("fill", "red")
 					.attr("opacity", .6)
 					.attr("r", 10);
 				vis.tooltip.transition()
@@ -302,11 +325,10 @@ class ScatterPlotVis {
 					.style("top", (event.pageY) + "px")
 					.style("font-family", "Arial, sans-serif")
 					.style("font-size", "14px")
-					.style("color", "yellow");
+					.style("color", vis.primary_color);
 			})
 			.on("mouseout", function (d) {
 				d3.select(this)
-					.attr("fill", "green")
 					.attr("opacity", 1)
 					.attr("r", 5);
 				vis.tooltip.transition()

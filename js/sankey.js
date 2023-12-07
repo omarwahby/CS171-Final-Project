@@ -21,6 +21,8 @@ class SankeyVis {
 
 	initVis() {
 		let vis = this;
+		vis.primary_color = "#ff6127"
+		vis.secondary_color = "26272f"
 
 		// Initialize the svg essentials
 		vis.margin = { top: 80, right: 50, bottom: 20, left: 10, xAxisPadding: -8, yAxisPadding: 10 };

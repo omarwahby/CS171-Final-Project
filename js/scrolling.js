@@ -1,15 +1,17 @@
+var primary_bg_color = "#26272f"
+var secondary_bg_color = "#ff6127"
 new fullpage('#fullpage', {
   //options here
   autoScrolling: true,
   scrollHorizontally: true,
   sectionsColor: [
-    '#26272f',
-    '#ffffff',
-    '#ffffff',
-    '#ffffff',
-    '#ffffff',
-    '#ffffff',
-    '#ffffff'],
+    primary_bg_color,
+    primary_bg_color,
+    primary_bg_color,
+    primary_bg_color,
+    primary_bg_color,
+    primary_bg_color,
+    primary_bg_color],
   navigation: true,
   slidesNavigation: true,
   anchors: ['title',
