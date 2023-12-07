@@ -22,7 +22,7 @@ class SankeyVis {
 	initVis() {
 		let vis = this;
 		vis.primary_color = "#ff6127"
-		vis.secondary_color = "26272f"
+		vis.secondary_color = "#26272f"
 
 		// Initialize the svg essentials
 		vis.margin = { top: 80, right: 50, bottom: 20, left: 10, xAxisPadding: -8, yAxisPadding: 10 };
@@ -83,9 +83,9 @@ class SankeyVis {
 		};
 
 		const income_colors = {
-			0: "red",
-			1: "green",
-			2: "blue"
+			0: vis.primary_color,
+			1: "yellow",
+			2: "red"
 		};
 
 		const withdrawal_mapping = {
@@ -114,7 +114,7 @@ class SankeyVis {
 			let nodeObject = {
 				node: index + node_offset,
 				name: withdrawal_mapping[index + node_offset],
-				color: "#36454F"
+				color: "white"
 			}
 			jsonGraph["nodes"].push(nodeObject)
 		});
@@ -149,13 +149,15 @@ class SankeyVis {
 			.attr("y", 0 - (vis.margin.top / 2))
 			.attr("text-anchor", "middle")
 			.style("font-size", "24px")
+			.attr("fill", "white")
 			.text("Connection between average student income per year to withdrawal rate");
 
 		// Add income node titles
 		vis.svg.append("text")
 			.attr("x", 50)
-			.attr("y", (vis.height / 8) - 80)
+			.attr("y", (vis.height / 8) - 85)
 			.attr("text-anchor", "middle")
+			.attr("fill", "white")
 			.style("font-size", "18px")
 			.style("font-weight", "bold")
 			.text("Income Bracket");
@@ -163,8 +165,9 @@ class SankeyVis {
 		// Add withdrawal rate node titles
 		vis.svg.append("text")
 			.attr("x", vis.width - 50)
-			.attr("y", (vis.height / 8) - 80)
+			.attr("y", (vis.height / 8) - 85)
 			.attr("text-anchor", "middle")
+			.attr("fill", "white")
 			.style("font-size", "18px")
 			.style("font-weight", "bold")
 			.text("Withdrawal Rate");
@@ -232,9 +235,15 @@ class SankeyVis {
 			.attr("dy", "0.35em")
 			.attr("text-anchor", "end")
 			.text(function (d) { return d.name; })
+			.style("text-shadow", "none")
+			.style("font-weight", 700)
+			.attr("fill", "white")
+			.attr("stroke-width", .8)
+			.attr("stroke", "black")
 			.filter(function (d) { return d.x0 < width / 2; })
 			.attr("x", function (d) { return d.x1 + 6; })
-			.attr("text-anchor", "start");
+			.attr("text-anchor", "start")
+			;
 
 
 
