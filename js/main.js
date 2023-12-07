@@ -15,18 +15,10 @@ let promises = [
 Promise.all(promises)
     .then(function (data) {
         createVis(data)
-        initMainPage((data))
     })
     .catch(function (err) {
         console.log(err)
     });
-
-function initMainPage(dataArray) {
-
-
-    const mapViz = new MapVisualization('#mapContainer', dataArray[1]);
-
-}
 
 function createVis(data) {
     let perSchoolData = data[0]
@@ -66,6 +58,7 @@ function createVis(data) {
     let notmeritplotVis = new NotMeritPlotVis("notmeritplotvis", allData);
     // let barchartVis = new BarChartVis("barchartvis", allData);
     let sankeyVis = new SankeyVis("sankeyvis", allData);
+    let mapViz = new MapVisualization('mapContainer', data[1]);
     // let barchartVis = new BarChartVis("barchartvis", allData);
 
 }

@@ -7,19 +7,18 @@ class MapVisualization {
         this.displayData = displayData
 
         // Set the dimensions of the SVG container
-        this.width = 960;
-        this.height = 600;
+        this.width = document.getElementById(this.parentElement).getBoundingClientRect().width 
+        this.height = document.getElementById(this.parentElement).getBoundingClientRect().height,
 
         this.tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
-
         this.initVis();
 
     }
 
     initVis() {
-
+        
         let vis = this;
         let states;
 
@@ -28,7 +27,7 @@ class MapVisualization {
             return stateData ? stateData.AverageRate : null;
         }
 
-        vis.svg = d3.select(vis.parentElement)
+        vis.svg = d3.select("#" + vis.parentElement)
             .append("svg")
             .attr("width", this.width)
             .attr("height", this.height);
@@ -117,7 +116,6 @@ class MapVisualization {
 
         // Load the GeoJSON data
         d3.json("gz_2010_us_040_00_500k.json").then((us) => {
-
 
             // const states = topojson.feature(us, us.objects.states);
             // Assuming you have functions to calculate average rates for each state

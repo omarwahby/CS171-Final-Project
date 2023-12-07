@@ -7,7 +7,7 @@
 
 let margin = { top: 40, right: 20, bottom: 300, left: 90 },
     width = $('#chart-area').width() - margin.left - margin.right,
-    height = 800 - margin.top - margin.bottom;
+    height = $('#chart-area').height() - margin.top - margin.bottom;
 
 
 let svg = d3.select("#chart-area").append("svg")
