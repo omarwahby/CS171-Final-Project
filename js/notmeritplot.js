@@ -1,11 +1,11 @@
 
 /*
- * ScatterPlotVis - Object constructor function
+ * NotMeritPlotVis - Object constructor function
  * @param _parentElement 	-- the HTML element in which to draw the visualization
  * @param _data						-- the actual data: perDayData
  */
 
-class ScatterPlotVis {
+class NotMeritPlotVis {
 
 	constructor(_parentElement, _data, _eventHandler) {
 		this.parentElement = _parentElement;
@@ -45,8 +45,8 @@ class ScatterPlotVis {
 			return (
 				schoolObject.avg_sat !== null &&
 				!isNaN(schoolObject.avg_sat) &&
-				schoolObject.comp_rate !== null &&
-				!isNaN(schoolObject.comp_rate)
+				schoolObject.avg_fam_inc !== null &&
+				!isNaN(schoolObject.avg_fam_inc)
 			);
 		});
 
@@ -55,16 +55,16 @@ class ScatterPlotVis {
 
 		// Scatterplot Scales
 		vis.xScale = d3.scaleLinear()
-			.domain([d3.min(vis.displayData, d => d.avg_sat), d3.max(vis.displayData, d => d.avg_sat)])
+			.domain([d3.min(vis.displayData, d => d.avg_fam_inc), d3.max(vis.displayData, d => d.avg_fam_inc)])
 			.range([0, vis.width]);
 
 		vis.yScale = d3.scaleLinear()
-			.domain([0, d3.max(vis.displayData, d => d.comp_rate)])
+			.domain([0, d3.max(vis.displayData, d => d.avg_sat)])
 			.range([vis.height, 0]);
 
 		// Add axes
 		vis.xAxis = d3.axisBottom(vis.xScale);
-		vis.yAxis = d3.axisLeft(vis.yScale).tickFormat(d3.format(".0%")); // Format ticks as percentages
+		vis.yAxis = d3.axisLeft(vis.yScale);
 
 		// Add axes groups
 		vis.xAxisGroup = vis.svg.append("g")
@@ -102,25 +102,25 @@ class ScatterPlotVis {
 			.style("font-size", "20px")
 			.style("fill", "white")
 			.style("font-weight", "light")
-			.text("Filter data by average SAT score range");
+			.text("Filter data by average household income range");
 
 		// Add SAT range score labels
-		vis.startScore = vis.svg.append("text")
-			.attr("x", (vis.width / 2) - 280)
+		vis.startIncome = vis.svg.append("text")
+			.attr("x", (vis.width / 2) - 290)
 			.attr("y", -45)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
 			.style("fill", "white")
 			.style("font-weight", "regular")
-			.text(d3.format(".0f")(d3.min(vis.displayData, (d) => d.avg_sat)));
-		vis.endScore = vis.svg.append("text")
-			.attr("x", (vis.width / 2) + 280)
+			.text("$" + d3.format(".0f")(d3.min(vis.displayData, (d) => d.avg_fam_inc)));
+		vis.endIncome = vis.svg.append("text")
+			.attr("x", (vis.width / 2) + 290)
 			.attr("y", -45)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
 			.style("fill", "white")
 			.style("font-weight", "regular")
-			.text(d3.format(".0f")(d3.max(vis.displayData, (d) => d.avg_sat)));
+			.text("$" + d3.format(".0f")(d3.max(vis.displayData, (d) => d.avg_fam_inc)));
 
 		// SLIDER
 		// Create a foreignObject within the SVG
@@ -140,25 +140,25 @@ class ScatterPlotVis {
 		// Create the slider inside the divContainer
 		const slider = divContainer.node();
 		noUiSlider.create(slider, {
-			start: [d3.min(vis.displayData, (d) => d.avg_sat), d3.max(vis.displayData, (d) => d.avg_sat)],
+			start: [d3.min(vis.displayData, (d) => d.avg_fam_inc), d3.max(vis.displayData, (d) => d.avg_fam_inc)],
 			connect: true,
 			step: 1,
 			range: {
-				min: d3.min(vis.displayData, (d) => d.avg_sat),
-				max: d3.max(vis.displayData, (d) => d.avg_sat)
+				min: d3.min(vis.displayData, (d) => d.avg_fam_inc),
+				max: d3.max(vis.displayData, (d) => d.avg_fam_inc)
 			}
 		});
 
 		// Attach an event listener to the slider
 		slider.noUiSlider.on('slide', function (values, handle) {
 			// Get the start and end date values from the slider
-			const [startScore, endScore] = values.map(score => d3.format(".0f")(score));
+			const [startIncome, endIncome] = values.map(score => d3.format(".0f")(score));
 
 			// Set the text content with rounded values
-			vis.startScore.text(startScore);
-			vis.endScore.text(endScore);
+			vis.startIncome.text("$" + startIncome);
+			vis.endIncome.text("$" + endIncome);
 			// Filter the data based on the selected date range
-			vis.displayData = vis.data.filter(d => d.avg_sat >= startScore && d.avg_sat <= endScore);
+			vis.displayData = vis.data.filter(d => d.avg_fam_inc >= startIncome && d.avg_fam_inc <= endIncome);
 
 			// Update the visualization
 			vis.updateVis();
@@ -180,7 +180,7 @@ class ScatterPlotVis {
 			.style("text-anchor", "middle")
 			.style("font-size", "24px")
 			.attr("fill", "white")
-			.text("Average SAT Score");
+			.text("Average Household Income per year ($)");
 
 		// Add y-axis label
 		vis.svg.append("text")
@@ -191,7 +191,7 @@ class ScatterPlotVis {
 			.style("text-anchor", "middle")
 			.style("font-size", "24px")
 			.attr("fill", "white")
-			.text("Completion Rate (%)");
+			.text("Average SAT Score");
 
 		// Add plot title
 		vis.svg.append("text")
@@ -200,7 +200,7 @@ class ScatterPlotVis {
 			.attr("text-anchor", "middle")
 			.style("font-size", "24px")
 			.attr("fill", vis.primary_color)
-			.text("SAT Scores vs. 4-Year Bachelor's Degree Completion Rates");
+			.text("Relationship between Avg. Household Income and SAT Scores");
 
 
 		vis.tooltip = d3.select("body").append("foreignObject")
@@ -231,16 +231,17 @@ class ScatterPlotVis {
 
 		// Scatterplot Scales
 		vis.xScale = d3.scaleLinear()
-			.domain([d3.min(vis.displayData, d => d.avg_sat), d3.max(vis.displayData, d => d.avg_sat)])
+			.domain([d3.min(vis.displayData, d => d.avg_fam_inc), d3.max(vis.displayData, d => d.avg_fam_inc)])
 			.range([0, vis.width]);
 
 		vis.yScale = d3.scaleLinear()
-			.domain([0, d3.max(vis.displayData, d => d.comp_rate)])
+			.domain([0, d3.max(vis.displayData, d => d.avg_sat)])
 			.range([vis.height, 0]);
 
 		// Add axes
-		vis.xAxis = d3.axisBottom(vis.xScale);
-		vis.yAxis = d3.axisLeft(vis.yScale).tickFormat(d3.format(".0%")); // Format ticks as percentages
+		vis.xAxis = d3.axisBottom(vis.xScale)
+			.tickFormat(d3.format("$,")); // Format ticks as dollars
+		vis.yAxis = d3.axisLeft(vis.yScale);
 
 		// Update x-axis and y-axis based on the new scales
 		vis.svg.select(".x-axis")
@@ -253,17 +254,17 @@ class ScatterPlotVis {
 
 		// Calculate the least squares regression line
 		const regressionLine = d3.line()
-			.x(d => vis.xScale(d.avg_sat))
-			.y(d => vis.yScale(regressionEquation(d.avg_sat)))
+			.x(d => vis.xScale(d.avg_fam_inc))
+			.y(d => vis.yScale(regressionEquation(d.avg_fam_inc)))
 			.curve(d3.curveLinear);
 
 		function regressionEquation(x) {
 			// simple linear regression: y = mx + b
 			const n = vis.displayData.length;
-			const sumX = vis.displayData.reduce((acc, d) => acc + d.avg_sat, 0);
-			const sumY = vis.displayData.reduce((acc, d) => acc + d.comp_rate, 0);
-			const sumXY = vis.displayData.reduce((acc, d) => acc + d.avg_sat * d.comp_rate, 0);
-			const sumXSquare = vis.displayData.reduce((acc, d) => acc + d.avg_sat ** 2, 0);
+			const sumX = vis.displayData.reduce((acc, d) => acc + d.avg_fam_inc, 0);
+			const sumY = vis.displayData.reduce((acc, d) => acc + d.avg_sat, 0);
+			const sumXY = vis.displayData.reduce((acc, d) => acc + d.avg_fam_inc * d.avg_sat, 0);
+			const sumXSquare = vis.displayData.reduce((acc, d) => acc + d.avg_fam_inc ** 2, 0);
 
 			const m = (n * sumXY - sumX * sumY) / (n * sumXSquare - sumX ** 2);
 			const b = (sumY - m * sumX) / n;
@@ -291,8 +292,8 @@ class ScatterPlotVis {
 			.merge(old_circles) // Merge with existing circles
 			.transition()
 			.duration(200)
-			.attr("cx", d => vis.xScale(d.avg_sat))
-			.attr("cy", d => vis.yScale(d.comp_rate))
+			.attr("cx", d => vis.xScale(d.avg_fam_inc))
+			.attr("cy", d => vis.yScale(d.avg_sat))
 			.attr("r", 5)
 			.attr("stroke", "black")
 			.style("fill", vis.primary_color);
@@ -308,8 +309,8 @@ class ScatterPlotVis {
 			.style("fill", vis.primary_color);
 
 		new_circles
-			.attr("cx", d => vis.xScale(d.avg_sat))
-			.attr("cy", d => vis.yScale(d.comp_rate));
+			.attr("cx", d => vis.xScale(d.avg_fam_inc))
+			.attr("cy", d => vis.yScale(d.avg_sat));
 
 		// // Tooltip interactions
 		new_circles
@@ -320,7 +321,7 @@ class ScatterPlotVis {
 				vis.tooltip.transition()
 					.duration(200)
 					.style("opacity", 1);
-				vis.tooltip.html(`${d.school_name}<br>Average SAT Score: ${d.avg_sat}<br> Completion Rate: ${(d.comp_rate * 100).toFixed(2)}%`)
+				vis.tooltip.html(`${d.school_name}<br>Average Household Income/yr : ${Math.round(d.avg_fam_inc)}$<br> Average SAT Score: ${(d.avg_sat)}`)
 					.style("left", (event.pageX) + "px")
 					.style("top", (event.pageY) + "px")
 					.style("font-family", "Arial, sans-serif")

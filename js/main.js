@@ -23,8 +23,6 @@ Promise.all(promises)
 
 function initMainPage(dataArray) {
 
-    // log data
-    // console.log('check out the data', dataArray);
 
     const mapViz = new MapVisualization('#mapContainer', dataArray[1]);
 
@@ -63,26 +61,11 @@ function createVis(data) {
     });
 
 
-    // (3) Create event handler
-    // *** TO-DO ***
-
     // (4) Create visualization instances
-    let scatterplotVis = new ScatterPlotVis("scatterplotvis", allData);
+    let meritplotVis = new MeritPlotVis("meritplotvis", allData);
+    let notmeritplotVis = new NotMeritPlotVis("notmeritplotvis", allData);
     // let barchartVis = new BarChartVis("barchartvis", allData);
     let sankeyVis = new SankeyVis("sankeyvis", allData);
     // let barchartVis = new BarChartVis("barchartvis", allData);
-
-    // *** TO-DO ***
-    //  pass event handler to CountVis, at constructor of CountVis above
-
-    // *** TO-DO ***
-    //let ageVis = new AgeVis("agevis", allData);
-    //let prioVis =
-
-
-    // (5) Bind event handler
-
-    // *** TO-DO ***
-    // eventHandler.bind("selectionChanged", function(event){ ...
 
 }
