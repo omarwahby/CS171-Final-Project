@@ -101,12 +101,12 @@ class ScatterPlotVis {
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
 			.style("fill", "white")
-			.style("font-weight", "bold")
+			.style("font-weight", "light")
 			.text("Filter data by average SAT score range");
 
 		// Add SAT range score labels
 		vis.startScore = vis.svg.append("text")
-			.attr("x", (vis.width / 2) - 270)
+			.attr("x", (vis.width / 2) - 280)
 			.attr("y", -45)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
@@ -114,7 +114,7 @@ class ScatterPlotVis {
 			.style("font-weight", "regular")
 			.text(d3.format(".0f")(d3.min(vis.displayData, (d) => d.avg_sat)));
 		vis.endScore = vis.svg.append("text")
-			.attr("x", (vis.width / 2) + 271)
+			.attr("x", (vis.width / 2) + 280)
 			.attr("y", -45)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
@@ -171,12 +171,12 @@ class ScatterPlotVis {
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
 			.style("fill", "white")
-			.style("font-weight", "bold")
+			.style("font-weight", "light")
 			.text("Hover over a point to view info about a specific school");
 
 		// Add x-axis label
 		vis.svg.append("text")
-			.attr("transform", "translate(" + (vis.width / 2) + " ," + (vis.height + 50) + ")")
+			.attr("transform", "translate(" + (vis.width / 2) + " ," + (vis.height + 57) + ")")
 			.style("text-anchor", "middle")
 			.style("font-size", "24px")
 			.attr("fill", "white")
@@ -320,7 +320,7 @@ class ScatterPlotVis {
 				vis.tooltip.transition()
 					.duration(200)
 					.style("opacity", 1);
-				vis.tooltip.html(`<strong>${d.school_name}</strong><br>Average SAT Score: ${d.avg_sat}<br> Completion Rate: ${(d.comp_rate * 100).toFixed(2)}%`)
+				vis.tooltip.html(`${d.school_name}<br>Average SAT Score: ${d.avg_sat}<br> Completion Rate: ${(d.comp_rate * 100).toFixed(2)}%`)
 					.style("left", (event.pageX) + "px")
 					.style("top", (event.pageY) + "px")
 					.style("font-family", "Arial, sans-serif")
