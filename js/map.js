@@ -7,18 +7,19 @@ class MapVisualization {
         this.displayData = displayData
 
         // Set the dimensions of the SVG container
-        this.width = document.getElementById(this.parentElement).getBoundingClientRect().width 
-        this.height = document.getElementById(this.parentElement).getBoundingClientRect().height,
+        this.width = 960;
+        this.height = 600;
 
         this.tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
+
         this.initVis();
 
     }
 
     initVis() {
-        
+
         let vis = this;
         let states;
 
@@ -27,7 +28,7 @@ class MapVisualization {
             return stateData ? stateData.AverageRate : null;
         }
 
-        vis.svg = d3.select("#" + vis.parentElement)
+        vis.svg = d3.select(vis.parentElement)
             .append("svg")
             .attr("width", this.width)
             .attr("height", this.height);
@@ -106,7 +107,7 @@ class MapVisualization {
         const variableDropdown = document.getElementById('variableDropdown');
 
 
-        // console.log(variableDropdown)
+        console.log(variableDropdown)
 
 
 
@@ -117,46 +118,15 @@ class MapVisualization {
         // Load the GeoJSON data
         d3.json("gz_2010_us_040_00_500k.json").then((us) => {
 
+
+            console.log(us);
+
+
             // const states = topojson.feature(us, us.objects.states);
             // Assuming you have functions to calculate average rates for each state
 
-            //  console.log("features:", states.features);
+           //  console.log("features:", states.features);
 
-            // Draw the state boundaries initially
-            // console.log("US", us)
-            // vis.svg.selectAll("path")
-            //     .data(us.features)
-            //     .enter().append("path")
-            //     .attr("d", vis.path)
-            //     .attr("fill", "lightgray")
-            //     .attr("stroke", "white");
-
-
-            // Feel free to remove after thursday's check-in - just a temporary fix
-            vis.svg.selectAll("path")
-                .data(us.features)
-                .enter().append("path")
-                .attr("d", vis.path)
-                .attr("fill", "lightgray")
-                .attr("stroke", "white")
-                .on("mouseover", function (event, d) {
-                    // Show tooltip on hover
-                    vis.tooltip.transition().duration(200).style("opacity", 0.9);
-                    const selectedVariable = variableDropdown.value;
-                    vis.tooltip
-                        .html(
-                            `State: ${stateMapping[d.properties.NAME] || "N/A"}<br>${variableDropdown.options[variableDropdown.selectedIndex].text}: ${getAverageRate(
-                                stateMapping[d.properties.NAME],
-                                selectedVariable
-                            ) || "N/A"}`
-                        )
-                        .style("left", event.pageX + "px")
-                        .style("top", event.pageY - 28 + "px");
-                })
-                .on("mouseout", function () {
-                    // Hide tooltip on mouseout
-                    vis.tooltip.transition().duration(500).style("opacity", 0);
-                });
 
 
 
@@ -173,7 +143,7 @@ class MapVisualization {
                     .attr("fill", "lightgray")
                     .attr("stroke", "white")
                     .on("mouseover", function (event, d) {
-                        // Show tooltip on hover
+                    // Show tooltip on hover
                         vis.tooltip.transition().duration(200).style("opacity", 0.9);
                         const selectedVariable = variableDropdown.value;
                         vis.tooltip
@@ -192,16 +162,27 @@ class MapVisualization {
                     });
             });
 
-        });
+            });
 
         const averageTuitionRates = vis.calculateAverageRates(vis.displayData, 'TUITIONFEE_IN');
         const averageCompletionRates = vis.calculateAverageRates(vis.displayData, 'COMP_ORIG_YR2_RT');
         const averageWithdrawalRates = vis.calculateAverageRates(vis.displayData, 'WDRAW_ORIG_YR4_RT');
 
 
-        // console.log(averageTuitionRates);
-        // console.log(averageCompletionRates);
-        // console.log(averageWithdrawalRates);
+        console.log(averageTuitionRates);
+        console.log(averageCompletionRates);
+        console.log(averageWithdrawalRates);
+
+        // Draw the state boundaries
+        vis.svg.selectAll("path")
+            .data(states.features)
+            .enter().append("path")
+            .attr("d", vis.path)
+            .attr("fill", "lightgray")
+            .attr("stroke", "white");
+
+
+
     }
 
 
