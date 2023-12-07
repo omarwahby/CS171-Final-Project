@@ -26,8 +26,7 @@ function initMainPage(dataArray) {
     // log data
     // console.log('check out the data', dataArray);
 
-    const map = new MapVisualization('#mapContainer', dataArray[1]);
-    MapVisualization.initVis();
+    const mapViz = new MapVisualization('#mapContainer', dataArray[1]);
 
 }
 

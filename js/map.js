@@ -119,14 +119,46 @@ class MapVisualization {
         d3.json("gz_2010_us_040_00_500k.json").then((us) => {
 
 
-            console.log(us);
-
-
             // const states = topojson.feature(us, us.objects.states);
             // Assuming you have functions to calculate average rates for each state
 
-           //  console.log("features:", states.features);
+            //  console.log("features:", states.features);
 
+            // Draw the state boundaries initially
+            console.log("US", us)
+            // vis.svg.selectAll("path")
+            //     .data(us.features)
+            //     .enter().append("path")
+            //     .attr("d", vis.path)
+            //     .attr("fill", "lightgray")
+            //     .attr("stroke", "white");
+
+
+            // Feel free to remove after thursday's check-in - just a temporary fix
+            vis.svg.selectAll("path")
+                .data(us.features)
+                .enter().append("path")
+                .attr("d", vis.path)
+                .attr("fill", "lightgray")
+                .attr("stroke", "white")
+                .on("mouseover", function (event, d) {
+                    // Show tooltip on hover
+                    vis.tooltip.transition().duration(200).style("opacity", 0.9);
+                    const selectedVariable = variableDropdown.value;
+                    vis.tooltip
+                        .html(
+                            `State: ${stateMapping[d.properties.NAME] || "N/A"}<br>${variableDropdown.options[variableDropdown.selectedIndex].text}: ${getAverageRate(
+                                stateMapping[d.properties.NAME],
+                                selectedVariable
+                            ) || "N/A"}`
+                        )
+                        .style("left", event.pageX + "px")
+                        .style("top", event.pageY - 28 + "px");
+                })
+                .on("mouseout", function () {
+                    // Hide tooltip on mouseout
+                    vis.tooltip.transition().duration(500).style("opacity", 0);
+                });
 
 
 
@@ -143,7 +175,7 @@ class MapVisualization {
                     .attr("fill", "lightgray")
                     .attr("stroke", "white")
                     .on("mouseover", function (event, d) {
-                    // Show tooltip on hover
+                        // Show tooltip on hover
                         vis.tooltip.transition().duration(200).style("opacity", 0.9);
                         const selectedVariable = variableDropdown.value;
                         vis.tooltip
@@ -162,7 +194,7 @@ class MapVisualization {
                     });
             });
 
-            });
+        });
 
         const averageTuitionRates = vis.calculateAverageRates(vis.displayData, 'TUITIONFEE_IN');
         const averageCompletionRates = vis.calculateAverageRates(vis.displayData, 'COMP_ORIG_YR2_RT');
@@ -172,17 +204,6 @@ class MapVisualization {
         console.log(averageTuitionRates);
         console.log(averageCompletionRates);
         console.log(averageWithdrawalRates);
-
-        // Draw the state boundaries
-        vis.svg.selectAll("path")
-            .data(states.features)
-            .enter().append("path")
-            .attr("d", vis.path)
-            .attr("fill", "lightgray")
-            .attr("stroke", "white");
-
-
-
     }
 
 
