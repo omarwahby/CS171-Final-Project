@@ -223,3 +223,11 @@ h4 {
 	width: 100%;
 	border-radius: 50%; /* Optional: Add a circular border to the images */
 }
+
+.col-sm {
+	color: white; /* Set the text color to white */
+}
+
+.col-sm strong {
+	margin-right: 5px; /* Adjust the margin-right as needed */
+}
