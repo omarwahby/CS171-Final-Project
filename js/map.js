@@ -21,7 +21,6 @@ class MapVisualization {
     initVis() {
 
         let vis = this;
-        let states;
 
         function getAverageRate(state, variable) {
             const stateData = vis.calculateAverageRates(vis.displayData, variable).find((d) => d.State === state);
@@ -104,6 +103,8 @@ class MapVisualization {
         };
 
 
+
+
         const variableDropdown = document.getElementById('variableDropdown');
 
 
@@ -111,21 +112,87 @@ class MapVisualization {
 
 
 
-        // Set the default value for the dropdown
-        variableDropdown.value = 'TUITIONFEE_IN';
+
 
 
         // Load the GeoJSON data
         d3.json("gz_2010_us_040_00_500k.json").then((us) => {
 
 
-            console.log(us);
+            console.log("map data", us.features);
 
 
-            // const states = topojson.feature(us, us.objects.states);
-            // Assuming you have functions to calculate average rates for each state
+            const selectedVariable = variableDropdown.value;
+            const minRate = d3.min(vis.displayData, d => +d[selectedVariable]);
+            console.log(minRate)
 
-           //  console.log("features:", states.features);
+            const maxRate = d3.max(vis.displayData, d => +d[selectedVariable]);
+
+            const colorScale = d3.scaleSequential()
+                .domain([minRate, maxRate])
+                .interpolator(d3.interpolateYlOrRd)
+                .clamp(true);
+
+            colorScale.range([d3.rgb('#ffffcc'), d3.rgb('#d73027')]);
+
+
+
+
+
+
+
+
+            vis.svg.selectAll("path")
+                .data(us.features)
+                .enter().append("path")
+                .attr("d", vis.path)
+                .attr("fill", function (state) {
+                    const stateName = stateMapping[state.properties.NAME];
+                    const averageRate = vis.calculateAverageRates(vis.displayData, selectedVariable)
+                        .find(d => d.State === stateName)?.AverageRate;
+                    return averageRate ? colorScale(averageRate) : "lightgray";
+                })
+                .attr("stroke", "black");
+
+            vis.svg.selectAll("path")
+                .on("mouseover", function (event, d) {
+                    // Show tooltip on hover
+                    vis.tooltip.transition().duration(200).style("opacity", 0.9);
+                    const selectedVariable = variableDropdown.value;
+                    const selectedState = stateMapping[d.properties.NAME] || "N/A";
+                    vis.svg.selectAll("path")
+                        .style("fill", function (stateData) {
+                            const stateName = stateMapping[stateData.properties.NAME];
+                            const averageRate = vis.calculateAverageRates(vis.displayData, selectedVariable)
+                                .find(d => d.State === stateName)?.AverageRate;
+
+                            return stateMapping[stateData.properties.NAME] === selectedState ? "blue" : (averageRate ? colorScale(averageRate) : "lightgray");
+                        });
+                    vis.tooltip
+                        .html(
+                            `State: ${stateMapping[d.properties.NAME] || "N/A"}<br>${variableDropdown.options[variableDropdown.selectedIndex].text}: ${getAverageRate(
+                                stateMapping[d.properties.NAME],
+                                selectedVariable
+                            ) || "N/A"}`
+                        )
+                        .style("left", event.pageX + "px")
+                        .style("top", event.pageY - 28 + "px");
+                })
+                .on("mouseout", function () {
+                    // Hide tooltip on mouseout
+
+                    vis.svg.selectAll("path")
+                        .attr("fill", function (stateData) {
+                            const stateName = stateMapping[stateData.properties.NAME];
+                            const averageRate = vis.calculateAverageRates(vis.displayData, selectedVariable)
+                                .find(d => d.State === stateName)?.AverageRate;
+                            return averageRate ? colorScale(averageRate) : "lightgray";
+                        });
+                    vis.tooltip.transition().duration(500).style("opacity", 0);
+                });
+
+
+
 
 
 
@@ -136,16 +203,39 @@ class MapVisualization {
             variableDropdown.addEventListener('change', function () {
 
 
+
+                const selectedVariable = variableDropdown.value;
+                const minRate = d3.min(vis.displayData, d => +d[selectedVariable]);
+                console.log(minRate)
+
+                const maxRate = d3.max(vis.displayData, d => +d[selectedVariable]);
+                console.log(maxRate)
+
+                const colorScale = d3.scaleSequential()
+                    .domain([minRate, maxRate])
+                    .interpolator(d3.interpolateYlOrRd);
+
+
                 vis.svg.selectAll("path")
                     .data(us.features)
                     .enter().append("path")
                     .attr("d", vis.path)
-                    .attr("fill", "lightgray")
-                    .attr("stroke", "white")
+                    .attr("fill", function (state) {
+                        const stateName = stateMapping[state.properties.NAME];
+                        const averageRate = vis.calculateAverageRates(vis.displayData, selectedVariable)
+                            .find(d => d.State === stateName)?.AverageRate;
+                        return averageRate ? colorScale(averageRate) : "lightgray";
+                    })
+                    .attr("stroke", "black")
                     .on("mouseover", function (event, d) {
                     // Show tooltip on hover
                         vis.tooltip.transition().duration(200).style("opacity", 0.9);
                         const selectedVariable = variableDropdown.value;
+                        const selectedState = stateMapping[d.properties.NAME] || "N/A";
+                        vis.svg.selectAll("path")
+                            .style("fill", function (stateData) {
+                                return stateMapping[stateData.properties.NAME] === selectedState ? "orange" : "lightgray";
+                            });
                         vis.tooltip
                             .html(
                                 `State: ${stateMapping[d.properties.NAME] || "N/A"}<br>${variableDropdown.options[variableDropdown.selectedIndex].text}: ${getAverageRate(
@@ -158,6 +248,14 @@ class MapVisualization {
                     })
                     .on("mouseout", function () {
                         // Hide tooltip on mouseout
+
+                        vis.svg.selectAll("path")
+                            .attr("fill", function (stateData) {
+                                const stateName = stateMapping[stateData.properties.NAME];
+                                const averageRate = vis.calculateAverageRates(vis.displayData, selectedVariable)
+                                    .find(d => d.State === stateName)?.AverageRate;
+                                return averageRate ? colorScale(averageRate) : "lightgray";
+                            });
                         vis.tooltip.transition().duration(500).style("opacity", 0);
                     });
             });
@@ -173,13 +271,7 @@ class MapVisualization {
         console.log(averageCompletionRates);
         console.log(averageWithdrawalRates);
 
-        // Draw the state boundaries
-        vis.svg.selectAll("path")
-            .data(states.features)
-            .enter().append("path")
-            .attr("d", vis.path)
-            .attr("fill", "lightgray")
-            .attr("stroke", "white");
+
 
 
 

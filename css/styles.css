@@ -47,6 +47,16 @@ h2 {
 	margin-bottom: 30px;
 }
 
+
+.team-member h2 {
+	color: var(--primary-color); /* Set the color to the desired value */
+}
+
+.team-member p {
+
+	color:white;
+}
+
 .narration {
 	font-family: var(--primary-font-family);
 	font-weight: 400;
@@ -202,4 +212,14 @@ h4 {
 
 .link:hover {
 	stroke-opacity: .5;
+}
+
+.team-member {
+	text-align: center;
+	margin-bottom: 20px; /* Adjust the margin for spacing between team members */
+}
+
+.team-member img {
+	width: 100%;
+	border-radius: 50%; /* Optional: Add a circular border to the images */
 }
