@@ -156,14 +156,14 @@ class MapVisualization {
             .attr("height", 100)  // Adjust the height as needed
             .html(`<div style="font-size: 18px; font-weight: 400; color: ${vis.primary_color};">
         Choose a metric from the dropdown menu to explore financial data across U.S. states.
-        Hover over a state to view more info about it.
+        Hover over a state for more info.
       </div>`);
 
 
         vis.legendWidth = vis.width * .8;
         vis.legendHeight = 30;
         vis.legendX = vis.width / 8;
-        vis.legendY = 70;
+        vis.legendY = 80;
 
         vis.legendScale = d3.scaleLinear()
             .domain([vis.minRate, vis.maxRate])
