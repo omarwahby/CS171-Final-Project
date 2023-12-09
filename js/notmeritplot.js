@@ -26,6 +26,18 @@ class NotMeritPlotVis {
 		vis.primary_color = "#ff6127"
 		vis.secondary_color = "26272f"
 
+		vis.calloutSchools = new Set([
+			"Villanova University",
+			"Michigan State University",
+			"University of Vermont",
+			"Harvard University",
+			"University of Texas at Austin",
+			"University of Virginia",
+			"Texas A&M International University",
+			"Union College",
+			"Chicago State University",
+		]);
+
 		// Initialize the svg essentials
 		vis.margin = { top: 120, right: 180, bottom: 80, left: 100, xAxisPadding: -8, yAxisPadding: 10 };
 
@@ -301,8 +313,6 @@ class NotMeritPlotVis {
 			.style("stroke", "white")
 			.style("opacity", ".7");
 
-
-
 		let old_circles = vis.svg.selectAll(".dot")
 			.data(vis.displayData, d => d.school_id);
 
@@ -313,9 +323,7 @@ class NotMeritPlotVis {
 			.duration(200)
 			.attr("cx", d => vis.xScale(d.avg_fam_inc))
 			.attr("cy", d => vis.yScale(d.avg_sat))
-			.attr("r", 5)
-			.attr("stroke", "black")
-			.style("fill", vis.primary_color);
+			.attr("stroke", "black");
 
 		old_circles.exit().remove();
 
@@ -325,18 +333,73 @@ class NotMeritPlotVis {
 			.attr("class", "dot")
 			.attr("r", 5)
 			.attr("stroke", "black")
-			.style("fill", vis.primary_color);
-
-		new_circles
+			.style("fill", vis.primary_color)
 			.attr("cx", d => vis.xScale(d.avg_fam_inc))
 			.attr("cy", d => vis.yScale(d.avg_sat));
+
+		// Logic for adding new callouts
+		new_circles.each(d => {
+			if (vis.calloutSchools.has(d.school_name)) {
+
+				new_circles.filter(school => school === d)
+					.attr("r", 8)
+					.style("fill", "crimson")
+					.raise();
+
+				let validClassName = getValidClassName(d.school_name);
+
+				vis.svg.append("text")
+					.attr("class", `${validClassName}`)
+					.attr("x", vis.xScale(d.avg_fam_inc))
+					.attr("y", vis.yScale(d.avg_sat) + 10)
+					.attr("text-anchor", "left")
+					.text(() => {
+						if (vis.calloutSchools.has(d.school_name)) {
+							return d.school_name;
+						}
+					})
+					.attr("font-weight", "400")
+					.attr("fill", "white")
+					.style("user-select", "none")
+					.style("pointer-events", "none");
+			}
+		});
+
+		// Logic for updating location of callouts as scatterplot shifts
+		old_circles.each(d => {
+
+			if (vis.calloutSchools.has(d.school_name)) {
+
+				let validClassName = getValidClassName(d.school_name);
+				vis.svg.selectAll(`.${validClassName}`)
+					.attr("x", vis.xScale(d.avg_fam_inc))
+					.attr("y", vis.yScale(d.avg_sat) + 10);
+			}
+		});
+
+		// Logic for removing callouts when circles are removed
+		let exitSelection = old_circles.exit();
+		exitSelection.each(d => {
+			let validClassName = getValidClassName(d.school_name);
+
+			if (vis.calloutSchools.has(d.school_name)) {
+				vis.svg.selectAll(`.${validClassName}`).remove();
+			}
+		});
+
+		// Helper function to get a valid class name
+		function getValidClassName(name) {
+			let validClassName = name.replace(/\s+/g, "_"); // Replace spaces with underscores
+			validClassName = validClassName.replace(/[^a-zA-Z0-9-_]/g, ""); // Remove other special characters
+			return validClassName;
+		}
 
 		// // Tooltip interactions
 		new_circles
 			.on("mouseover", function (event, d) {
 				d3.select(this)
 					.attr("opacity", .6)
-					.attr("r", 10);
+					.attr("r", this.r.baseVal.value + 5);
 				vis.tooltip.transition()
 					.duration(200)
 					.style("opacity", 0.8);
@@ -347,7 +410,7 @@ class NotMeritPlotVis {
 			.on("mouseout", function (d) {
 				d3.select(this)
 					.attr("opacity", 1)
-					.attr("r", 5);
+					.attr("r", this.r.baseVal.value - 5);
 				vis.tooltip.transition()
 					.duration(500)
 					.style("opacity", 0);

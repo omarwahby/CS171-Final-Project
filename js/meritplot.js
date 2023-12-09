@@ -314,12 +314,8 @@ class MeritPlotVis {
 			.style("stroke", "white")
 			.style("opacity", ".7");
 
-
-
 		let old_circles = vis.svg.selectAll(".dot")
 			.data(vis.displayData, d => d.school_id);
-
-
 
 		old_circles // Add new circles for data points that enter the range
 			.attr("class", "dot")
@@ -341,8 +337,6 @@ class MeritPlotVis {
 			.style("fill", vis.primary_color)
 			.attr("cx", d => vis.xScale(d.avg_sat))
 			.attr("cy", d => vis.yScale(d.comp_rate));
-
-
 
 		// Logic for adding new callouts
 		new_circles.each(d => {
@@ -400,13 +394,6 @@ class MeritPlotVis {
 			validClassName = validClassName.replace(/[^a-zA-Z0-9-_]/g, ""); // Remove other special characters
 			return validClassName;
 		}
-
-
-
-
-
-
-
 
 		// // Tooltip interactions
 		new_circles
