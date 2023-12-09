@@ -22,11 +22,20 @@ class MapVisualization {
 
         let vis = this;
 
-        function getAverageRate(state, variable) {
-            const stateData = vis.calculateAverageRates(vis.displayData, variable).find((d) => d.State === state);
-            return stateData ? stateData.AverageRate : null;
+        // function getAverageRate(state, variable) {
+        //     const stateData = vis.calculateAverageRates(vis.displayData, variable).find((d) => d.State === state);
+        //     return stateData ? stateData.AverageRate : null;
+        // }
+        vis.averageTuitionRates = vis.calculateAverageRates(vis.displayData, 'TUITIONFEE_IN');
+        vis.averageCompletionRates = vis.calculateAverageRates(vis.displayData, 'COMP_ORIG_YR2_RT');
+        vis.averageWithdrawalRates = vis.calculateAverageRates(vis.displayData, 'WDRAW_ORIG_YR4_RT');
+        //Set a default value - later sync this up to be whatever the dropdown is defaulted to
+        vis.averageRates = vis.averageTuitionRates
+        vis.dropdown_mapping = {
+            'TUITIONFEE_IN': vis.averageTuitionRates,
+            'COMP_ORIG_YR2_RT': vis.averageCompletionRates,
+            'WDRAW_ORIG_YR4_RT': vis.averageWithdrawalRates,
         }
-        vis.averageRates = []
 
         vis.svg = d3.select(vis.parentElement)
             .append("svg")
@@ -40,7 +49,7 @@ class MapVisualization {
 
         vis.path = d3.geoPath().projection(vis.projection);
 
-        const stateMapping = {
+        vis.stateMapping = {
             'Alabama': 'AL',
             'Illinois': 'IL',
             'Alaska': 'AK',
@@ -102,17 +111,17 @@ class MapVisualization {
             'Marshall Islands': 'MH'
         };
 
-        const variableDropdown = document.getElementById('variableDropdown');
+        vis.variableDropdown = document.getElementById('variableDropdown');
 
         
-        console.log(variableDropdown)
+        console.log(vis.variableDropdown)
 
         // Load the GeoJSON data
         d3.json("gz_2010_us_040_00_500k.json").then((us) => {
 
             console.log("map data", us.features);
 
-            vis.selectedVariable = variableDropdown.value;
+            vis.selectedVariable = vis.variableDropdown.value;
             vis.minRate = d3.min(vis.displayData, d => +d[vis.selectedVariable]);
             vis.maxRate = d3.max(vis.displayData, d => +d[vis.selectedVariable]);
             console.log("Min Rate:",vis.minRate,"Max Rate:",vis.maxRate)
@@ -129,7 +138,7 @@ class MapVisualization {
                 .enter().append("path")
                 .attr("d", vis.path)
                 .attr("fill", function (state) {
-                    const stateName = stateMapping[state.properties.NAME];
+                    const stateName = vis.stateMapping[state.properties.NAME];
                     const averageRate = vis.calculateAverageRates(vis.displayData, vis.selectedVariable)
                         .find(d => d.State === stateName)?.AverageRate;
                     return averageRate ? vis.colorScale(averageRate) : "lightgray";
@@ -138,31 +147,39 @@ class MapVisualization {
 
             vis.svg.selectAll("path")
                 .on("mouseover", function (event, currentState) {
-                    // Show tooltip on hover
+                    const stateAbrev = vis.stateMapping[currentState.properties.NAME]
+                    console.log("State Abrev",stateAbrev)
+                    const selectedRate = vis.averageRates.find(stateAverageDataObject => stateAverageDataObject.State == stateAbrev).AverageRate
+                    console.log("Selected Rate",selectedRate)
+                    const selectedMetricName = vis.variableDropdown.options[vis.variableDropdown.selectedIndex].text
+                    console.log(selectedMetricName)
+                    let displayStat;
+                    if (selectedMetricName == "Average Tuition") {
+                        displayStat = ("$" + Math.trunc(selectedRate)) || 'N/A'
+                    }
+                    else {
+                        displayStat = (Math.trunc(selectedRate * 100) + "%") || 'N/A'
+                    }
+
+
                     vis.tooltip.transition().duration(200).style("opacity", 0.9);
-                    vis.selectedVariable = variableDropdown.value;
+                    vis.selectedVariable = vis.variableDropdown.value;
                     vis.selectedState = currentState.properties.NAME || "N/A";
                     vis.states_drawings
                         .style("fill", (x)=>{
                            if(x.properties.NAME == vis.selectedState){
-                            console.log(x.properties)
                             return "red"
                            }
                         });
                     vis.tooltip
                         .html(
-                            `State: ${stateMapping[currentState.properties.NAME] || "N/A"}<br>${variableDropdown.options[variableDropdown.selectedIndex].text}: ${getAverageRate(
-                                stateMapping[currentState.properties.NAME],
-                                vis.selectedVariable
-                            ) || "N/A"}`
-                        )
+                            `State: ${currentState.properties.NAME || "N/A"}<br>${vis.variableDropdown.options[vis.variableDropdown.selectedIndex].text}:
+                             ` + `${displayStat}`)
                         .style("left", event.pageX + "px")
                         .style("top", event.pageY - 28 + "px");
                 })
                 .on("mouseout", function (event, currentState) {
                     // Hide tooltip on mouseout
-                    
-                    console.log("YIPEE")
                     vis.states_drawings
                         .style("fill", (x)=>{
                            if(x.properties.NAME == vis.selectedState){
@@ -173,8 +190,11 @@ class MapVisualization {
                     vis.tooltip.transition().duration(500).style("opacity", 0);
                 });
 
-            variableDropdown.addEventListener('change', function () {
-                vis.selectedVariable = variableDropdown.value;
+            // Change the state data when metric is changed through dropdown menu
+            vis.variableDropdown.addEventListener('change', function () {
+                vis.selectedVariable = vis.variableDropdown.value;
+                vis.averageRates = vis.dropdown_mapping[vis.selectedVariable]
+                console.log(vis.averageRates)
                 vis.minRate = d3.min(vis.displayData, d => +d[vis.selectedVariable]);
                 console.log(vis.minRate)
 
@@ -187,7 +207,7 @@ class MapVisualization {
 
                 vis.states_drawings
                         .style("fill", function (stateData) {
-                            const stateName = stateMapping[stateData.properties.NAME];
+                            const stateName = vis.stateMapping[stateData.properties.NAME];
                             const averageRate = vis.calculateAverageRates(vis.displayData, vis.selectedVariable)
                                 .find(d => d.State === stateName)?.AverageRate;
                             return vis.colorScale(averageRate);
@@ -195,22 +215,7 @@ class MapVisualization {
             });
 
             });
-
-        // const averageTuitionRates = vis.calculateAverageRates(vis.displayData, 'TUITIONFEE_IN');
-        // const averageCompletionRates = vis.calculateAverageRates(vis.displayData, 'COMP_ORIG_YR2_RT');
-        // const averageWithdrawalRates = vis.calculateAverageRates(vis.displayData, 'WDRAW_ORIG_YR4_RT');
-
-
-        // console.log(averageTuitionRates);
-        // console.log(averageCompletionRates);
-        // console.log(averageWithdrawalRates);
-
-
-
-
-
     }
-
 
     // Helper function to calculate average rates from the data
     calculateAverageRates(data, variable) {
