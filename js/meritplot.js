@@ -26,6 +26,18 @@ class MeritPlotVis {
 		vis.primary_color = "#ff6127"
 		vis.secondary_color = "26272f"
 
+		vis.calloutSchools = new Set([
+			"University of California-Berkeley",
+			"Michigan State University",
+			"University of Florida",
+			"Harvard University",
+			"University of Texas at Austin",
+			"University of Virginia",
+			"University of Georgia",
+			"Worcester State University",
+			"Indiana State University",
+		]);
+
 		// Initialize the svg essentials
 		vis.margin = { top: 120, right: 180, bottom: 80, left: 100, xAxisPadding: -8, yAxisPadding: 10 };
 
@@ -46,7 +58,8 @@ class MeritPlotVis {
 				schoolObject.avg_sat !== null &&
 				!isNaN(schoolObject.avg_sat) &&
 				schoolObject.comp_rate !== null &&
-				!isNaN(schoolObject.comp_rate)
+				!isNaN(schoolObject.comp_rate) &&
+				schoolObject.comp_rate > .02
 			);
 		});
 
@@ -200,7 +213,7 @@ class MeritPlotVis {
 			.attr("text-anchor", "middle")
 			.style("font-size", "24px")
 			.attr("fill", vis.primary_color)
-			.text("SAT Scores vs. 4-Year Bachelor's Degree Completion Rates");
+			.text("SAT Scores vs. Completion Rates (Graduated in 4 years)");
 
 
 		vis.tooltip = d3.select("body").append("foreignObject")
@@ -306,6 +319,8 @@ class MeritPlotVis {
 		let old_circles = vis.svg.selectAll(".dot")
 			.data(vis.displayData, d => d.school_id);
 
+
+
 		old_circles // Add new circles for data points that enter the range
 			.attr("class", "dot")
 			.merge(old_circles) // Merge with existing circles
@@ -313,9 +328,7 @@ class MeritPlotVis {
 			.duration(200)
 			.attr("cx", d => vis.xScale(d.avg_sat))
 			.attr("cy", d => vis.yScale(d.comp_rate))
-			.attr("r", 5)
-			.attr("stroke", "black")
-			.style("fill", vis.primary_color);
+			.attr("stroke", "black");
 
 		old_circles.exit().remove();
 
@@ -325,18 +338,82 @@ class MeritPlotVis {
 			.attr("class", "dot")
 			.attr("r", 5)
 			.attr("stroke", "black")
-			.style("fill", vis.primary_color);
-
-		new_circles
+			.style("fill", vis.primary_color)
 			.attr("cx", d => vis.xScale(d.avg_sat))
 			.attr("cy", d => vis.yScale(d.comp_rate));
+
+
+
+		// Logic for adding new callouts
+		new_circles.each(d => {
+			if (vis.calloutSchools.has(d.school_name)) {
+
+				new_circles.filter(school => school === d)
+					.attr("r", 8)
+					.style("fill", "crimson")
+					.raise();
+
+				let validClassName = getValidClassName(d.school_name);
+
+				vis.svg.append("text")
+					.attr("class", `${validClassName}`)
+					.attr("x", vis.xScale(d.avg_sat))
+					.attr("y", vis.yScale(d.comp_rate) + 10)
+					.attr("text-anchor", "left")
+					.text(() => {
+						if (vis.calloutSchools.has(d.school_name)) {
+							return d.school_name;
+						}
+					})
+					.attr("font-weight", "400")
+					.attr("fill", "white")
+					.style("user-select", "none")
+					.style("pointer-events", "none");
+			}
+		});
+
+		// Logic for updating location of callouts as scatterplot shifts
+		old_circles.each(d => {
+
+			if (vis.calloutSchools.has(d.school_name)) {
+
+				let validClassName = getValidClassName(d.school_name);
+				vis.svg.selectAll(`.${validClassName}`)
+					.attr("x", vis.xScale(d.avg_sat))
+					.attr("y", vis.yScale(d.comp_rate) + 10);
+			}
+		});
+
+		// Logic for removing callouts when circles are removed
+		let exitSelection = old_circles.exit();
+		exitSelection.each(d => {
+			let validClassName = getValidClassName(d.school_name);
+
+			if (vis.calloutSchools.has(d.school_name)) {
+				vis.svg.selectAll(`.${validClassName}`).remove();
+			}
+		});
+
+		// Helper function to get a valid class name
+		function getValidClassName(name) {
+			let validClassName = name.replace(/\s+/g, "_"); // Replace spaces with underscores
+			validClassName = validClassName.replace(/[^a-zA-Z0-9-_]/g, ""); // Remove other special characters
+			return validClassName;
+		}
+
+
+
+
+
+
+
 
 		// // Tooltip interactions
 		new_circles
 			.on("mouseover", function (event, d) {
 				d3.select(this)
 					.attr("opacity", .6)
-					.attr("r", 10);
+					.attr("r", this.r.baseVal.value + 5);
 				vis.tooltip.transition()
 					.duration(200)
 					.style("opacity", 0.8);
@@ -347,7 +424,7 @@ class MeritPlotVis {
 			.on("mouseout", function (d) {
 				d3.select(this)
 					.attr("opacity", 1)
-					.attr("r", 5);
+					.attr("r", this.r.baseVal.value - 5);
 				vis.tooltip.transition()
 					.duration(500)
 					.style("opacity", 0);
