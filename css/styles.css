@@ -19,12 +19,12 @@
 	stroke: black;
 }
 
-#variableDropdown {
+/* #variableDropdown {
 	position: absolute;
-	top: 12vh;
+	top: 1vh;
 	left: 80vw;
 	z-index: 999;
-}
+} */
 
 .section {
 	text-align: center;

@@ -41,7 +41,7 @@ class MapVisualization {
 
         // Set up a geo projection for the map
         vis.projection = d3.geoAlbersUsa()
-            .scale(vis.height * 1.7)
+            .scale(vis.width * vis.height / 800)
             .translate([vis.width / 2, (vis.height / 2) + 50]);
 
         vis.path = d3.geoPath().projection(vis.projection);
@@ -159,15 +159,21 @@ class MapVisualization {
         vis.legendWidth = 800;
         vis.legendHeight = 30;
         vis.legendX = (vis.width / 2) - 420;
-        vis.legendY = 95;
+        vis.legendY = 70;
 
         vis.legendScale = d3.scaleLinear()
             .domain([vis.minRate, vis.maxRate])
             .range([vis.legendX, vis.legendX + vis.legendWidth]);
 
+        vis.legendFormat = d3.format(
+            vis.selectedVariable === 'TUITIONFEE_IN'
+                ? "$,.0f" : ".0%");
+
         vis.legendAxis = d3.axisBottom(vis.legendScale)
             .tickSize(13)
-            .ticks(5);
+            .ticks(5)
+            .tickFormat(vis.legendFormat);
+
 
         // Create a group for the legend
         vis.legendGroup = vis.svg.append("g")
@@ -251,6 +257,22 @@ class MapVisualization {
                     .domain([vis.minRate, vis.maxRate])
                     .interpolator(d3.interpolateYlOrRd)
                     .clamp(true);
+
+                vis.legendScale = d3.scaleLinear()
+                    .domain([vis.minRate, vis.maxRate])
+                    .range([vis.legendX, vis.legendX + vis.legendWidth]);
+
+                vis.legendFormat = d3.format(
+                    vis.selectedVariable === 'TUITIONFEE_IN'
+                        ? "$,.0f" : ".0%");
+
+                vis.legendAxis = d3.axisBottom(vis.legendScale)
+                    .tickSize(13)
+                    .ticks(5)
+                    .tickFormat(vis.legendFormat);
+
+                vis.legendGroup.call(vis.legendAxis);
+
 
                 vis.states_drawings
                     .style("fill", function (currentState) {
