@@ -10,10 +10,6 @@ class MapVisualization {
         this.width = 960;
         this.height = 600;
 
-        this.tooltip = d3.select("body").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
-
         this.initVis();
 
     }
@@ -22,6 +18,22 @@ class MapVisualization {
 
         let vis = this;
 
+        vis.primary_color = "#ff6127"
+		vis.secondary_color = "26272f"
+
+        vis.tooltip = d3.select("body").append("foreignObject")
+			.attr("width", 200)
+			.attr("height", 300)
+			.append("xhtml:div")
+			.style("user-select", "none")
+			.style("position", "absolute")
+			.style("background-color", "white")
+			.style("padding", "10px")
+			.style("border", "1px solid")
+			.style("font-weight", "700")
+			.style("border-color", vis.primary_color)
+			.style("border-radius", "5px")
+			.style("pointer-events", "none");
         // function getAverageRate(state, variable) {
         //     const stateData = vis.calculateAverageRates(vis.displayData, variable).find((d) => d.State === state);
         //     return stateData ? stateData.AverageRate : null;
@@ -155,14 +167,15 @@ class MapVisualization {
                     console.log(selectedMetricName)
                     let displayStat;
                     if (selectedMetricName == "Average Tuition") {
-                        displayStat = ("$" + Math.trunc(selectedRate)) || 'N/A'
+                        displayStat = `$${(Math.trunc(selectedRate) || 'N/A').toLocaleString()}`;
+
                     }
                     else {
                         displayStat = (Math.trunc(selectedRate * 100) + "%") || 'N/A'
                     }
 
 
-                    vis.tooltip.transition().duration(200).style("opacity", 0.9);
+                    vis.tooltip.transition().duration(200).style("opacity", 0.8);
                     vis.selectedVariable = vis.variableDropdown.value;
                     vis.selectedState = currentState.properties.NAME || "N/A";
                     vis.states_drawings
@@ -176,7 +189,7 @@ class MapVisualization {
                             `State: ${currentState.properties.NAME || "N/A"}<br>${vis.variableDropdown.options[vis.variableDropdown.selectedIndex].text}:
                              ` + `${displayStat}`)
                         .style("left", event.pageX + "px")
-                        .style("top", event.pageY - 28 + "px");
+                        .style("top", event.pageY - 85 + "px");
                 })
                 .on("mouseout", function (event, currentState) {
                     // Hide tooltip on mouseout
