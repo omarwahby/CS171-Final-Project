@@ -46,8 +46,14 @@ function createVis(data) {
                 "fooddegpercent": +d.PCIP12
             },
             avg_fam_inc: +d.FAMINC,
-            withdraw_rate: +d.WDRAW_ORIG_YR4_RT
-
+            withdraw_rate: +d.WDRAW_ORIG_YR4_RT,
+            opeid6: +d.OPEID6,
+            opeid: +d.OPEID,
+            city: d.CITY,
+            state_abbr: d.STABBR,
+            zip: d.ZIP,
+            tuition_in: +d.TUITIONFEE_IN,
+            tuition_out: +d.TUITIONFEE_OUT
         };
         return schoolObject;
     });
@@ -56,9 +62,10 @@ function createVis(data) {
     // (4) Create visualization instances
     let meritplotVis = new MeritPlotVis("meritplotvis", allData);
     let notmeritplotVis = new NotMeritPlotVis("notmeritplotvis", allData);
-    // let barchartVis = new BarChartVis("barchartvis", allData);
     let sankeyVis = new SankeyVis("sankeyvis", allData);
-    let mapViz = new MapVisualization('mapContainer', data[1]);
+    let mapVis = new MapVisualization('mapContainer', allData);
+    // let barchartVis = new BarChartVis("barchartvis", allData);
+
     // let barchartVis = new BarChartVis("barchartvis", allData);
 
 }
