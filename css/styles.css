@@ -256,3 +256,8 @@ a {
 	color: var(--primary-color);
 	font-weight: 700;
 }
+
+.col-sm ul {
+	list-style-type: none; /* Remove bullets from the list */
+	padding: 0; /* Remove default padding */
+}
