@@ -64,7 +64,6 @@ class MeritPlotVis {
 		});
 
 		vis.displayData = vis.data
-		// console.log(vis.displayData)
 
 		// Scatterplot Scales
 		vis.xScale = d3.scaleLinear()
@@ -243,7 +242,6 @@ class MeritPlotVis {
 
 	updateVis() {
 		let vis = this;
-		// console.log(vis.displayData.length)
 
 		// Scatterplot Scales
 		vis.xScale = d3.scaleLinear()

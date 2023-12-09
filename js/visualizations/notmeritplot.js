@@ -10,16 +10,11 @@ class NotMeritPlotVis {
 	constructor(_parentElement, _data, _eventHandler) {
 		this.parentElement = _parentElement;
 		this.data = _data;
-		//this.eventHandler =
-
 		this.initVis();
 	}
-
-
 	/*
 	 * Initialize visualization (static content, e.g. SVG area or axes)
 	 */
-
 	initVis() {
 		let vis = this;
 
@@ -63,7 +58,6 @@ class NotMeritPlotVis {
 		});
 
 		vis.displayData = vis.data
-		// console.log(vis.displayData)
 
 		// Scatterplot Scales
 		vis.xScale = d3.scaleLinear()
@@ -241,7 +235,6 @@ class NotMeritPlotVis {
 
 	updateVis() {
 		let vis = this;
-		// console.log(vis.displayData.length)
 
 		// Scatterplot Scales
 		vis.xScale = d3.scaleLinear()

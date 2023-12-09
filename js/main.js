@@ -1,14 +1,5 @@
-// Function to convert date objects to strings or reverse
-let dateFormatter = d3.timeFormat("%Y-%m-%d");
-let dateParser = d3.timeParse("%Y-%m-%d");
-
-
-// (1) Load data with promises
-
 let promises = [
-
     d3.csv("data/collegeData.csv")
-
 ];
 
 Promise.all(promises)
@@ -58,11 +49,12 @@ function createVis(data) {
     });
 
 
-    // (4) Create visualization instances
+    // Create visualization instances
     let meritplotVis = new MeritPlotVis("meritplotvis", allData);
     let notmeritplotVis = new NotMeritPlotVis("notmeritplotvis", allData);
     let sankeyVis = new SankeyVis("sankeyvis", allData);
     let mapVis = new MapVisualization('mapContainer', allData);
+    // For when we integrate barchart data with the rest of the visualizations
     // let barchartVis = new BarChartVis("barchartvis", allData);
 
 }

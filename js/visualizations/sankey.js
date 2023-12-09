@@ -30,7 +30,6 @@ class SankeyVis {
 		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right - 50,
 			vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
 
-
 		// Clean the data before we initialize the vis
 		vis.data = vis.data.filter(function (schoolObject) {
 			// Check if any attribute is null or NaN
@@ -244,9 +243,6 @@ class SankeyVis {
 			.attr("x", function (d) { return d.x1 + 6; })
 			.attr("text-anchor", "start")
 			;
-
-
-
 		vis.wrangleData();
 	}
 
