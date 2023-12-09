@@ -207,15 +207,18 @@ class MeritPlotVis {
 			.attr("width", 200)
 			.attr("height", 300)
 			.append("xhtml:div")
-			.style("opacity", .5)
 			.style("user-select", "none")
 			.style("position", "absolute")
 			.style("background-color", "white")
 			.style("padding", "10px")
 			.style("border", "1px solid")
+			.style("font-weight", "700")
 			.style("border-color", vis.primary_color)
 			.style("border-radius", "5px")
-			.style("pointer-events", "none");
+			.style("pointer-events", "none")
+			.style("font-family", "Arial, sans-serif")
+			.style("font-size", "14px")
+			.style("color", vis.secondary_color);
 
 		vis.wrangleData();
 	}
@@ -243,8 +246,8 @@ class MeritPlotVis {
 		vis.yAxis = d3.axisLeft(vis.yScale).tickFormat(d3.format(".0%")); // Format ticks as percentages
 
 		vis.yAxisGroup.selectAll("path")
-		.attr("fill", "none")
-		.attr("stroke", "white");
+			.attr("fill", "none")
+			.attr("stroke", "white");
 		vis.yAxisGroup.selectAll("line")
 			.attr("fill", "white")
 			.attr("stroke", "white");
@@ -336,13 +339,10 @@ class MeritPlotVis {
 					.attr("r", 10);
 				vis.tooltip.transition()
 					.duration(200)
-					.style("opacity", 1);
+					.style("opacity", 0.8);
 				vis.tooltip.html(`${d.school_name}<br>Average SAT Score: ${d.avg_sat}<br> Completion Rate: ${(d.comp_rate * 100).toFixed(2)}%`)
 					.style("left", (event.pageX) + "px")
-					.style("top", (event.pageY) + "px")
-					.style("font-family", "Arial, sans-serif")
-					.style("font-size", "14px")
-					.style("color", vis.primary_color);
+					.style("top", (event.pageY) + "px");
 			})
 			.on("mouseout", function (d) {
 				d3.select(this)
