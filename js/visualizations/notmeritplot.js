@@ -29,7 +29,8 @@ class NotMeritPlotVis {
 			"University of Texas at Austin",
 			"University of Virginia",
 			"Texas A&M International University",
-			"Union College",
+			"Fisk University",
+			"Washington State University",
 			"Chicago State University",
 		]);
 
