@@ -260,3 +260,8 @@ h4 {
 .col-sm strong {
 	margin-right: 5px; /* Adjust the margin-right as needed */
 }
+
+.col-sm ul {
+	list-style-type: none; /* Remove bullets from the list */
+	padding: 0; /* Remove default padding */
+}
