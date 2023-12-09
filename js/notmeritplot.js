@@ -104,23 +104,23 @@ class NotMeritPlotVis {
 			.style("font-weight", "light")
 			.text("Filter data by average household income range");
 
-		// Add SAT range score labels
-		vis.startIncome = vis.svg.append("text")
+		// Add income range labels
+		vis.minIncome = vis.svg.append("text")
 			.attr("x", (vis.width / 2) - 290)
 			.attr("y", -45)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
 			.style("fill", "white")
 			.style("font-weight", "regular")
-			.text("$" + d3.format(".0f")(d3.min(vis.displayData, (d) => d.avg_fam_inc)));
-		vis.endIncome = vis.svg.append("text")
-			.attr("x", (vis.width / 2) + 290)
+			.text(d3.format("$,.0f")(d3.min(vis.displayData, (d) => d.avg_fam_inc)));
+		vis.maxIncome = vis.svg.append("text")
+			.attr("x", (vis.width / 2) + 295)
 			.attr("y", -45)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
 			.style("fill", "white")
 			.style("font-weight", "regular")
-			.text("$" + d3.format(".0f")(d3.max(vis.displayData, (d) => d.avg_fam_inc)));
+			.text(d3.format("$,.0f")(d3.max(vis.displayData, (d) => d.avg_fam_inc)));
 
 		// SLIDER
 		// Create a foreignObject within the SVG
@@ -151,14 +151,13 @@ class NotMeritPlotVis {
 
 		// Attach an event listener to the slider
 		slider.noUiSlider.on('slide', function (values, handle) {
-			// Get the start and end date values from the slider
-			const [startIncome, endIncome] = values.map(score => d3.format(".0f")(score));
-
+			// Get the start and end income  values from the slider
+			const [minIncome, maxIncome] = values.map(income => d3.format(".0f")(income));
 			// Set the text content with rounded values
-			vis.startIncome.text("$" + startIncome);
-			vis.endIncome.text("$" + endIncome);
+			vis.minIncome.text(d3.format("$,.0f")(minIncome));
+			vis.maxIncome.text(d3.format("$,.0f")(maxIncome));
 			// Filter the data based on the selected date range
-			vis.displayData = vis.data.filter(d => d.avg_fam_inc >= startIncome && d.avg_fam_inc <= endIncome);
+			vis.displayData = vis.data.filter(d => d.avg_fam_inc >= minIncome && d.avg_fam_inc <= maxIncome);
 
 			// Update the visualization
 			vis.updateVis();
@@ -341,7 +340,7 @@ class NotMeritPlotVis {
 				vis.tooltip.transition()
 					.duration(200)
 					.style("opacity", 0.8);
-				vis.tooltip.html(`${d.school_name}<br>Average Household Income/yr : ${Math.round(d.avg_fam_inc)}$<br> Average SAT Score: ${(d.avg_sat)}`)
+				vis.tooltip.html(`${d.school_name}<br>Average Annual Household Income : ${(d3.format("$,.0f")(d.avg_fam_inc))}<br> Average SAT Score: ${(d.avg_sat)}`)
 					.style("left", (event.pageX) + "px")
 					.style("top", (event.pageY) + "px");
 			})
