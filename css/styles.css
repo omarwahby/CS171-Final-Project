@@ -1,5 +1,29 @@
 .selected-state {
-    fill: limegreen !important; /* or any other style for the selected state */
+	fill: limegreen !important;
+	/* or any other style for the selected state */
+}
+
+.legend {
+	font-size: 12px;
+}
+
+.legend text {
+	fill: black;
+}
+
+.legend rect {
+	stroke: none;
+}
+
+.legend .tick line {
+	stroke: black;
+}
+
+#variableDropdown {
+	position: absolute;
+	top: 12vh;
+	left: 80vw;
+	z-index: 999;
 }
 
 .section {
@@ -11,7 +35,8 @@
 	display: none;
 }
 
-#fp-nav ul li a span, .fp-slidesNav ul li a span {
+#fp-nav ul li a span,
+.fp-slidesNav ul li a span {
 	background-color: white;
 }
 

@@ -58,7 +58,7 @@ function createVis(data) {
     let notmeritplotVis = new NotMeritPlotVis("notmeritplotvis", allData);
     // let barchartVis = new BarChartVis("barchartvis", allData);
     let sankeyVis = new SankeyVis("sankeyvis", allData);
-    const map =  new MapVisualization('#mapContainer', data[1]);
+    const map = new MapVisualization('mapContainer', data[1]);
 
     // let barchartVis = new BarChartVis("barchartvis", allData);
 
