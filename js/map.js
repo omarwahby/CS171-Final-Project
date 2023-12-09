@@ -99,12 +99,16 @@ class MapVisualization {
             'Wisconsin': 'WI',
             'Wyoming': 'WY'
         };
-        vis.averageTuitionRates = vis.calculateAverageRates(vis.displayData, 'TUITIONFEE_IN');
-        vis.averageCompletionRates = vis.calculateAverageRates(vis.displayData, 'COMP_ORIG_YR2_RT');
-        vis.averageWithdrawalRates = vis.calculateAverageRates(vis.displayData, 'WDRAW_ORIG_YR4_RT');
+        vis.averageTuitionRates_in = vis.calculateAverageRates(vis.displayData, 'tuition_in');
+        vis.averageTuitionRates_out = vis.calculateAverageRates(vis.displayData, 'tuition_out');
+        vis.averageCompletionRates = vis.calculateAverageRates(vis.displayData, 'comp_rate');
+        vis.averageWithdrawalRates = vis.calculateAverageRates(vis.displayData, 'withdraw_rate');
 
         // Filter out US territories and anything else not in our mapping
-        vis.averageTuitionRates = vis.averageTuitionRates.filter(state_obj => {
+        vis.averageTuitionRates_in = vis.averageTuitionRates_in.filter(state_obj => {
+            return Object.values(vis.stateMapping).includes(state_obj.State);
+        });
+        vis.averageTuitionRates_out = vis.averageTuitionRates_out.filter(state_obj => {
             return Object.values(vis.stateMapping).includes(state_obj.State);
         });
         vis.averageCompletionRates = vis.averageCompletionRates.filter(state_obj => {
@@ -115,7 +119,8 @@ class MapVisualization {
         });
 
         vis.dropdown_mapping = {
-            'TUITIONFEE_IN': vis.averageTuitionRates,
+            'TUITIONFEE_IN': vis.averageTuitionRates_in,
+            'TUITIONFEE_OUT': vis.averageTuitionRates_out,
             'COMP_ORIG_YR2_RT': vis.averageCompletionRates,
             'WDRAW_ORIG_YR4_RT': vis.averageWithdrawalRates,
         }
@@ -165,7 +170,7 @@ class MapVisualization {
             .range([vis.legendX, vis.legendX + vis.legendWidth]);
 
         vis.legendFormat = d3.format(
-            vis.selectedVariable === 'TUITIONFEE_IN'
+            vis.selectedVariable === 'TUITIONFEE_IN' || vis.selectedVariable === 'TUITIONFEE_OUT'
                 ? "$,.0f" : ".0%");
 
         vis.legendAxis = d3.axisBottom(vis.legendScale)
@@ -218,7 +223,7 @@ class MapVisualization {
                     const selectedMetricName = vis.variableDropdown.options[vis.variableDropdown.selectedIndex].text
                     let displayStat;
 
-                    if (selectedMetricName == "Average Tuition") {
+                    if (selectedMetricName == "Average Tuition (In-State)" || selectedMetricName == "Average Tuition (Out-of-State)") {
                         displayStat = `$${(Math.trunc(selected_metric) || 'N/A').toLocaleString()}`;
                     }
                     else {
@@ -262,7 +267,7 @@ class MapVisualization {
                     .range([vis.legendX, vis.legendX + vis.legendWidth]);
 
                 vis.legendFormat = d3.format(
-                    vis.selectedVariable === 'TUITIONFEE_IN'
+                    vis.selectedVariable === 'TUITIONFEE_IN' || vis.selectedVariable === 'TUITIONFEE_OUT'
                         ? "$,.0f" : ".0%");
 
                 vis.legendAxis = d3.axisBottom(vis.legendScale)
@@ -290,7 +295,7 @@ class MapVisualization {
     // Helper function to calculate average rates from the data
     calculateAverageRates(data, variable) {
         // Use d3.group to group data by state
-        const groupedData = d3.group(data, d => d.STABBR);
+        const groupedData = d3.group(data, d => d.state_abbr);
         // Use Array.from to convert the Map into an array of objects
         const averagesByState = Array.from(groupedData, ([state, countyData]) => ({
             State: state,
