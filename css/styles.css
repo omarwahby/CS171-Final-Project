@@ -1,3 +1,7 @@
+.selected-state {
+    fill: red !important; /* or any other style for the selected state */
+}
+
 .section {
 	text-align: center;
 	/* font-size: 3em; */

@@ -34,10 +34,7 @@ class MapVisualization {
 			.style("border-color", vis.primary_color)
 			.style("border-radius", "5px")
 			.style("pointer-events", "none");
-        // function getAverageRate(state, variable) {
-        //     const stateData = vis.calculateAverageRates(vis.displayData, variable).find((d) => d.State === state);
-        //     return stateData ? stateData.AverageRate : null;
-        // }
+
         vis.averageTuitionRates = vis.calculateAverageRates(vis.displayData, 'TUITIONFEE_IN');
         vis.averageCompletionRates = vis.calculateAverageRates(vis.displayData, 'COMP_ORIG_YR2_RT');
         vis.averageWithdrawalRates = vis.calculateAverageRates(vis.displayData, 'WDRAW_ORIG_YR4_RT');
@@ -136,6 +133,7 @@ class MapVisualization {
             vis.selectedVariable = vis.variableDropdown.value;
             vis.minRate = d3.min(vis.displayData, d => +d[vis.selectedVariable]);
             vis.maxRate = d3.max(vis.displayData, d => +d[vis.selectedVariable]);
+         
             console.log("Min Rate:",vis.minRate,"Max Rate:",vis.maxRate)
 
             vis.colorScale = d3.scaleSequential()
@@ -149,57 +147,45 @@ class MapVisualization {
                 .data(us.features)
                 .enter().append("path")
                 .attr("d", vis.path)
-                .attr("fill", function (state) {
-                    const stateName = vis.stateMapping[state.properties.NAME];
-                    const averageRate = vis.calculateAverageRates(vis.displayData, vis.selectedVariable)
-                        .find(d => d.State === stateName)?.AverageRate;
-                    return averageRate ? vis.colorScale(averageRate) : "lightgray";
+                .attr("fill", function (currentState) {
+                    const stateAbrev = vis.stateMapping[currentState.properties.NAME]
+                    const selectedRate = vis.averageRates.find(stateAverageDataObject => stateAverageDataObject.State == stateAbrev).AverageRate
+                    return selectedRate ? vis.colorScale(selectedRate) : "lightgray";
                 })
                 .attr("stroke", "black");
 
             vis.svg.selectAll("path")
-                .on("mouseover", function (event, currentState) {
-                    const stateAbrev = vis.stateMapping[currentState.properties.NAME]
-                    console.log("State Abrev",stateAbrev)
-                    const selectedRate = vis.averageRates.find(stateAverageDataObject => stateAverageDataObject.State == stateAbrev).AverageRate
-                    console.log("Selected Rate",selectedRate)
-                    const selectedMetricName = vis.variableDropdown.options[vis.variableDropdown.selectedIndex].text
-                    console.log(selectedMetricName)
-                    let displayStat;
-                    if (selectedMetricName == "Average Tuition") {
-                        displayStat = `$${(Math.trunc(selectedRate) || 'N/A').toLocaleString()}`;
-
-                    }
-                    else {
-                        displayStat = (Math.trunc(selectedRate * 100) + "%") || 'N/A'
-                    }
-
-
-                    vis.tooltip.transition().duration(200).style("opacity", 0.8);
-                    vis.selectedVariable = vis.variableDropdown.value;
-                    vis.selectedState = currentState.properties.NAME || "N/A";
-                    vis.states_drawings
-                        .style("fill", (x)=>{
-                           if(x.properties.NAME == vis.selectedState){
-                            return "red"
-                           }
-                        });
-                    vis.tooltip
-                        .html(
-                            `State: ${currentState.properties.NAME || "N/A"}<br>${vis.variableDropdown.options[vis.variableDropdown.selectedIndex].text}:
-                             ` + `${displayStat}`)
-                        .style("left", event.pageX + "px")
-                        .style("top", event.pageY - 85 + "px");
+            .on("mouseover", function (event, currentState) {
+                vis.selectedVariable = vis.variableDropdown.value;
+                vis.selectedState = currentState
+                const stateAbrev = vis.stateMapping[currentState.properties.NAME]
+                const selectedRate = vis.averageRates.find(stateAverageDataObject => stateAverageDataObject.State == stateAbrev).AverageRate
+                const selectedMetricName = vis.variableDropdown.options[vis.variableDropdown.selectedIndex].text
+                let displayStat;
+                
+                if (selectedMetricName == "Average Tuition") {
+                    displayStat = `$${(Math.trunc(selectedRate) || 'N/A').toLocaleString()}`;
+                }
+                else {
+                    displayStat = (Math.trunc(selectedRate * 100) + "%") || 'N/A'
+                }
+                vis.states_drawings
+                .classed("selected-state", x => x.properties.NAME === currentState.properties.NAME);
+                vis.tooltip.transition().duration(200).style("opacity", 0.8);
+                vis.tooltip
+                    .html(
+                        `State: ${currentState.properties.NAME || "N/A"}<br>${vis.variableDropdown.options[vis.variableDropdown.selectedIndex].text}:
+                            ` + `${displayStat}`)
+                    .style("left", event.pageX + "px")
+                    .style("top", event.pageY - 85 + "px");
                 })
                 .on("mouseout", function (event, currentState) {
-                    // Hide tooltip on mouseout
+                    vis.selectedState = null
+                    
                     vis.states_drawings
-                        .style("fill", (x)=>{
-                           if(x.properties.NAME == vis.selectedState){
-                            return "green"
-                           }
-                        });
-                    vis.selectedState = "N/A";
+                    .classed("selected-state", false);
+
+                    // Hide tooltip on mouseout
                     vis.tooltip.transition().duration(500).style("opacity", 0);
                 });
 
@@ -219,12 +205,13 @@ class MapVisualization {
                     .interpolator(d3.interpolateYlOrRd);
 
                 vis.states_drawings
-                        .style("fill", function (stateData) {
-                            const stateName = vis.stateMapping[stateData.properties.NAME];
-                            const averageRate = vis.calculateAverageRates(vis.displayData, vis.selectedVariable)
-                                .find(d => d.State === stateName)?.AverageRate;
-                            return vis.colorScale(averageRate);
-                        });
+                        .style("fill", function (currentState) {
+                            const stateAbrev = vis.stateMapping[currentState.properties.NAME]
+                            const selectedRate = vis.averageRates.find(stateAverageDataObject => stateAverageDataObject.State == stateAbrev).AverageRate
+                            return vis.colorScale(selectedRate);
+                        })
+                        .classed("selected-state", x => x.properties.NAME === vis.selectedState);
+
             });
 
             });
