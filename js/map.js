@@ -150,15 +150,14 @@ class MapVisualization {
             .attr("width", vis.width - 20)  // Adjust the width as needed
             .attr("height", 100)  // Adjust the height as needed
             .html(`<div style="font-size: 18px; font-weight: 400; color: ${vis.primary_color};">
-        Choose a metric from the dropdown menu to explore tuition rates,
-        withdrawal, and completion rates for different U.S. states.
+        Choose a metric from the dropdown menu to explore financial data across U.S. states.
         Hover over a state to view more info about it.
       </div>`);
 
 
-        vis.legendWidth = 800;
+        vis.legendWidth = vis.width * .8;
         vis.legendHeight = 30;
-        vis.legendX = (vis.width / 2) - 420;
+        vis.legendX = vis.width / 8;
         vis.legendY = 70;
 
         vis.legendScale = d3.scaleLinear()
@@ -191,7 +190,7 @@ class MapVisualization {
         vis.legendGroup.call(vis.legendAxis);
 
         // Load the GeoJSON data
-        d3.json("gz_2010_us_040_00_500k.json").then((us) => {
+        d3.json("data/us_map.json").then((us) => {
 
             // Filter out US territories and anything else not in our mapping
             us.features = us.features.filter(state_feature => {
