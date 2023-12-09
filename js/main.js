@@ -7,8 +7,7 @@ let dateParser = d3.timeParse("%Y-%m-%d");
 
 let promises = [
 
-    d3.csv("data/collegeData.csv"),
-    d3.csv("data/data.csv")
+    d3.csv("data/collegeData.csv")
 
 ];
 
@@ -64,8 +63,6 @@ function createVis(data) {
     let notmeritplotVis = new NotMeritPlotVis("notmeritplotvis", allData);
     let sankeyVis = new SankeyVis("sankeyvis", allData);
     let mapVis = new MapVisualization('mapContainer', allData);
-    // let barchartVis = new BarChartVis("barchartvis", allData);
-
     // let barchartVis = new BarChartVis("barchartvis", allData);
 
 }

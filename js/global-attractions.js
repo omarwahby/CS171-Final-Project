@@ -1,3 +1,4 @@
+
 var attractionData = [
     {
         "Location": "Communication, Journalism",
@@ -33,11 +34,11 @@ var attractionData = [
         "Location": "Homeland Security, Law Enforcement, Firefighting",
         "Category": "Default",
         "Visitors": 0.02430
-    },    
+    },
     {
         "Location": "Mechanic And Repair Technologies/Technicians",
         "Category": "Default",
-        "Visitors":  0.02785
+        "Visitors": 0.02785
     },
     {
         "Location": "Visual And Performing Arts",
@@ -198,7 +199,7 @@ var attractionData = [
         "Location": "Engineering Technologies",
         "Category": "9",
         "Visitors": 0.056426
-    },    {
+    }, {
         "Location": "Liberal Arts And Sciences, General Studies And Humanities",
         "Category": "0",
         "Visitors": 0.00666
@@ -498,5 +499,4 @@ var attractionData = [
         "Category": "9",
         "Visitors": 0.0953507
     }
- ]
- 
+]
