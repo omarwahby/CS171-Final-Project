@@ -101,7 +101,7 @@ function renderBarChart(data) {
         .attr("dy", ".1em")
         .style("text-anchor", "end")
         .attr("fill", "white")
-        .text("percentage");
+        .text("Percentage");
     
     svg.selectAll(".axis path")
         .style("fill", "none")
@@ -154,14 +154,14 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 		console.log(data.map(d => d.PCIP));
 		console.log(data.map(d => d.COMP_ORIG_YR2_RT));
 
-        let scatterWidth = $('#scatterplot-area').width() - margin.left - margin.right - 100;
-        let scatterHeight = 800 - margin.top - margin.bottom;
+        let scatterWidth = $('#scatterplot-area').width() - margin.left - margin.right - 200;
+        let scatterHeight = 1000 - margin.top - margin.bottom;
 
         let scatterSvg = d3.select("#scatterplot-area").append("svg")
-            .attr("width", scatterWidth)
-            .attr("height", scatterHeight + margin.top + margin.bottom)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")");
 
         let xScatter = d3.scaleLinear()
             .domain([d3.min(data, d => d.PCIP), d3.max(data, d => d.PCIP)])
@@ -197,7 +197,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 
 		scatterSvg.append("text")
 			.attr("transform", "rotate(-90)")
-			.attr("y", 0 - margin.left)
+			.attr("y", 100 - margin.left)
 			.attr("x", 0 - (scatterHeight / 2))
 			.attr("dy", "1em")
 			.style("text-anchor", "middle")
@@ -205,7 +205,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 			.text("Completion Rate");
 	
 		scatterSvg.append("text")
-			.attr("x", 100 + scatterWidth / 2)
+			.attr("x", scatterWidth / 2)
 			.attr("y", 0 - (margin.top / 2))
 			.attr("text-anchor", "middle")
 			.style("font-size", "16px")
