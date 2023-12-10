@@ -10,7 +10,7 @@ var attractionData = [
         "Visitors": 0.02080
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "10",
         "Visitors": 0.02159
     },
@@ -145,52 +145,52 @@ var attractionData = [
         "Visitors": 0.0202307
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "0",
         "Visitors": 0.00542
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "1",
         "Visitors": 0.0164762
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "2",
         "Visitors": 0.0176268
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "3",
         "Visitors": 0.0217002
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "4",
         "Visitors": 0.0192333
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "5",
         "Visitors": 0.0243586
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "6",
         "Visitors": 0.0259661
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "7",
         "Visitors": 0.0185664
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "8",
         "Visitors": 0.0163194
     },
     {
-        "Location": "Engineering ",
+        "Location": "Engineering",
         "Category": "9",
         "Visitors": 0.056426
     },    {
