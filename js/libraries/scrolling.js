@@ -16,6 +16,7 @@ new fullpage('#fullpage', {
     primary_bg_color,
     primary_bg_color,
     primary_bg_color,
+    primary_bg_color,
     primary_bg_color],
   navigation: true,
   slidesNavigation: true,
