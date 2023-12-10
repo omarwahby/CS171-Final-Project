@@ -1,4 +1,4 @@
-let margin = { top: 40, right: 200, bottom: 300, left: 200 },
+let margin = { top: 40, right: 200, bottom: 200, left: 200 },
     width = $('#chart-area').width() - margin.left - margin.right,
     height = 800 - margin.top - margin.bottom;
 
@@ -19,6 +19,7 @@ let xAxis = d3.axisBottom()
     .scale(x);
 
 let yAxis = d3.axisLeft()
+    .tickFormat(d3.format(".0%")) // Formats ticks as percentages
     .scale(y);
 
 let xAxisGroup = svg.append("g")
@@ -94,15 +95,24 @@ function renderBarChart(data) {
         .call(yAxis);
     
     svg.select("text.axis-title").remove();
+    
     svg.append("text")
+        .attr("transform", "rotate(-90)")
         .attr("class", "axis-title")
-        .attr("x", -5)
-        .attr("y", -15)
+        .attr("x", -200)
+        .attr("y", 100 - margin.left)
         .attr("dy", ".1em")
         .style("text-anchor", "end")
         .attr("fill", "white")
-        .text("Percentage");
-    
+        .text("Completion Rate");
+
+    svg.append("text")
+        .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 70) + ")")
+        .style("text-anchor", "middle")
+        .attr("fill", "white")
+        .text(`Degree Type`);
+
+
     svg.selectAll(".axis path")
         .style("fill", "none")
         .style("stroke", "white")
@@ -187,7 +197,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 
         scatterSvg.append("g")
             .attr("class", "y-axis-scatter")
-            .call(yAxisScatter);
+            .call(yAxisScatter.tickFormat(d3.format(".0%")));
 		
 		scatterSvg.append("text")
 			.attr("transform", "translate(" + (scatterWidth / 2) + " ," + (scatterHeight + margin.top + 20) + ")")
