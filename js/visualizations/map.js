@@ -148,22 +148,30 @@ class MapVisualization {
             .attr("fill", "white")
             .text("U.S. Statewise Education Metrics Map");
 
-        // Add plot sub heading
-        vis.subheading = vis.svg.append("foreignObject")
-            .attr("x", 10)
-            .attr("y", 35)
-            .attr("width", vis.width - 20)  // Adjust the width as needed
-            .attr("height", 100)  // Adjust the height as needed
-            .html(`<div style="font-size: 18px; font-weight: 400; color: ${vis.primary_color};">
-        Choose a metric from the dropdown menu to explore financial data across U.S. states.
-        Hover over a state for more info.
-      </div>`);
+        // Add plot instructions
+        vis.svg.append("text")
+            .attr("x", (vis.width / 2))
+            .attr("y", 55)
+            .attr("text-anchor", "middle")
+            .style("font-size", "18px")
+            .style("font-weight", 400)
+            .attr("fill", "white")
+            .text("Choose a metric from the dropdown menu to explore financial data across U.S. states. Hover over a state for more info.");
 
+        //// Data takeaway label
+        vis.svg.append("text")
+            .attr("x", vis.width / 2)
+            .attr("y", 80)
+            .attr("text-anchor", "middle")
+            .style("font-size", "20px")
+            .style("fill", vis.primary_color)
+            .style("font-weight", 400)
+            .text("The data suggests that states with higher tuition experience higher completion rates");
 
         vis.legendWidth = vis.width * .8;
         vis.legendHeight = 30;
         vis.legendX = vis.width / 8;
-        vis.legendY = 80;
+        vis.legendY = 90;
 
         vis.legendScale = d3.scaleLinear()
             .domain([vis.minRate, vis.maxRate])
