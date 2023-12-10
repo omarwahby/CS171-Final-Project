@@ -218,6 +218,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 			.attr("transform", "translate(" + (scatterWidth / 2) + " ," + (scatterHeight + margin.top + 20) + ")")
 			.style("text-anchor", "middle")
 			.attr("fill", "white")
+            .style("font-size", "24px")
             .text(`Percentage of Students Majoring in ${selectedAttraction}`);
 
 		scatterSvg.append("text")
@@ -227,13 +228,14 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 			.attr("dy", "1em")
 			.style("text-anchor", "middle")
 			.attr("fill", "white")
+            .style("font-size", "24px")
 			.text("Completion Rate");
 	
 		scatterSvg.append("text")
 			.attr("x", scatterWidth / 2)
 			.attr("y", 0 - (margin.top / 2))
 			.attr("text-anchor", "middle")
-			.style("font-size", "24px")
+			.style("font-size", "30px")
 			.attr("fill", "white")
             .text(`Degree Completion Rates for ${selectedAttraction} Majors`);
 
