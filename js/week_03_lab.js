@@ -7,7 +7,6 @@ dataFiltering();
 function dataFiltering() {
 	let attractions = attractionData;
 
-	// console.log('hello from your js file. Good luck with the lab!')
 
 
 	// Sorting code fixed (needed to change from 'visitors' to 'Visitors')
@@ -37,8 +36,7 @@ function dataFiltering() {
 	}
 	// console.log('Sorted Array filtered by the \'' + selectedValue + '\' category', attractions);
 	// Use the filter() method to get the first five rows
-	const firstFiveRows = attractions.filter((item, index) => index < 15);
-	renderBarChart(firstFiveRows);
+	renderBarChart(attractions);
 }
 
 function dataManipulation() {
