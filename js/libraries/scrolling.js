@@ -18,6 +18,7 @@ new fullpage('#fullpage', {
     primary_bg_color,
     primary_bg_color,
     primary_bg_color,
+    primary_bg_color,
     primary_bg_color],
   navigation: true,
   slidesNavigation: true,
@@ -31,6 +32,7 @@ new fullpage('#fullpage', {
     'sankey_anchor',
     'tuition_anchor',
     'map_anchor',
+    'major_anchor',
     'barchart_anchor',
     'team_anchor',
     'references_anchor',
@@ -45,6 +47,7 @@ new fullpage('#fullpage', {
     'Income to withdrawal',
     'Tuition Proxy',
     'Regional stats',
+    'Do majors matter?',
     'Major breakdown',
     'Our Team',
     'References'
