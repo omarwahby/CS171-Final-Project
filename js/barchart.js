@@ -1,4 +1,4 @@
-let margin = { top: 120, right: 180, bottom: 80, left: 100 },
+let margin = { top: 120, right: 180, bottom: 200, left: 100 },
     width = $('#chart-area').width() - margin.left - margin.right,
     height = 1500 - margin.top - margin.bottom;
 
@@ -176,7 +176,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 		console.log(data.map(d => d.COMP_ORIG_YR2_RT));
 
         let scatterWidth = $('#scatterplot-area').width() - margin.left - margin.right;
-        let scatterHeight = 1500 - margin.top - margin.bottom;
+        let scatterHeight = 1400 - margin.top - margin.bottom;
 
         let scatterSvg = d3.select("#scatterplot-area").append("svg")
             .attr("width", width + margin.left + margin.right)
