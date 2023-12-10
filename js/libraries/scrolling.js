@@ -5,7 +5,7 @@ new fullpage('#fullpage', {
   licenseKey: "gplv3-license",
   autoScrolling: true,
   scrollHorizontally: true,
-  loopBottom:true,
+  loopBottom: true,
   sectionsColor: [
     primary_bg_color,
     primary_bg_color,
@@ -26,6 +26,7 @@ new fullpage('#fullpage', {
     'socioeconomic_anchor',
     'notmerit_anchor',
     'sankey_anchor',
+    'tuition_anchor',
     'map_anchor',
     'barchart_anchor',
     'team_anchor',
@@ -33,15 +34,16 @@ new fullpage('#fullpage', {
   ],
   navigationTooltips: [
     'Title',
-   'Is it all merit?',
-   'SAT vs Completion',
-   'Socioeconomic Factors',
-   'Income vs SAT',
-   'Income to withdrawal',
-   'Regional stats',
-   'Major breakdown',
-   'Our Team',
-   'References'
+    'Is it all merit?',
+    'SAT vs Completion',
+    'Socioeconomic Factors',
+    'Income vs SAT',
+    'Income to withdrawal',
+    'Tuition Proxy',
+    'Regional stats',
+    'Major breakdown',
+    'Our Team',
+    'References'
   ]
-  
+
 });
