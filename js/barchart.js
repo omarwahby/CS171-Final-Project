@@ -19,7 +19,7 @@ let xAxis = d3.axisBottom()
     .scale(x);
 
 let yAxis = d3.axisLeft()
-    .tickFormat(d3.format(".0%")) // Formats ticks as percentages
+    .tickFormat(d3.format(".0%"))
     .scale(y);
 
 let xAxisGroup = svg.append("g")
@@ -87,7 +87,7 @@ function renderBarChart(data) {
             d3.select("#tooltip").classed("hidden", true);
             d3.select(".tooltip-svg").remove();
         });
-    
+
     xAxisGroup = svg.select(".x-axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
@@ -132,6 +132,10 @@ function renderBarChart(data) {
     
     svg.selectAll(".axis text")
         .style("fill", "white");
+    
+    svg.selectAll(".bar").on("click", function(event, d) {
+        d3.select("#scatterplot-area").selectAll("*").remove();
+    });
 }
 
 function errorMessage(message) {
@@ -143,7 +147,6 @@ function shortenString(content, maxLength) {
     trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
     return trimmedString;
 }
-
 
 
 d3.csv("data/NEW_16_PP.csv").then(function(data) {
@@ -163,7 +166,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
     function renderScatterPlot(selectedData, selectedAttraction) {
 
         selectedData = data.filter(
-            d => !isNaN(d.PCIP) && !isNaN(d.COMP_ORIG_YR2_RT) && d.PCIP !== 0.00
+            d => !isNaN(d.PCIP) && !isNaN(d.COMP_ORIG_YR2_RT) && d.PCIP !== 0
         );
         console.log("Test", selectedData)
 
@@ -228,7 +231,6 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 			.style("font-size", "24px")
 			.attr("fill", "white")
             .text(`Degree Completion Rates for ${selectedAttraction} Majors`);
-
 
 		scatterSvg.selectAll("circle")
 			.data(data) 
