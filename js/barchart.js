@@ -97,6 +97,7 @@ function renderBarChart(data) {
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
         .attr("fill", "white")
+        .style("font-size", "15px")
         .attr("transform", "rotate(-45)");
 
     
@@ -113,12 +114,14 @@ function renderBarChart(data) {
         .attr("dy", ".1em")
         .style("text-anchor", "end")
         .attr("fill", "white")
+        .style("font-size", "30px")
         .text(`Average Percentage of Student Body`);
 
     svg.append("text")
         .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 70) + ")")
         .style("text-anchor", "middle")
         .attr("fill", "white")
+        .style("font-size", "30px")
         .text(`Major`);
 
     svg.selectAll(".axis path")
@@ -132,6 +135,7 @@ function renderBarChart(data) {
         .style("shape-rendering", "crispEdges");
     
     svg.selectAll(".axis text")
+        .style("font-size", "14px")
         .style("fill", "white");
     
     svg.selectAll(".bar").on("click", function(event, d) {
