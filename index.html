@@ -140,37 +140,40 @@
         </div>
         <div class="section">
             <div class="col-md-12">
-                <div class="align-self-center">
-                    <h1 style="color:white; font-size: 24px; font-weight: 100;">Average Percentage of Degrees Awarded by
-                        Top 10 Most Common Degree Categories</h1>
-                </div>
-                <div class="align-self-center">
-                    <div class="user-control">
-                        <div class="form-group">
-                            <select id="attraction-category" class="form-control" onchange="dataManipulation()">
-                                <option value="10">Default</option>
-                                <option value="0">U.S. Service Academies</option>
-                                <option value="1">New England</option>
-                                <option value="2">Mid East</option>
-                                <option value="3">Great Lakes</option>
-                                <option value="4">Plains</option>
-                                <option value="5">Southeast</option>
-                                <option value="6">Southwest</option>
-                                <option value="7">Rocky Mountains</option>
-                                <option value="8">Far West</option>
-                                <option value="9">Other U.S. Jurisdictions</option>
-                            </select>
+                <div class="row align-self-center">
+                    <div class="col-md-6">
+                        <div class="align-self-center">
+                            <h1 style="color:white; font-size: 24px; font-weight: 100;">Average Percentage of Degrees Awarded by Top 10 Most Common Degree Categories</h1>
                         </div>
+                        <div class="align-self-center">
+                            <div class="user-control">
+                                <div class="form-group">
+                                    <select id="attraction-category" class="form-control" onchange="dataManipulation()">
+                                        <option value="10">Default</option>
+                                        <option value="0">U.S. Service Academies</option>
+                                        <option value="1">New England</option>
+                                        <option value="2">Mid East</option>
+                                        <option value="3">Great Lakes</option>
+                                        <option value="4">Plains</option>
+                                        <option value="5">Southeast</option>
+                                        <option value="6">Southwest</option>
+                                        <option value="7">Rocky Mountains</option>
+                                        <option value="8">Far West</option>
+                                        <option value="9">Other U.S. Jurisdictions</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <div id="tooltip">
+                            <p style="color:white;"><strong>Percentage: </strong><span id="value"></span></p>
+                        </div>
+                        <div id="chart-area" style="width:100%;"></div>
+                    </div>
+                    <div class="col-md-6" id="scatter-plot-majors">
+                        <div id="scatterplot-area" style="width:100%;"></div>
                     </div>
                 </div>
-                <br><br>
-                <div id="tooltip">
-                    <p style="color:white;"><strong>Percentage: </strong><span id="value"></span></p>
-                </div>
-                <div id="chart-area" style="width:100%;"></div>
-
-                <br>
-                <div id="scatterplot-area" style="width:100%;"></div>
 
             </div>
         </div>
