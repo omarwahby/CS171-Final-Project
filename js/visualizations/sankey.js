@@ -77,8 +77,8 @@ class SankeyVis {
 
 		const income_mapping = {
 			0: `Lower Third (<=${(d3.format("$,.0f")(bottom_third_threshold))}/yr)`,
-			1: `Middle Third (${(d3.format("$,.0f")(bottom_third_threshold))}/yr-$${(d3.format("$,.0f")(middle_third_threshold))}/yr)`,
-			2: `Upper Third (${(d3.format("$,.0f")(middle_third_threshold))}/yr-$${(d3.format("$,.0f")(upper_third_threshold))}/yr)`
+			1: `Middle Third (${(d3.format("$,.0f")(bottom_third_threshold))}/yr-${(d3.format("$,.0f")(middle_third_threshold))}/yr)`,
+			2: `Upper Third (${(d3.format("$,.0f")(middle_third_threshold))}/yr-${(d3.format("$,.0f")(upper_third_threshold))}/yr)`
 		};
 
 		const income_colors = {
@@ -170,6 +170,16 @@ class SankeyVis {
 			.style("font-size", "18px")
 			.style("font-weight", "bold")
 			.text("Withdrawal Rate (%)");
+
+		// Add takeaway label
+		vis.svg.append("text")
+			.attr("x", (vis.width / 2))
+			.attr("y", (vis.margin.top / 8) - 20)
+			.attr("text-anchor", "middle")
+			.attr("fill", vis.primary_color)
+			.style("font-size", "18px")
+			.style("font-weight", "400")
+			.text("The data suggests that schools attended by students from less affluent backgrounds exhibit higher withdrawal rates.");
 
 		// format variables
 		var formatNumber = d3.format(",.0f"), // zero decimal places

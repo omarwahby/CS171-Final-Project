@@ -106,7 +106,7 @@ class MeritPlotVis {
 		vis.xAxisGroup.selectAll("text")
 			.attr("fill", "white");
 
-		// Add SAT range instructions label
+		// Add SAT range instructions label and hover instructions
 		vis.svg.append("text")
 			.attr("x", (vis.width / 2))
 			.attr("y", -70)
@@ -114,7 +114,7 @@ class MeritPlotVis {
 			.style("font-size", "20px")
 			.style("fill", "white")
 			.style("font-weight", "light")
-			.text("Filter data by average SAT score range");
+			.text("Filter data by average SAT score range | Hover over a point to view info about a specific school");
 
 		// Add SAT range score labels
 		vis.startScore = vis.svg.append("text")
@@ -176,15 +176,15 @@ class MeritPlotVis {
 			vis.updateVis();
 		});
 
-		// Hover instructions label
+		// Data Takeaway Label
 		vis.svg.append("text")
 			.attr("x", vis.width / 2)
 			.attr("y", -15)
 			.attr("text-anchor", "middle")
 			.style("font-size", "20px")
-			.style("fill", "white")
-			.style("font-weight", "light")
-			.text("Hover over a point to view info about a specific school");
+			.style("fill", vis.primary_color)
+			.style("font-weight", 400)
+			.text("The data suggests that students who excel on the SAT tend to excel in college");
 
 		// Add x-axis label
 		vis.svg.append("text")
@@ -213,7 +213,6 @@ class MeritPlotVis {
 			.style("font-size", "24px")
 			.attr("fill", vis.primary_color)
 			.text("SAT Scores vs. Completion Rates (Graduated in 4 years)");
-
 
 		vis.tooltip = d3.select("body").append("foreignObject")
 			.attr("width", 200)
