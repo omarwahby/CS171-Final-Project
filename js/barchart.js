@@ -208,8 +208,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 			.attr("x", scatterWidth / 2)
 			.attr("y", 0 - (margin.top / 2))
 			.attr("text-anchor", "middle")
-			.style("font-size", "16px")
-			.style("text-decoration", "underline")
+			.style("font-size", "24px")
 			.attr("fill", "white")
             .text(`Scatterplot of Proportion of Degrees Related to ${selectedAttraction} Against Overall Completion Rate`);
 
