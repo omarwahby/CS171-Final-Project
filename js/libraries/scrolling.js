@@ -43,7 +43,7 @@ new fullpage('#fullpage', {
     'SAT vs Completion',
     'Socioeconomic Factors',
     'Income vs SAT',
-    'Dropout preictor?',
+    'Dropout predictor?',
     'Income to withdrawal',
     'Tuition Proxy',
     'Regional stats',
