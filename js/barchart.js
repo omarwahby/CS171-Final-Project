@@ -110,18 +110,29 @@ function shortenString(content, maxLength) {
     return trimmedString;
 }
 
+
+
 d3.csv("data/NEW_16_PP.csv").then(function(data) {
-    data.forEach(function(d) {
-        d.PCIP12 = +d.PCIP12; 
-        d.COMP_ORIG_YR2_RT = +d.COMP_ORIG_YR2_RT;
-    });
+    const pcipMapping = {
+        'Communications': 'PCIP09',
+        'Education': 'PCIP13',
+        'General Studies': 'PCIP24',
+        'Theology': 'PCIP39',
+        'Homeland Security': 'PCIP43',
+        'Repair Technologies': 'PCIP47',
+        'Visual & Performing Arts': 'PCIP50', 
+        'Business & Management': 'PCIP52',
+        'Engineering': 'PCIP14',
+
+    };
+    
     function renderScatterPlot(selectedData) {
 
-		data = data.filter(d => !isNaN(d.PCIP12) && !isNaN(d.COMP_ORIG_YR2_RT));
+		selectedData = data.filter(d => !isNaN(d.PCIP) && !isNaN(d.COMP_ORIG_YR2_RT));
+        console.log("Test", selectedData)
 
         d3.select("#scatterplot-area").selectAll("*").remove();
-
-		console.log(data.map(d => d.PCIP12));
+		console.log(data.map(d => d.PCIP));
 		console.log(data.map(d => d.COMP_ORIG_YR2_RT));
 
         let scatterWidth = $('#scatterplot-area').width() - margin.left - margin.right;
@@ -134,7 +145,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         let xScatter = d3.scaleLinear()
-            .domain([d3.min(data, d => d.PCIP12), d3.max(data, d => d.PCIP12)])
+            .domain([d3.min(data, d => d.PCIP), d3.max(data, d => d.PCIP)])
             .range([0, scatterWidth]);
 		
         let yScatter = d3.scaleLinear()
@@ -183,17 +194,30 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 			.data(data) 
 			.enter()
 			.append("circle")
-			.attr("cx", d => xScatter(d.PCIP12))
+			.attr("cx", d => xScatter(d.PCIP))
 			.attr("cy", d => yScatter(d.COMP_ORIG_YR2_RT))
 			.attr("r", 5)
 			.style("fill", "steelblue");	
     }
 
     svg.selectAll(".bar")
-        .on("click", function(event, d) {
-            let selectedAttraction = d.Location; 
-            let selectedData = data.filter(item => item.Location === selectedAttraction);
-            
-            renderScatterPlot(selectedData);
+    .on("click", function(event, d) {
+        let selectedAttraction = d.Location;
+        let selectedPCIP = pcipMapping[selectedAttraction];
+
+        let selectedData = data.map(item => {
+            return {
+                Location: item.Location,
+                PCIP: item[selectedPCIP],
+                COMP_ORIG_YR2_RT: item.COMP_ORIG_YR2_RT
+            };
         });
+        console.log(selectedData);
+        
+        data.forEach(function(d) {
+            d.PCIP = +d[selectedPCIP];
+            d.COMP_ORIG_YR2_RT = +d.COMP_ORIG_YR2_RT;
+        });
+        renderScatterPlot(selectedData);
+    });
 });
