@@ -107,19 +107,18 @@ function renderBarChart(data) {
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("class", "axis-title")
-        .attr("x", -75)
+        .attr("x", -10)
         .attr("y", 100 - margin.left)
         .attr("dy", ".1em")
         .style("text-anchor", "end")
         .attr("fill", "white")
-        .text("Completion Rate");
+        .text(`Average Percentage of Student Body`);
 
     svg.append("text")
         .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 70) + ")")
         .style("text-anchor", "middle")
         .attr("fill", "white")
-        .text(`Degree Type`);
-
+        .text(`Major`);
 
     svg.selectAll(".axis path")
         .style("fill", "none")
@@ -211,7 +210,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 			.attr("transform", "translate(" + (scatterWidth / 2) + " ," + (scatterHeight + margin.top + 20) + ")")
 			.style("text-anchor", "middle")
 			.attr("fill", "white")
-            .text(`Percentage of Degrees that are Related to ${selectedAttraction}`);
+            .text(`Percentage of Students Majoring in ${selectedAttraction}`);
 
 		scatterSvg.append("text")
 			.attr("transform", "rotate(-90)")
@@ -228,7 +227,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 			.attr("text-anchor", "middle")
 			.style("font-size", "24px")
 			.attr("fill", "white")
-            .text(`Scatterplot of Proportion of Degrees Related to ${selectedAttraction} Against Overall Completion Rate`);
+            .text(`Degree Completion Rates for ${selectedAttraction} Majors`);
 
 
 		scatterSvg.selectAll("circle")
