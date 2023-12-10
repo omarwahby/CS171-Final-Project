@@ -1,6 +1,6 @@
 let margin = { top: 40, right: 200, bottom: 200, left: 200 },
     width = $('#chart-area').width() - margin.left - margin.right,
-    height = 800 - margin.top - margin.bottom;
+    height = 1000 - margin.top - margin.bottom;
 
 let svg = d3.select("#chart-area").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -27,6 +27,14 @@ let xAxisGroup = svg.append("g")
 
 let yAxisGroup = svg.append("g")
     .attr("class", "y-axis axis");
+
+svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", 0 - (margin.top / 2))
+    .attr("text-anchor", "middle")
+    .style("font-size", "24px")
+    .attr("fill", "white")
+    .text(`Try clicking on one of the bars to generate a scatterplot!`);
 
 function renderBarChart(data) {
     if (data.length > 15) {
