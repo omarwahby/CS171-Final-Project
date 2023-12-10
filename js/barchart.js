@@ -107,7 +107,7 @@ function renderBarChart(data) {
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("class", "axis-title")
-        .attr("x", -200)
+        .attr("x", -75)
         .attr("y", 100 - margin.left)
         .attr("dy", ".1em")
         .style("text-anchor", "end")
