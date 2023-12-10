@@ -155,7 +155,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 		console.log(data.map(d => d.COMP_ORIG_YR2_RT));
 
         let scatterWidth = $('#scatterplot-area').width() - margin.left - margin.right - 100;
-        let scatterHeight = 100 - margin.top - margin.bottom;
+        let scatterHeight = 800 - margin.top - margin.bottom;
 
         let scatterSvg = d3.select("#scatterplot-area").append("svg")
             .attr("width", scatterWidth)
