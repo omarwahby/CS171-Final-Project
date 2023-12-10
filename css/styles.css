@@ -71,6 +71,10 @@ h2 {
 	color: white;
 }
 
+#scatter-plot-majors {
+	padding-top: 230px;
+}
+
 .team-member h2 {
 	color: var(--primary-color);
 }
