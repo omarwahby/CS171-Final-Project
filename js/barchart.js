@@ -1,4 +1,4 @@
-let margin = { top: 120, right: 180, bottom: 200, left: 100 },
+let margin = { top: 120, right: 180, bottom: 200, left: 200 },
     width = $('#chart-area').width() - margin.left - margin.right,
     height = 1500 - margin.top - margin.bottom;
 
@@ -108,7 +108,7 @@ function renderBarChart(data) {
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("class", "axis-title")
-        .attr("x", -10)
+        .attr("x", -500)
         .attr("y", 100 - margin.left)
         .attr("dy", ".1em")
         .style("text-anchor", "end")
@@ -175,7 +175,7 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 		console.log(data.map(d => d.PCIP));
 		console.log(data.map(d => d.COMP_ORIG_YR2_RT));
 
-        let scatterWidth = $('#scatterplot-area').width() - margin.left - margin.right;
+        let scatterWidth = 100 + $('#scatterplot-area').width() - margin.left - margin.right;
         let scatterHeight = 1400 - margin.top - margin.bottom;
 
         let scatterSvg = d3.select("#scatterplot-area").append("svg")
