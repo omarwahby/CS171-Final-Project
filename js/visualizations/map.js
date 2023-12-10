@@ -41,7 +41,7 @@ class MapVisualization {
 
         // Set up a geo projection for the map
         vis.projection = d3.geoAlbersUsa()
-            .scale(vis.width * vis.height / 800)
+            .scale(vis.width / 1.3)
             .translate([vis.width / 2, (vis.height / 2) + 50]);
 
         vis.path = d3.geoPath().projection(vis.projection);
