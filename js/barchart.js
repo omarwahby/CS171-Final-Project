@@ -55,7 +55,7 @@ function renderScatterPlot(data) {
         .range([0, scatterWidth]);
 		
     let yScatter = d3.scaleLinear()
-        .domain([0, 10])
+        .domain([0, 1])
         
         .range([scatterHeight, 0]);
 
