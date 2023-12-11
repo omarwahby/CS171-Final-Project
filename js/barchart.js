@@ -238,6 +238,7 @@ function renderBarChart(data) {
             const pcipMapping = {
                 'Communications': 'PCIP09',
                 'Education': 'PCIP13',
+                'Computer Science': 'PCIP11',
                 'General Studies': 'PCIP24',
                 'Theology': 'PCIP39',
                 'Homeland Security': 'PCIP43',
