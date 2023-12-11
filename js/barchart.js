@@ -35,7 +35,7 @@ svg.append("text")
     .attr("text-anchor", "middle")
     .style("font-size", "24px")
     .attr("fill", "white")
-    .text(`Try clicking on one of the bars to generate a scatterplot!`);
+    .text(`Click on one of the bars to generate a scatter plot on the right:`);
 
 function renderScatterPlot(data) {
 
@@ -71,7 +71,7 @@ function renderScatterPlot(data) {
         .attr("class", "x-axis-scatter")
         .attr("transform", "translate(0," + scatterHeight + ")")
         .attr("fill", "white")
-        .call(xAxisScatter);
+        .call(xAxisScatter.tickFormat(d3.format(".0%")));
 
     scatterSvg.append("g")
         .attr("class", "y-axis-scatter")
