@@ -172,7 +172,7 @@ function renderBarChart(data) {
                 .style("top", yPosition + "px")
                 .select("#value")
                 .style("fill", "white")
-                .text(d.Percentage);
+                .text(d.Percentage * 100 + "%");
                 
             d3.select("#tooltip").classed("hidden", false);
         })
