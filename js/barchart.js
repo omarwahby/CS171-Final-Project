@@ -247,7 +247,7 @@ function renderBarChart(data) {
             function renderScatterPlot(selectedData, selectedSubject) {
         
                 selectedData = data.filter(
-                    d => !isNaN(d.PCIP) && !isNaN(d.COMP_ORIG_YR2_RT) && d.PCIP !== "0.0"
+                    d => !isNaN(d.PCIP) && !isNaN(d.COMP_ORIG_YR2_RT) && d.PCIP > 0
                 );
                 console.log("Test", selectedData)
         
