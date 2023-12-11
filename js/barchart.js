@@ -37,6 +37,95 @@ svg.append("text")
     .attr("fill", "white")
     .text(`Try clicking on one of the bars to generate a scatterplot!`);
 
+function renderScatterPlot(data) {
+
+    d3.select("#scatterplot-area").selectAll("*").remove();
+
+    let scatterWidth = 100 + $('#scatterplot-area').width() - margin.left - margin.right;
+    let scatterHeight = 1400 - margin.top - margin.bottom;
+
+    let scatterSvg = d3.select("#scatterplot-area").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")");
+
+    let xScatter = d3.scaleLinear()
+        .domain([0, 100])
+        .range([0, scatterWidth]);
+		
+    let yScatter = d3.scaleLinear()
+        .domain([0, 100])
+        .range([scatterHeight, 0]);
+
+    let xAxisScatter = d3.axisBottom()
+        .scale(xScatter);
+
+    let yAxisScatter = d3.axisLeft()
+        .scale(yScatter);
+
+    scatterSvg.append("g")
+        .attr("class", "x-axis-scatter")
+        .attr("transform", "translate(0," + scatterHeight + ")")
+        .attr("fill", "white")
+        .call(xAxisScatter);
+
+    scatterSvg.append("g")
+        .attr("class", "y-axis-scatter")
+        .call(yAxisScatter.tickFormat(d3.format(".0%")));
+		
+	scatterSvg.append("text")
+		.attr("transform", "translate(" + (scatterWidth / 2) + " ," + (scatterHeight + margin.top + 20) + ")")
+		.style("text-anchor", "middle")
+		.attr("fill", "white")
+        .style("font-size", "24px")
+        .text(`Percentage of Students in a Specific Major`);
+
+	scatterSvg.append("text")
+		.attr("transform", "rotate(-90)")
+		.attr("y", 100 - margin.left)
+		.attr("x", 0 - (scatterHeight / 2))
+		.attr("dy", "1em")
+		.style("text-anchor", "middle")
+		.attr("fill", "white")
+        .style("font-size", "24px")
+		.text("Completion Rate");
+	
+	scatterSvg.append("text")
+	    .attr("x", scatterWidth / 2)
+		.attr("y", 0 - (margin.top / 2))
+		.attr("text-anchor", "middle")
+		.style("font-size", "30px")
+		.attr("fill", "white")
+        .text(`Degree Completion Rates for a Specific Major`);
+
+    scatterSvg.selectAll(".x-axis-scatter path")
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("shape-rendering", "crispEdges");
+        
+    scatterSvg.selectAll(".x-axis-scatter line")
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("shape-rendering", "crispEdges");
+        
+    scatterSvg.selectAll(".x-axis-scatter text")
+        .style("fill", "white");
+        
+    scatterSvg.selectAll(".y-axis-scatter path")
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("shape-rendering", "crispEdges");
+        
+    scatterSvg.selectAll(".y-axis-scatter line")
+        .style("fill", "none")
+        .style("stroke", "white")
+        .style("shape-rendering", "crispEdges");
+        
+    scatterSvg.selectAll(".y-axis-scatter text")
+        .style("fill", "white");
+}
+    
 function renderBarChart(data) {
     if (data.length > 15) {
         errorMessage("Max 5 rows");
@@ -154,6 +243,7 @@ function shortenString(content, maxLength) {
 }
 
 
+
 d3.csv("data/collegeData.csv").then(function(data) {
     const pcipMapping = {
         'Communications': 'PCIP09',
@@ -201,8 +291,6 @@ d3.csv("data/collegeData.csv").then(function(data) {
 
         let yAxisScatter = d3.axisLeft()
             .scale(yScatter);
-
-		console.log('xScatter domain:', d3.max(data, d => d.COMP_ORIG_YR2_RT));
 
         scatterSvg.append("g")
             .attr("class", "x-axis-scatter")

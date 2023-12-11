@@ -14,6 +14,7 @@ function dataFiltering() {
 	}
 	const firstFiveRows = subjects.filter((item, index) => index < 15);
 	renderBarChart(firstFiveRows);
+	renderScatterPlot(firstFiveRows);
 }
 
 function dataManipulation() {
