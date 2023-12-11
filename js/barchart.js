@@ -319,7 +319,7 @@ function renderBarChart(data) {
                     .append("circle")
                     .attr("cx", d => xScatter(d.PCIP))
                     .attr("cy", d => yScatter(d.COMP_ORIG_YR2_RT))
-                    .attr("r", 5)
+                    .attr("r", 2)
                     .style("fill", "orange");	
                 
                 scatterSvg.selectAll(".x-axis-scatter path")
