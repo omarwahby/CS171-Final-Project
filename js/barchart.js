@@ -41,7 +41,7 @@ function renderScatterPlot(data) {
 
     d3.select("#scatterplot-area").selectAll("*").remove();
 
-    let scatterWidth = 100 + $('#scatterplot-area').width() - margin.left - margin.right;
+    let scatterWidth = $('#scatterplot-area').width() - margin.left - margin.right;
     let scatterHeight = 500 - margin.top - margin.bottom;
 
     let scatterSvg = d3.select("#scatterplot-area").append("svg")
@@ -78,7 +78,7 @@ function renderScatterPlot(data) {
         .call(yAxisScatter.tickFormat(d3.format(".0%")));
 		
 	scatterSvg.append("text")
-		.attr("transform", "translate(" + (scatterWidth / 2) + " ," + (scatterHeight + margin.top + 20) + ")")
+		.attr("transform", "translate(" + (scatterWidth / 2) + " ," + (scatterHeight + margin.top +50) + ")")
 		.style("text-anchor", "middle")
 		.attr("fill", "white")
         .style("font-size", "24px")
@@ -98,7 +98,7 @@ function renderScatterPlot(data) {
 	    .attr("x", scatterWidth / 2)
 		.attr("y", 0 - (margin.top / 2))
 		.attr("text-anchor", "middle")
-		.style("font-size", "30px")
+		.style("font-size", "24px")
 		.attr("fill", "white")
         .text(`Degree Completion Rates for a Specific Major`);
 
@@ -201,19 +201,19 @@ function renderBarChart(data) {
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("class", "axis-title")
-        .attr("x", -500)
+        .attr("x", 25)
         .attr("y", 100 - margin.left)
         .attr("dy", ".1em")
         .style("text-anchor", "end")
         .attr("fill", "white")
-        .style("font-size", "30px")
+        .style("font-size", "16px")
         .text(`Average Percentage of Student Body`);
 
     svg.append("text")
-        .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 70) + ")")
+        .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top + 50) + ")")
         .style("text-anchor", "middle")
         .attr("fill", "white")
-        .style("font-size", "30px")
+        .style("font-size", "24px")
         .text(`Major`);
 
     svg.selectAll(".axis path")
@@ -255,8 +255,8 @@ function renderBarChart(data) {
                 console.log(data.map(d => d.PCIP));
                 console.log(data.map(d => d.COMP_ORIG_YR2_RT));
         
-                let scatterWidth = 100 + $('#scatterplot-area').width() - margin.left - margin.right;
-                let scatterHeight = 1400 - margin.top - margin.bottom;
+                let scatterWidth = $('#scatterplot-area').width() - margin.left - margin.right;
+                let scatterHeight = 500 - margin.top - margin.bottom;
         
                 let scatterSvg = d3.select("#scatterplot-area").append("svg")
                     .attr("width", width + margin.left + margin.right)
@@ -289,7 +289,7 @@ function renderBarChart(data) {
                     .call(yAxisScatter.tickFormat(d3.format(".0%")));
                 
                 scatterSvg.append("text")
-                    .attr("transform", "translate(" + (scatterWidth / 2) + " ," + (scatterHeight + margin.top + 20) + ")")
+                    .attr("transform", "translate(" + (scatterWidth / 2) + " ," + (scatterHeight + margin.top + 50) + ")")
                     .style("text-anchor", "middle")
                     .attr("fill", "white")
                     .style("font-size", "24px")
@@ -309,7 +309,7 @@ function renderBarChart(data) {
                     .attr("x", scatterWidth / 2)
                     .attr("y", 0 - (margin.top / 2))
                     .attr("text-anchor", "middle")
-                    .style("font-size", "30px")
+                    .style("font-size", "24px")
                     .attr("fill", "white")
                     .text(`Degree Completion Rates for ${selectedSubject} Majors`);
         
