@@ -2,6 +2,7 @@ let margin = { top: 120, right: 180, bottom: 200, left: 200 },
     width = $('#chart-area').width() - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
+let primary_color = "#ff6127"
 
 let svg = d3.select("#chart-area").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -249,13 +250,13 @@ function renderBarChart(data) {
             function renderScatterPlot(selectedData, selectedSubject) {
 
                 selectedData = data.filter(
-                    d => !isNaN(d.PCIP) && !isNaN(d.COMP_ORIG_YR2_RT) && d.PCIP !== "0.0"
+                    d => !isNaN(d.PCIP) && !isNaN(d.COMP_ORIG_YR2_RT) && d.PCIP > 0.0
                 );
                 console.log("Test", selectedData)
 
                 d3.select("#scatterplot-area").selectAll("*").remove();
-                console.log(data.map(d => d.PCIP));
-                console.log(data.map(d => d.COMP_ORIG_YR2_RT));
+                console.log("pcip", selectedData.map(d => d.PCIP));
+                console.log("comporig", selectedData.map(d => d.COMP_ORIG_YR2_RT));
 
                 let scatterWidth = $('#scatterplot-area').width() - margin.left - margin.right;
                 let scatterHeight = 500 - margin.top - margin.bottom;
@@ -267,11 +268,11 @@ function renderBarChart(data) {
                     .attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")");
 
                 let xScatter = d3.scaleLinear()
-                    .domain([d3.min(data, d => d.PCIP), d3.max(data, d => d.PCIP)])
+                    .domain([d3.min(selectedData, d => d.PCIP), d3.max(selectedData, d => d.PCIP)])
                     .range([0, scatterWidth]);
 
                 let yScatter = d3.scaleLinear()
-                    .domain([0, d3.max(data, d => d.COMP_ORIG_YR2_RT)])
+                    .domain([0, d3.max(selectedData, d => d.COMP_ORIG_YR2_RT)])
                     .range([scatterHeight, 0]);
 
                 let xAxisScatter = d3.axisBottom()
@@ -316,7 +317,7 @@ function renderBarChart(data) {
                     .text(`Degree Completion Rates for ${selectedSubject} Majors`);
 
                 scatterSvg.selectAll("circle")
-                    .data(data)
+                    .data(selectedData)
                     .enter()
                     .append("circle")
                     .attr("cx", d => xScatter(d.PCIP))
