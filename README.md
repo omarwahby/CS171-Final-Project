@@ -5,6 +5,8 @@
 
 **Link to Website:** https://omarwahby.github.io/CS171-Final-Project
 
+**Link to Video:** https://youtu.be/j5170i1K4Gw
+
 ### How to Deploy Site Locally
 
 **Prerequesites**:
