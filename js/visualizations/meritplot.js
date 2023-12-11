@@ -60,7 +60,7 @@ class MeritPlotVis {
 				!isNaN(schoolObject.avg_sat) &&
 				schoolObject.comp_rate !== null &&
 				!isNaN(schoolObject.comp_rate) &&
-				schoolObject.comp_rate > .02
+				schoolObject.comp_rate > 0
 			);
 		});
 
