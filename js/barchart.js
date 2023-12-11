@@ -43,13 +43,13 @@ function renderBarChart(data) {
         return;
     }
     
-    if (!data[0].hasOwnProperty("Visitors") || !data[0].hasOwnProperty("Location") || !data[0].hasOwnProperty("Category")) {
-        errorMessage("The Object properties are not correct! An attraction should include at least: 'Visitors', 'Location', 'Category'");
+    if (!data[0].hasOwnProperty("Percentage") || !data[0].hasOwnProperty("Subject") || !data[0].hasOwnProperty("Category")) {
+        errorMessage("The Object properties are not correct! A school  should include at least: 'Percentage', 'Subject', 'Category'");
         return;
     }
     
-    x.domain(data.map(d => d.Location));
-    y.domain([0, d3.max(data, d => d.Visitors)]);
+    x.domain(data.map(d => d.Subject));
+    y.domain([0, d3.max(data, d => d.Percentage)]);
     
     let bars = svg.selectAll(".bar")
         .remove()
@@ -59,13 +59,13 @@ function renderBarChart(data) {
     bars.enter()
         .append("rect")
         .attr("class", "bar")
-        .attr("x", d => x(d.Location))
-        .attr("y", d => y(d.Visitors))
-        .attr("height", d => (height - y(d.Visitors)))
+        .attr("x", d => x(d.Subject))
+        .attr("y", d => y(d.Percentage))
+        .attr("height", d => (height - y(d.Percentage)))
         .attr("width", x.bandwidth())
         .on("mouseover", function (event, d) {
             let xPosition = margin.left + parseFloat(d3.select(this).attr("x"));
-            let yPosition = margin.top + y(d.Visitors / 2);
+            let yPosition = margin.top + y(d.Percentage / 2);
     
             let tooltipSVG = d3.select("#tooltip").append("svg")
                 .attr("class", "tooltip-svg")
@@ -80,7 +80,7 @@ function renderBarChart(data) {
                 .style("top", yPosition + "px")
                 .select("#value")
                 .style("fill", "white")
-                .text(d.Visitors);
+                .text(d.Percentage);
                 
             d3.select("#tooltip").classed("hidden", false);
         })
@@ -154,7 +154,7 @@ function shortenString(content, maxLength) {
 }
 
 
-d3.csv("data/NEW_16_PP.csv").then(function(data) {
+d3.csv("data/collegeData.csv").then(function(data) {
     const pcipMapping = {
         'Communications': 'PCIP09',
         'Education': 'PCIP13',
@@ -277,12 +277,12 @@ d3.csv("data/NEW_16_PP.csv").then(function(data) {
 
     svg.selectAll(".bar")
     .on("click", function(event, d) {
-        let selectedAttraction = d.Location;
+        let selectedAttraction = d.Subject;
         let selectedPCIP = pcipMapping[selectedAttraction];
 
         let selectedData = data.map(item => {
             return {
-                Location: item.Location,
+                Subject: item.Subject,
                 PCIP: item[selectedPCIP],
                 COMP_ORIG_YR2_RT: item.COMP_ORIG_YR2_RT
             };
