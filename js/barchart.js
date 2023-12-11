@@ -1,6 +1,6 @@
 let margin = { top: 120, right: 180, bottom: 200, left: 200 },
     width = $('#chart-area').width() - margin.left - margin.right,
-    height = 1500 - margin.top - margin.bottom;
+    height = 500 - margin.top - margin.bottom;
 
 
 let svg = d3.select("#chart-area").append("svg")
@@ -42,7 +42,7 @@ function renderScatterPlot(data) {
     d3.select("#scatterplot-area").selectAll("*").remove();
 
     let scatterWidth = 100 + $('#scatterplot-area').width() - margin.left - margin.right;
-    let scatterHeight = 1400 - margin.top - margin.bottom;
+    let scatterHeight = 500 - margin.top - margin.bottom;
 
     let scatterSvg = d3.select("#scatterplot-area").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -172,7 +172,7 @@ function renderBarChart(data) {
                 .style("top", yPosition + "px")
                 .select("#value")
                 .style("fill", "white")
-                .text(d.Percentage * 100 + "%");
+                .text((d.Percentage * 100).toFixed(2) + "%");
                 
             d3.select("#tooltip").classed("hidden", false);
         })
