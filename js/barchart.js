@@ -230,8 +230,149 @@ function renderBarChart(data) {
         .style("font-size", "14px")
         .style("fill", "white");
     
-    svg.selectAll(".bar").on("click", function(event, d) {
-        d3.select("#scatterplot-area").selectAll("*").remove();
+    svg.selectAll(".bar").on("click", function(event, d) {    
+        d3.csv("data/collegeData.csv").then(function(data) {
+            const pcipMapping = {
+                'Communications': 'PCIP09',
+                'Education': 'PCIP13',
+                'General Studies': 'PCIP24',
+                'Theology': 'PCIP39',
+                'Homeland Security': 'PCIP43',
+                'Repair Technologies': 'PCIP47',
+                'Visual & Performing Arts': 'PCIP50', 
+                'Business & Management': 'PCIP52',
+                'Engineering': 'PCIP14'
+            };
+            
+            function renderScatterPlot(selectedData, selectedSubject) {
+        
+                selectedData = data.filter(
+                    d => !isNaN(d.PCIP) && !isNaN(d.COMP_ORIG_YR2_RT) && d.PCIP !== "0.0"
+                );
+                console.log("Test", selectedData)
+        
+                d3.select("#scatterplot-area").selectAll("*").remove();
+                console.log(data.map(d => d.PCIP));
+                console.log(data.map(d => d.COMP_ORIG_YR2_RT));
+        
+                let scatterWidth = 100 + $('#scatterplot-area').width() - margin.left - margin.right;
+                let scatterHeight = 1400 - margin.top - margin.bottom;
+        
+                let scatterSvg = d3.select("#scatterplot-area").append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")");
+        
+                let xScatter = d3.scaleLinear()
+                    .domain([d3.min(data, d => d.PCIP), d3.max(data, d => d.PCIP)])
+                    .range([0, scatterWidth]);
+                
+                let yScatter = d3.scaleLinear()
+                    .domain([0, d3.max(data, d => d.COMP_ORIG_YR2_RT)])
+                    .range([scatterHeight, 0]);
+        
+                let xAxisScatter = d3.axisBottom()
+                    .scale(xScatter);
+        
+                let yAxisScatter = d3.axisLeft()
+                    .scale(yScatter);
+        
+                scatterSvg.append("g")
+                    .attr("class", "x-axis-scatter")
+                    .attr("transform", "translate(0," + scatterHeight + ")")
+                    .attr("fill", "white")
+                    .call(xAxisScatter);
+        
+                scatterSvg.append("g")
+                    .attr("class", "y-axis-scatter")
+                    .call(yAxisScatter.tickFormat(d3.format(".0%")));
+                
+                scatterSvg.append("text")
+                    .attr("transform", "translate(" + (scatterWidth / 2) + " ," + (scatterHeight + margin.top + 20) + ")")
+                    .style("text-anchor", "middle")
+                    .attr("fill", "white")
+                    .style("font-size", "24px")
+                    .text(`Percentage of Students Majoring in ${selectedSubject}`);
+        
+                scatterSvg.append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 100 - margin.left)
+                    .attr("x", 0 - (scatterHeight / 2))
+                    .attr("dy", "1em")
+                    .style("text-anchor", "middle")
+                    .attr("fill", "white")
+                    .style("font-size", "24px")
+                    .text("Completion Rate");
+            
+                scatterSvg.append("text")
+                    .attr("x", scatterWidth / 2)
+                    .attr("y", 0 - (margin.top / 2))
+                    .attr("text-anchor", "middle")
+                    .style("font-size", "30px")
+                    .attr("fill", "white")
+                    .text(`Degree Completion Rates for ${selectedSubject} Majors`);
+        
+                scatterSvg.selectAll("circle")
+                    .data(data) 
+                    .enter()
+                    .append("circle")
+                    .attr("cx", d => xScatter(d.PCIP))
+                    .attr("cy", d => yScatter(d.COMP_ORIG_YR2_RT))
+                    .attr("r", 5)
+                    .style("fill", "orange");	
+                
+                scatterSvg.selectAll(".x-axis-scatter path")
+                    .style("fill", "none")
+                    .style("stroke", "white")
+                    .style("shape-rendering", "crispEdges");
+                
+                scatterSvg.selectAll(".x-axis-scatter line")
+                    .style("fill", "none")
+                    .style("stroke", "white")
+                    .style("shape-rendering", "crispEdges");
+                
+                scatterSvg.selectAll(".x-axis-scatter text")
+                    .style("fill", "white");
+                
+                scatterSvg.selectAll(".y-axis-scatter path")
+                    .style("fill", "none")
+                    .style("stroke", "white")
+                    .style("shape-rendering", "crispEdges");
+                
+                scatterSvg.selectAll(".y-axis-scatter line")
+                    .style("fill", "none")
+                    .style("stroke", "white")
+                    .style("shape-rendering", "crispEdges");
+                
+                scatterSvg.selectAll(".y-axis-scatter text")
+                    .style("fill", "white");
+            }
+        
+            svg.selectAll(".bar")
+            .on("click", function(event, d) {
+                console.log("WHAT")
+                let selectedSubject = d.Subject;
+                let selectedPCIP = pcipMapping[selectedSubject];
+                
+                let selectedData = data.map(item => {
+                    return {
+                        Subject: item.Subject,
+                        PCIP: item[selectedPCIP],
+                        COMP_ORIG_YR2_RT: item.COMP_ORIG_YR2_RT
+                    };
+                });
+                console.log(selectedData);
+                
+                data.forEach(function(d) {
+                    d.PCIP = +d[selectedPCIP];
+                    d.COMP_ORIG_YR2_RT = +d.COMP_ORIG_YR2_RT;
+                });
+                renderScatterPlot(selectedData, selectedSubject);
+                console.log(selectedData)
+            });
+        });
+          
     });
 }
 
@@ -246,144 +387,3 @@ function shortenString(content, maxLength) {
 }
 
 
-
-d3.csv("data/collegeData.csv").then(function(data) {
-    const pcipMapping = {
-        'Communications': 'PCIP09',
-        'Education': 'PCIP13',
-        'General Studies': 'PCIP24',
-        'Theology': 'PCIP39',
-        'Homeland Security': 'PCIP43',
-        'Repair Technologies': 'PCIP47',
-        'Visual & Performing Arts': 'PCIP50', 
-        'Business & Management': 'PCIP52',
-        'Engineering': 'PCIP14',
-
-    };
-    
-    function renderScatterPlot(selectedData, selectedAttraction) {
-
-        selectedData = data.filter(
-            d => !isNaN(d.PCIP) && !isNaN(d.COMP_ORIG_YR2_RT) && d.PCIP !== 0
-        );
-        console.log("Test", selectedData)
-
-        d3.select("#scatterplot-area").selectAll("*").remove();
-		console.log(data.map(d => d.PCIP));
-		console.log(data.map(d => d.COMP_ORIG_YR2_RT));
-
-        let scatterWidth = 100 + $('#scatterplot-area').width() - margin.left - margin.right;
-        let scatterHeight = 1400 - margin.top - margin.bottom;
-
-        let scatterSvg = d3.select("#scatterplot-area").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")");
-
-        let xScatter = d3.scaleLinear()
-            .domain([d3.min(data, d => d.PCIP), d3.max(data, d => d.PCIP)])
-            .range([0, scatterWidth]);
-		
-        let yScatter = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.COMP_ORIG_YR2_RT)])
-            .range([scatterHeight, 0]);
-
-        let xAxisScatter = d3.axisBottom()
-            .scale(xScatter);
-
-        let yAxisScatter = d3.axisLeft()
-            .scale(yScatter);
-
-        scatterSvg.append("g")
-            .attr("class", "x-axis-scatter")
-            .attr("transform", "translate(0," + scatterHeight + ")")
-            .attr("fill", "white")
-            .call(xAxisScatter);
-
-        scatterSvg.append("g")
-            .attr("class", "y-axis-scatter")
-            .call(yAxisScatter.tickFormat(d3.format(".0%")));
-		
-		scatterSvg.append("text")
-			.attr("transform", "translate(" + (scatterWidth / 2) + " ," + (scatterHeight + margin.top + 20) + ")")
-			.style("text-anchor", "middle")
-			.attr("fill", "white")
-            .style("font-size", "24px")
-            .text(`Percentage of Students Majoring in ${selectedAttraction}`);
-
-		scatterSvg.append("text")
-			.attr("transform", "rotate(-90)")
-			.attr("y", 100 - margin.left)
-			.attr("x", 0 - (scatterHeight / 2))
-			.attr("dy", "1em")
-			.style("text-anchor", "middle")
-			.attr("fill", "white")
-            .style("font-size", "24px")
-			.text("Completion Rate");
-	
-		scatterSvg.append("text")
-			.attr("x", scatterWidth / 2)
-			.attr("y", 0 - (margin.top / 2))
-			.attr("text-anchor", "middle")
-			.style("font-size", "30px")
-			.attr("fill", "white")
-            .text(`Degree Completion Rates for ${selectedAttraction} Majors`);
-
-		scatterSvg.selectAll("circle")
-			.data(data) 
-			.enter()
-			.append("circle")
-			.attr("cx", d => xScatter(d.PCIP))
-			.attr("cy", d => yScatter(d.COMP_ORIG_YR2_RT))
-			.attr("r", 5)
-			.style("fill", "orange");	
-        
-        scatterSvg.selectAll(".x-axis-scatter path")
-            .style("fill", "none")
-            .style("stroke", "white")
-            .style("shape-rendering", "crispEdges");
-        
-        scatterSvg.selectAll(".x-axis-scatter line")
-            .style("fill", "none")
-            .style("stroke", "white")
-            .style("shape-rendering", "crispEdges");
-        
-        scatterSvg.selectAll(".x-axis-scatter text")
-            .style("fill", "white");
-        
-        scatterSvg.selectAll(".y-axis-scatter path")
-            .style("fill", "none")
-            .style("stroke", "white")
-            .style("shape-rendering", "crispEdges");
-        
-        scatterSvg.selectAll(".y-axis-scatter line")
-            .style("fill", "none")
-            .style("stroke", "white")
-            .style("shape-rendering", "crispEdges");
-        
-        scatterSvg.selectAll(".y-axis-scatter text")
-            .style("fill", "white");
-    }
-
-    svg.selectAll(".bar")
-    .on("click", function(event, d) {
-        let selectedAttraction = d.Subject;
-        let selectedPCIP = pcipMapping[selectedAttraction];
-
-        let selectedData = data.map(item => {
-            return {
-                Subject: item.Subject,
-                PCIP: item[selectedPCIP],
-                COMP_ORIG_YR2_RT: item.COMP_ORIG_YR2_RT
-            };
-        });
-        console.log(selectedData);
-        
-        data.forEach(function(d) {
-            d.PCIP = +d[selectedPCIP];
-            d.COMP_ORIG_YR2_RT = +d.COMP_ORIG_YR2_RT;
-        });
-        renderScatterPlot(selectedData, selectedAttraction);
-    });
-});
