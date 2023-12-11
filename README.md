@@ -1,7 +1,7 @@
 # An Analysis on the Causes of Educational Success in the United States
 <b>Team</b>: Omar Wahby, Nishant Mishra, Joshua Cai, and Samuel Osa-Agbontaen
 
-<b>Description</b>: This project examines the causes of educational success in colleges across the United States. Using data from the U.S. Department of Education’s College Scorecard from the 2015-2016 school year, we find that academic success in college is highly correlated with students’ household income. College with students who have access to more financial resources from their families are able to score higher on standardized tests such as the SAT and have higher four-year degree completion rates. We also find that colleges with higher median household incomes have lower withdrawal rates from four-year degree programs.
+<b>Description</b>: This project examines the causes of educational success in colleges across the United States. Using data from the U.S. Department of Education’s College Scorecard from the 2015-2016 school year, we find that academic success in college is highly correlated with students’ household income. Colleges with students who have access to more financial resources from their families are able to score higher on standardized tests such as the SAT and have higher four-year degree completion rates. We also find that colleges with higher median household incomes have lower withdrawal rates from four-year degree programs.
 
 **Link to Website:** https://omarwahby.github.io/CS171-Final-Project
 
