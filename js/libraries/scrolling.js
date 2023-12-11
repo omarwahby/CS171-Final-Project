@@ -19,6 +19,7 @@ new fullpage('#fullpage', {
     primary_bg_color,
     primary_bg_color,
     primary_bg_color,
+    primary_bg_color,
     primary_bg_color],
   navigation: true,
   slidesNavigation: true,
@@ -34,6 +35,7 @@ new fullpage('#fullpage', {
     'map_anchor',
     'major_anchor',
     'barchart_anchor',
+    'takeaways_anchor',
     'team_anchor',
     'references_anchor',
   ],
@@ -49,6 +51,7 @@ new fullpage('#fullpage', {
     'Regional stats',
     'Do majors matter?',
     'Major breakdown',
+    'Key Takeaways',
     'Our Team',
     'References'
   ]
