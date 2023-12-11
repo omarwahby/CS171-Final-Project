@@ -52,9 +52,11 @@ class NotMeritPlotVis {
 			// Check if any attribute is null or NaN
 			return (
 				schoolObject.avg_sat !== null &&
+				schoolObject.avg_sat > 0 &&
 				!isNaN(schoolObject.avg_sat) &&
 				schoolObject.avg_fam_inc !== null &&
-				!isNaN(schoolObject.avg_fam_inc)
+				!isNaN(schoolObject.avg_fam_inc) &&
+				schoolObject.avg_fam_inc > 0
 			);
 		});
 

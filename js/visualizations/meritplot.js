@@ -56,6 +56,7 @@ class MeritPlotVis {
 			// Check if any attribute is null or NaN
 			return (
 				schoolObject.avg_sat !== null &&
+				schoolObject.avg_sat > 0 &&
 				!isNaN(schoolObject.avg_sat) &&
 				schoolObject.comp_rate !== null &&
 				!isNaN(schoolObject.comp_rate) &&
