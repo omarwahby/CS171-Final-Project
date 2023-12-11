@@ -10,7 +10,7 @@
 Python, http-server
 
 **Instructions**
-Download the .zip file, and extract it to a directory you can access
-Enter the directory in the terminal. 
-Execute the following command: 'python -m http.server 8080'
-In your browser, go to the following URL: http://localhost:8080
+1. Download the .zip file, and extract it to a directory you can access
+2. Enter the directory in the terminal. 
+3. Execute the following command: 'python -m http.server 8080'
+4. In your browser, go to the following URL: http://localhost:8080
