@@ -51,17 +51,20 @@ function renderScatterPlot(data) {
         .attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")");
 
     let xScatter = d3.scaleLinear()
-        .domain([0, 100])
+        .domain([0, 1])
         .range([0, scatterWidth]);
 		
     let yScatter = d3.scaleLinear()
-        .domain([0, 100])
+        .domain([0, 10])
+        
         .range([scatterHeight, 0]);
 
     let xAxisScatter = d3.axisBottom()
+        .tickFormat(d3.format(".0%"))
         .scale(xScatter);
 
     let yAxisScatter = d3.axisLeft()
+        .tickFormat(d3.format(".0%"))
         .scale(yScatter);
 
     scatterSvg.append("g")
