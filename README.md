@@ -3,6 +3,6 @@
 
 <b>Description: </b></b>
 
-**Link to Website:** https://omarwahby.github.io/CS171-Final-Project/#merit_anchor
+**Link to Website:** https://omarwahby.github.io/CS171-Final-Project
 
 **How to Deploy Site Locally** 
